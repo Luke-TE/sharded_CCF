@@ -47,6 +47,19 @@ private:
     return response;
   }
 
+  void write_and_read(const PreparedTx& tx,
+                      const std::shared_ptr<RpcTlsClient>& connection)
+  {
+    connection->write(tx.rpc.encoded);
+
+    // Blocking read one response
+    auto read = false;
+    while (!read) {
+      process_reply(connection->read_response());
+      read = true;
+    }
+  };
+
   timing::Results call_raw_batch(std::shared_ptr<RpcTlsClient>& connection, const PreparedTxs& txs) override
   {
     size_t read;
@@ -58,17 +71,18 @@ private:
     // Repeat for each session
     for (size_t session = 1; session <= options.session_count; ++session)
     {
+      read = 0;
+      written = 0;
+
       // Write everything
       while (written < txs.size()) {
-        read = 0;
-        written = 0;
-
         LOG_INFO_FMT("Transaction here");
+        write_and_read();
+        written++;
         // TODO execute transaction
-        write(txs[written], read, written, connection);
       }
 
-      blocking_read(read, written, connection);
+//      blocking_read(read, written, connection);
 
       // Reconnect for each session (except the last)
       if (session != options.session_count)
