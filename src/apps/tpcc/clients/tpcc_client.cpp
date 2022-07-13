@@ -58,16 +58,17 @@ private:
     // Repeat for each session
     for (size_t session = 1; session <= options.session_count; ++session)
     {
-      // Serial transaction execution
+      // Write everything
       while (written < txs.size()) {
         read = 0;
         written = 0;
-
+        
         auto tx = txs[written];
         // TODO execute transaction
         write(tx, read, written, connection);
-        blocking_read(read, written, connection);
       }
+
+      blocking_read(read, written, connection);
 
       // Reconnect for each session (except the last)
       if (session != options.session_count)
