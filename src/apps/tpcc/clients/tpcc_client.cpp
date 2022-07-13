@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 License.
 #include "../tpcc_serializer.h"
 #include "perf_client.h"
+#include <chrono>
 
 using namespace std;
 using namespace nlohmann;
@@ -44,6 +45,44 @@ private:
     check_response(response);
 
     return response;
+  }
+
+  timing::Results call_raw_batch(std::shared_ptr<RpcTlsClient>& connection, const PreparedTxs& txs) override
+  {
+    size_t read;
+    size_t written;
+
+    last_write_time = std::chrono::high_resolution_clock::now();
+    kick_off_timing();
+
+    // Repeat for each session
+    for (size_t session = 1; session <= options.session_count; ++session)
+    {
+      read = 0;
+      written = 0;
+
+      // Write everything
+      while (written < txs.size())
+        write(txs[written], read, written, connection);
+
+      blocking_read(read, written, connection);
+
+      // Reconnect for each session (except the last)
+      if (session != options.session_count)
+      {
+        reconnect(connection);
+      }
+    }
+
+    if (!options.no_wait)
+    {
+      auto c = create_connection(true, false);
+      wait_for_global_commit(last_response_tx_id);
+    }
+    const auto last_commit = last_response_tx_id.seqno;
+    auto timing_results = end_timing(last_commit);
+    LOG_INFO_FMT("Timing ended");
+    return timing_results;
   }
 
   void prepare_transactions() override
