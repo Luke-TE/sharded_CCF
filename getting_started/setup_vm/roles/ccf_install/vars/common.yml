@@ -1,5 +1,5 @@
 workspace: "/tmp/"
-ccf_ver: "latest"
+ccf_ver: "1.0.7"
 ccf_tarball: "ccf.tar.gz"
 ccf_suffix: "{{ 'latest/download' if ccf_ver == 'latest' else 'download/ccf-' + ccf_ver }}"
 ccf_url: "https://github.com/microsoft/CCF/releases/{{ ccf_suffix }}/{{ ccf_tarball }}"
