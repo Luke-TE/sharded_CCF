@@ -62,10 +62,9 @@ private:
       while (written < txs.size()) {
         read = 0;
         written = 0;
-        
-        auto tx = txs[written];
+
         // TODO execute transaction
-        write(tx, read, written, connection);
+        write(txs[written], read, written, connection);
       }
 
       blocking_read(read, written, connection);
