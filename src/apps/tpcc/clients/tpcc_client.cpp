@@ -63,6 +63,7 @@ private:
         read = 0;
         written = 0;
 
+        LOG_INFO_FMT("Transaction here");
         // TODO execute transaction
         write(txs[written], read, written, connection);
       }
