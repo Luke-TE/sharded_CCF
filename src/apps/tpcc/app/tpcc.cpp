@@ -329,8 +329,9 @@ namespace ccfapp
         table_key.v.d_id = request.d_id;
         auto it = tpcc::TpccTables::customers.find(table_key.k);
         auto customers_table = args.tx.ro(it->second);
+        auto c_last = request.last_name;
         customers_table->foreach([&](const tpcc::Customer::Key&, const tpcc::Customer& c) {
-          if (strcmp(c.last.data(), request.last_name) == 0)
+          if (strcmp(c.last.data(), c_last) == 0)
           {
             customer = c;
             return false;
