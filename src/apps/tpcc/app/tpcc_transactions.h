@@ -2,9 +2,9 @@
 // Licensed under the Apache 2.0 License.
 #pragma once
 
-#include "../app/tpcc_common.h"
-#include "../app/tpcc_output.h"
-#include "../app/tpcc_tables.h"
+#include "tpcc_common.h"
+#include "tpcc_output.h"
+#include "tpcc_tables.h"
 
 #include <cinttypes>
 #include <string.h>
