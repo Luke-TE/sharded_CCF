@@ -3,6 +3,7 @@
 #pragma once
 
 #include "ds/serialized.h"
+#include "app/tpcc_tables.h"
 
 namespace tpcc
 {
