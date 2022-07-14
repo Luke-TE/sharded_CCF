@@ -106,8 +106,10 @@ private:
       district_response = tpcc::DistrictResponse::deserialize(response.body.data(), response.body.size());
 
       LOG_INFO_FMT("New Value: {0}, {1}", std::to_string(district_response.id), std::to_string(district_response.w_id));
-      if (!district_response.street_2.empty()) {
-        LOG_INFO_FMT("Non-empty!");
+      if (!district_response.street_2.empty())
+      {
+        std::string street(std::begin(district_response.street_2), std::end(district_response.street_2));
+        LOG_INFO_FMT("Non-empty: {}", street);
       }
     }
     else {
