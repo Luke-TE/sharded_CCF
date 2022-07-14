@@ -121,8 +121,7 @@ namespace ccfapp
         LOG_INFO_FMT("Test is beginning");
         const auto& body = args.rpc_ctx->get_request_body();
         auto test_struct = tpcc::TestStruct::deserialize(body.data(), body.size());
-        auto ret = std::format("Got the value {0}", test_struct.int_val);
-        LOG_INFO_FMT(ret);
+        LOG_INFO_FMT("Value: {}", std::to_string(test_struct.int_val));
         LOG_INFO_FMT("Test is ending");
 
         set_no_content_status(args);
