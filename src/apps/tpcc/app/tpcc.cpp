@@ -117,6 +117,17 @@ namespace ccfapp
         set_no_content_status(args);
       };
 
+      auto do_test = [this](auto& args) {
+        LOG_INFO_FMT("Test is beginning");
+        const auto& body = args.rpc_ctx->get_request_body();
+        auto test_struct = tpcc::TestStruct::deserialize(body.data(), body.size());
+        auto ret = std::format("Got the value {0}", test_struct.int_val);
+        LOG_INFO_FMT(ret);
+        LOG_INFO_FMT("Test is ending");
+
+        set_no_content_status(args);
+      };
+
       const ccf::AuthnPolicies user_sig_or_cert = {user_signature_auth_policy,
                                                    user_cert_auth_policy};
 
@@ -132,6 +143,8 @@ namespace ccfapp
           .install();
         make_endpoint("payment", verb, do_payment, user_sig_or_cert).install();
         make_endpoint("new_order", verb, do_new_order, user_sig_or_cert)
+          .install();
+        make_endpoint("test", verb, do_test, user_sig_or_cert)
           .install();
       }
 
