@@ -3,6 +3,8 @@
 //#include "ds/serialized.h"
 #include "../app/tpcc_global.h"
 #include "../tpcc_tables.h"
+#include <exception>
+#include <iostream>
 #include <stdexcept>
 
 namespace tpcc
