@@ -125,7 +125,7 @@ namespace ccfapp
         response.int_val = test_struct.int_val * 2;
 
         set_ok_status(args);
-        args.rpc_ctx->set_response_body(response.serialize());
+//        args.rpc_ctx->set_response_body(response.serialize());
       };
 
       const ccf::AuthnPolicies user_sig_or_cert = {user_signature_auth_policy,
