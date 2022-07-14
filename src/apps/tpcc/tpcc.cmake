@@ -3,7 +3,9 @@
 # Small Bank Client executable
 
 add_client_exe(
-  tpcc_client SRCS ${CMAKE_CURRENT_LIST_DIR}/clients/tpcc_client.cpp
+  tpcc_client
+  SRCS ${CMAKE_CURRENT_LIST_DIR}/clients/tpcc_client.cpp
+  INCLUDE_DIRS ${CCF_DIR}/3rdparty/test
 )
 target_link_libraries(tpcc_client PRIVATE http_parser.host ccfcrypto.host c++fs)
 
