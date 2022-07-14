@@ -93,7 +93,7 @@ private:
     tpcc::DistrictRequest district_request;
     district_request.id = 123;
     district_request.w_id = 456;
-//    LOG_INFO_FMT("Old Value: \\{{}\\}, \\{{}\\}", std::to_string(district_request.id), std::to_string(district_request.w_id));
+    LOG_INFO_FMT("Old Value: {0}, {1}", std::to_string(district_request.id), std::to_string(district_request.w_id));
     const auto body = district_request.serialize();
     const auto response =
       connection->call("get_district", CBuffer{body.data(), body.size()});
@@ -105,7 +105,7 @@ private:
     {
       district_response = tpcc::DistrictResponse::deserialize(response.body.data(), response.body.size());
 
-//      LOG_INFO_FMT("New Value: \\{{}\\}, \\{{}\\}", std::to_string(district_response.id), std::to_string(district_response.w_id));
+      LOG_INFO_FMT("New Value: {0}, {1}", std::to_string(district_response.id), std::to_string(district_response.w_id));
       if (!district_response.street_2.empty()) {
         LOG_INFO_FMT("Non-empty!");
       }
