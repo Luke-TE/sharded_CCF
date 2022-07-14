@@ -9,6 +9,7 @@
 #include <unordered_set>
 #include <vector>
 #include <array>
+#include "app/tpcc_common.h"
 
 namespace Address
 {
