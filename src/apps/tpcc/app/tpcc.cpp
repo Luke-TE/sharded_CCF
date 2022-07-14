@@ -135,13 +135,7 @@ namespace ccfapp
         tpcc::DistrictResponse response;
         response.id = district_request.id;
         response.w_id = district_request.w_id;
-        response.tax = district_request.tax;
-        response.ytd = district_request.ytd;
-        response.next_o_id = district_request.next_o_id;
-        response.street_1 = district_request.street_1;
-        response.street_2 = district_request.street_2;
-        response.city = district_request.city;
-        response.state = district_request.state;
+        // TODO fetch district from local store
 
         set_ok_status(args);
         args.rpc_ctx->set_response_body(response.serialize());
