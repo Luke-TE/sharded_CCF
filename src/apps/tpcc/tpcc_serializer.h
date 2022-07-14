@@ -830,4 +830,33 @@ namespace tpcc
       return order_response;
     }
   };
+
+  struct NewOrderResponse
+  {
+    static const int INITIAL_NUM_PER_DISTRICT = 900;
+
+    int32_t w_id;
+    int32_t d_id;
+    int32_t o_id;
+
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = sizeof(w_id) + sizeof(d_id) + sizeof(o_id);
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, w_id);
+      serialized::write(data, size, d_id);
+      serialized::write(data, size, o_id);
+      return v;
+    }
+
+    static NewOrderResponse deserialize(const uint8_t* data, size_t size)
+    {
+      NewOrderResponse new_order_response;
+      new_order_response.w_id = serialized::read<decltype(w_id)>(data, size);
+      new_order_response.d_id = serialized::read<decltype(d_id)>(data, size);
+      new_order_response.o_id = serialized::read<decltype(o_id)>(data, size);
+      return new_order_response;
+    }
+  };
 }
