@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache 2.0 License.
-#include "../tpcc_global.h"
 #include "../tpcc_serializer.h"
-#include "../tpcc_tables.h"
 #include "apps/utils/metrics_tracker.h"
 #include "ccf/app_interface.h"
 #include "ccf/user_frontend.h"
+#include "tpcc_global.h"
 #include "tpcc_setup.h"
+#include "tpcc_tables.h"
 #include "tpcc_transactions.h"
 
 #include <charconv>
@@ -134,9 +134,27 @@ namespace ccfapp
         auto request = tpcc::DistrictRequest::deserialize(body.data(), body.size());
 
         tpcc::DistrictResponse response;
-        response.id = request.id;
-        response.w_id = request.w_id;
-        // TODO fetch district from local store
+
+        District::Key key = {request.id, request.w_id};
+        auto districts_table = args.tx.ro(tpcc::TpccTables::districts);
+        auto districts = districts_table->get(key);
+
+        if (!districts.has_value())
+        {
+          throw std::logic_error("district does not exist");
+        }
+        auto district = districts.value();
+        response.id = district.id;
+        response.w_id = district.w_id;
+        response.tax = district.tax;
+        response.ytd = district.ytd;
+        response.next_o_id = district.next_o_id;
+        response.name = district.name;
+        response.street_1 = district.street_1;
+        response.street_2 = district.street_2;
+        response.city = district.city;
+        response.state = district.state;
+        response.zip = district.zip;
 
         set_ok_status(args);
         args.rpc_ctx->set_response_body(response.serialize());

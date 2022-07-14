@@ -2,8 +2,8 @@
 // Licensed under the Apache 2.0 License.
 #pragma once
 
-#include "../tpcc_tables.h"
 #include "tpcc_common.h"
+#include "tpcc_tables.h"
 
 #include <exception>
 #include <set>
