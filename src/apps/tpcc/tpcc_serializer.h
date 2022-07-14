@@ -9,6 +9,7 @@
 #include <unordered_set>
 #include <vector>
 #include <array>
+#include <string>
 #include "app/tpcc_common.h"
 
 namespace Address
@@ -291,7 +292,7 @@ namespace tpcc
 
   struct CustomerByNameRequest
   {
-    string last_name;
+    std::string last_name;
     int32_t w_id;
     int32_t d_id;
 
