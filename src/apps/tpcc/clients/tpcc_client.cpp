@@ -89,6 +89,14 @@ private:
 
   void prepare_transactions() override
   {
+    auto connection = create_connection(true, false);
+    tpcc::TestStruct test_struct;
+    test_struct.int_val = 12345;
+    const auto body = test_struct.serialize();
+    const auto response =
+      connection->call("test", CBuffer{body.data(), body.size()});
+    check_response(response);
+
     // Reserve space for transfer transactions
     prepared_txs.resize(options.num_transactions);
 
