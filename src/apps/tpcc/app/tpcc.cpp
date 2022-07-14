@@ -150,7 +150,7 @@ namespace ccfapp
 
       auto get_order_line = [this](auto& args) {
         const auto& body = args.rpc_ctx->get_request_body();
-        auto key = tpcc::OrderLineRequest::deserialize(body.data(), body.size());
+        auto key = tpcc::OrderLine::Key::deserialize(body.data(), body.size());
 
         auto order_lines_table = args.tx.ro(tpcc::TpccTables::order_lines);
         auto optional_order_line = order_lines_table->get(key);
@@ -168,7 +168,7 @@ namespace ccfapp
 
       auto get_item = [this](auto& args) {
         const auto& body = args.rpc_ctx->get_request_body();
-        auto key = tpcc::ItemRequest::deserialize(body.data(), body.size());
+        auto key = tpcc::Item::Key::deserialize(body.data(), body.size());
 
         auto items_table = args.tx.ro(tpcc::TpccTables::items);
         auto optional_item = items_table->get(key);
@@ -186,7 +186,7 @@ namespace ccfapp
 
       auto get_stock = [this](auto& args) {
         const auto& body = args.rpc_ctx->get_request_body();
-        auto key = tpcc::StockRequest::deserialize(body.data(), body.size());
+        auto key = tpcc::Stock::Key::deserialize(body.data(), body.size());
 
         auto stocks_table = args.tx.ro(tpcc::TpccTables::stocks);
         auto optional_stock = stocks_table->get(key);
@@ -204,7 +204,7 @@ namespace ccfapp
 
       auto get_warehouse = [this](auto& args) {
         const auto& body = args.rpc_ctx->get_request_body();
-        auto key = tpcc::WarehouseRequest::deserialize(body.data(), body.size());
+        auto key = tpcc::Warehouse::Key::deserialize(body.data(), body.size());
 
         auto warehouses_table = args.tx.ro(tpcc::TpccTables::warehouses);
         auto optional_warehouse = warehouses_table->get(key);
