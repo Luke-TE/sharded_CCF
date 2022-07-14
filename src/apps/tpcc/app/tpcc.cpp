@@ -7,7 +7,7 @@
 #include "tpcc_setup.h"
 #include "tpcc_tables.h"
 #include "tpcc_transactions.h"
-#include "tpcc_globals.h"
+#include "tpcc_global.h"
 
 #include <charconv>
 
