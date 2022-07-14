@@ -134,21 +134,15 @@ namespace ccfapp
         const auto& body = args.rpc_ctx->get_request_body();
         auto key = tpcc::District::Key::deserialize(body.data(), body.size());
 
-        tpcc::District response;
-//
-//        auto districts_table = args.tx.ro(tpcc::TpccTables::districts);
-//        auto optional_district = districts_table->get(key);
-//
-//        if (!optional_district.has_value())
-//        {
-//          throw std::logic_error("district does not exist");
-//        }
+        auto districts_table = args.tx.ro(tpcc::TpccTables::districts);
+        auto optional_district = districts_table->get(key);
 
-        response.id = key.id;
-        response.w_id = key.w_id;
-        response.street_2 = {'a','b','c','\0'};;
+        if (!optional_district.has_value())
+        {
+          throw std::logic_error("district does not exist");
+        }
 
-//        auto response = optional_district.value();
+        auto response = optional_district.value();
 
         set_ok_status(args);
         args.rpc_ctx->set_response_body(response.serialize());
@@ -156,11 +150,8 @@ namespace ccfapp
 
       auto get_order_line = [this](auto& args) {
         const auto& body = args.rpc_ctx->get_request_body();
-        auto request = tpcc::OrderLineRequest::deserialize(body.data(), body.size());
+        auto key = tpcc::OrderLineRequest::deserialize(body.data(), body.size());
 
-        tpcc::OrderLineResponse response;
-
-        tpcc::OrderLine::Key key = {request.o_id, request.d_id, request.w_id, request.number};
         auto order_lines_table = args.tx.ro(tpcc::TpccTables::order_lines);
         auto optional_order_line = order_lines_table->get(key);
 
@@ -169,17 +160,7 @@ namespace ccfapp
           throw std::logic_error("order_line does not exist");
         }
 
-        auto order_line = optional_order_line.value();
-        response.o_id = order_line.o_id;
-        response.d_id = order_line.d_id;
-        response.w_id = order_line.w_id;
-        response.number = order_line.number;
-        response.i_id = order_line.i_id;
-        response.supply_w_id = order_line.supply_w_id;
-        response.quantity = order_line.quantity;
-        response.amount = order_line.amount;
-        response.delivery_d = order_line.delivery_d;
-        response.dist_info = order_line.dist_info;
+        auto response = optional_order_line.value();
 
         set_ok_status(args);
         args.rpc_ctx->set_response_body(response.serialize());
@@ -187,11 +168,8 @@ namespace ccfapp
 
       auto get_item = [this](auto& args) {
         const auto& body = args.rpc_ctx->get_request_body();
-        auto request = tpcc::ItemRequest::deserialize(body.data(), body.size());
+        auto key = tpcc::ItemRequest::deserialize(body.data(), body.size());
 
-        tpcc::ItemResponse response;
-
-        tpcc::Item::Key key = {request.id};
         auto items_table = args.tx.ro(tpcc::TpccTables::items);
         auto optional_item = items_table->get(key);
 
@@ -200,12 +178,7 @@ namespace ccfapp
           throw std::logic_error("item does not exist");
         }
 
-        auto item = optional_item.value();
-        response.id = item.id;
-        response.im_id = item.im_id;
-        response.price = item.price;
-        response.name = item.name;
-        response.data_field = item.data;
+        auto response = optional_item.value();
 
         set_ok_status(args);
         args.rpc_ctx->set_response_body(response.serialize());
@@ -213,26 +186,17 @@ namespace ccfapp
 
       auto get_stock = [this](auto& args) {
         const auto& body = args.rpc_ctx->get_request_body();
-        auto request = tpcc::StockRequest::deserialize(body.data(), body.size());
+        auto key = tpcc::StockRequest::deserialize(body.data(), body.size());
 
-        tpcc::StockResponse response;
-
-        tpcc::Stock::Key key = {request.id, request.w_id};
         auto stocks_table = args.tx.ro(tpcc::TpccTables::stocks);
         auto optional_stock = stocks_table->get(key);
+
         if (!optional_stock.has_value())
         {
           throw std::logic_error("stock does not exist");
         }
-        auto stock = optional_stock.value();
-        response.i_id = stock.i_id;
-        response.w_id = stock.w_id;
-        response.quantity = stock.quantity;
-        response.ytd = stock.ytd;
-        response.order_cnt = stock.order_cnt;
-        response.remote_cnt = stock.remote_cnt;
-        response.dist = stock.dist;
-        response.data_field = stock.data;
+
+        auto response = optional_stock.value();
 
         set_ok_status(args);
         args.rpc_ctx->set_response_body(response.serialize());
@@ -240,27 +204,17 @@ namespace ccfapp
 
       auto get_warehouse = [this](auto& args) {
         const auto& body = args.rpc_ctx->get_request_body();
-        auto request = tpcc::WarehouseRequest::deserialize(body.data(), body.size());
+        auto key = tpcc::WarehouseRequest::deserialize(body.data(), body.size());
 
-        tpcc::WarehouseResponse response;
-
-        tpcc::Warehouse::Key key = {request.id};
         auto warehouses_table = args.tx.ro(tpcc::TpccTables::warehouses);
         auto optional_warehouse = warehouses_table->get(key);
+
         if (!optional_warehouse.has_value())
         {
           throw std::logic_error("warehouse does not exist");
         }
-        auto warehouse = optional_warehouse.value();
-        response.id = warehouse.id;
-        response.tax = warehouse.tax;
-        response.ytd = warehouse.ytd;
-        response.name = warehouse.name;
-        response.street_1 = warehouse.street_1;
-        response.street_2 = warehouse.street_2;
-        response.city = warehouse.city;
-        response.state = warehouse.state;
-        response.zip = warehouse.zip;
+
+        auto response = optional_warehouse.value();
 
         set_ok_status(args);
         args.rpc_ctx->set_response_body(response.serialize());
@@ -269,8 +223,6 @@ namespace ccfapp
       auto get_customer = [this](auto& args) {
         const auto& body = args.rpc_ctx->get_request_body();
         auto request = tpcc::CustomerRequest::deserialize(body.data(), body.size());
-
-        tpcc::CustomerResponse response;
 
         tpcc::TpccTables::DistributeKey table_key;
         table_key.v.w_id = request.w_id;
@@ -284,28 +236,7 @@ namespace ccfapp
         {
           throw std::logic_error("customer does not exist");
         }
-        auto customer = optional_customer.value();
-        response.id = customer.id;
-        response.d_id = customer.d_id;
-        response.w_id = customer.w_id;
-        response.credit_lim = customer.credit_lim;
-        response.discount = customer.discount;
-        response.balance = customer.balance;
-        response.ytd_payment = customer.ytd_payment;
-        response.payment_cnt = customer.payment_cnt;
-        response.delivery_cnt = customer.delivery_cnt;
-        response.first = customer.first;
-        response.middle = customer.middle;
-        response.last = customer.last;
-        response.street_1 = customer.street_1;
-        response.street_2 = customer.street_2;
-        response.city = customer.city;
-        response.state = customer.state;
-        response.zip = customer.zip;
-        response.phone = customer.phone;
-        response.since = customer.since;
-        response.credit = customer.credit;
-        response.data_field = customer.data;
+        auto response = optional_customer.value();
 
         set_ok_status(args);
         args.rpc_ctx->set_response_body(response.serialize());
@@ -315,9 +246,7 @@ namespace ccfapp
         const auto& body = args.rpc_ctx->get_request_body();
         auto request = tpcc::CustomerByNameRequest::deserialize(body.data(), body.size());
 
-        tpcc::CustomerResponse response;
-
-        tpcc::Customer customer;
+        tpcc::Customer response;
         tpcc::TpccTables::DistributeKey table_key;
         table_key.v.w_id = request.w_id;
         table_key.v.d_id = request.d_id;
@@ -327,33 +256,11 @@ namespace ccfapp
         customers_table->foreach([&](const tpcc::Customer::Key&, const tpcc::Customer& c) {
           if (strcmp(c.last.data(), c_last) == 0)
           {
-            customer = c;
+            response = c;
             return false;
           }
           return true;
         });
-
-        response.id = customer.id;
-        response.d_id = customer.d_id;
-        response.w_id = customer.w_id;
-        response.credit_lim = customer.credit_lim;
-        response.discount = customer.discount;
-        response.balance = customer.balance;
-        response.ytd_payment = customer.ytd_payment;
-        response.payment_cnt = customer.payment_cnt;
-        response.delivery_cnt = customer.delivery_cnt;
-        response.first = customer.first;
-        response.middle = customer.middle;
-        response.last = customer.last;
-        response.street_1 = customer.street_1;
-        response.street_2 = customer.street_2;
-        response.city = customer.city;
-        response.state = customer.state;
-        response.zip = customer.zip;
-        response.phone = customer.phone;
-        response.since = customer.since;
-        response.credit = customer.credit;
-        response.data_field = customer.data;
 
         set_ok_status(args);
         args.rpc_ctx->set_response_body(response.serialize());
@@ -362,8 +269,6 @@ namespace ccfapp
       auto get_order = [this](auto& args) {
         const auto& body = args.rpc_ctx->get_request_body();
         auto request = tpcc::OrderRequest::deserialize(body.data(), body.size());
-
-        tpcc::OrderResponse response;
 
         tpcc::TpccTables::DistributeKey table_key;
         table_key.v.w_id = request.w_id;
@@ -378,15 +283,7 @@ namespace ccfapp
           throw std::logic_error("order does not exist");
         }
 
-        auto order = optional_order.value();
-        response.id = order.id;
-        response.c_id = order.c_id;
-        response.d_id = order.d_id;
-        response.w_id = order.w_id;
-        response.carrier_id = order.carrier_id;
-        response.ol_cnt = order.ol_cnt;
-        response.all_local = order.all_local;
-        response.entry_d = order.entry_d;
+        auto response = optional_order.value();
 
         set_ok_status(args);
         args.rpc_ctx->set_response_body(response.serialize());
@@ -396,9 +293,7 @@ namespace ccfapp
         const auto& body = args.rpc_ctx->get_request_body();
         auto request = tpcc::LastOrderRequest::deserialize(body.data(), body.size());
 
-        tpcc::OrderResponse response;
-
-        tpcc::Order order;
+        tpcc::Order response;
         tpcc::TpccTables::DistributeKey table_key;
         table_key.v.w_id = request.w_id;
         table_key.v.d_id = request.d_id;
@@ -408,20 +303,11 @@ namespace ccfapp
         orders_table->foreach([&](const tpcc::Order::Key&, const tpcc::Order& o) {
           if (o.c_id == request.id)
           {
-            order = o;
+            response = o;
             return false;
           }
           return true;
         });
-
-        response.id = order.id;
-        response.c_id = order.c_id;
-        response.d_id = order.d_id;
-        response.w_id = order.w_id;
-        response.carrier_id = order.carrier_id;
-        response.ol_cnt = order.ol_cnt;
-        response.all_local = order.all_local;
-        response.entry_d = order.entry_d;
 
         set_ok_status(args);
         args.rpc_ctx->set_response_body(response.serialize());
@@ -431,7 +317,7 @@ namespace ccfapp
         const auto& body = args.rpc_ctx->get_request_body();
         auto request = tpcc::LastNewOrderRequest::deserialize(body.data(), body.size());
 
-        tpcc::NewOrderResponse response;
+        tpcc::NewOrder response;
 
         tpcc::TpccTables::DistributeKey table_key;
         table_key.v.w_id = request.w_id;

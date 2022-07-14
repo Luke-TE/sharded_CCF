@@ -39,6 +39,23 @@ namespace tpcc
     struct Key
     {
       int32_t id;
+
+      std::vector<uint8_t> serialize() const
+      {
+        auto size = sizeof(id);
+        std::vector<uint8_t> v(size);
+        auto data = v.data();
+        serialized::write(data, size, id);
+        return v;
+      }
+
+      static Item::Key deserialize(const uint8_t* data, size_t size)
+      {
+        Item::Key key;
+        key.id = serialized::read<decltype(id)>(data, size);
+        return key;
+      }
+
       MSGPACK_DEFINE(id);
     };
 
@@ -52,6 +69,31 @@ namespace tpcc
     float price;
     std::array<char, MAX_NAME + 1> name;
     std::array<char, MAX_DATA + 1> data;
+
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = sizeof(id) + sizeof(im_id) + sizeof(price) + sizeof(name) + sizeof(data_field);
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, id);
+      serialized::write(data, size, im_id);
+      serialized::write(data, size, price);
+      serialized::write(data, size, name);
+      serialized::write(data, size, data_field);
+      return v;
+    }
+
+    static Item deserialize(const uint8_t* data, size_t size)
+    {
+      Item item;
+      item.id = serialized::read<decltype(id)>(data, size);
+      item.im_id = serialized::read<decltype(im_id)>(data, size);
+      item.price = serialized::read<decltype(price)>(data, size);
+      item.name = serialized::read<decltype(name)>(data, size);
+      item.data_field = serialized::read<decltype(data_field)>(data, size);
+
+      return item;
+    }
 
     MSGPACK_DEFINE(id, im_id, price, name, data);
   };
@@ -73,6 +115,23 @@ namespace tpcc
     struct Key
     {
       int32_t id;
+
+      std::vector<uint8_t> serialize() const
+      {
+        auto size = sizeof(id);
+        std::vector<uint8_t> v(size);
+        auto data = v.data();
+        serialized::write(data, size, id);
+        return v;
+      }
+
+      static Warehouse::Key deserialize(const uint8_t* data, size_t size)
+      {
+        Warehouse::Key key;
+        key.id = serialized::read<decltype(id)>(data, size);
+        return key;
+      }
+
       MSGPACK_DEFINE(id);
     };
 
@@ -90,6 +149,40 @@ namespace tpcc
     std::array<char, Address::MAX_STREET + 1> city;
     std::array<char, Address::STATE + 1> state;
     std::array<char, Address::ZIP + 1> zip;
+
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = sizeof(id) + sizeof(tax) + sizeof(ytd) + sizeof(name) +
+        sizeof(street_1) + sizeof(street_2) + sizeof(city) + sizeof(state) +
+        sizeof(zip);
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, id);
+      serialized::write(data, size, tax);
+      serialized::write(data, size, ytd);
+      serialized::write(data, size, name);
+      serialized::write(data, size, street_1);
+      serialized::write(data, size, street_2);
+      serialized::write(data, size, city);
+      serialized::write(data, size, state);
+      serialized::write(data, size, zip);
+      return v;
+    }
+
+    static Warehouse deserialize(const uint8_t* data, size_t size)
+    {
+      Warehouse warehouse;
+      warehouse.id = serialized::read<decltype(id)>(data, size);
+      warehouse.tax = serialized::read<decltype(tax)>(data, size);
+      warehouse.ytd = serialized::read<decltype(ytd)>(data, size);
+      warehouse.name = serialized::read<decltype(name)>(data, size);
+      warehouse.street_1 = serialized::read<decltype(street_1)>(data, size);
+      warehouse.street_2 = serialized::read<decltype(street_2)>(data, size);
+      warehouse.city = serialized::read<decltype(city)>(data, size);
+      warehouse.state = serialized::read<decltype(state)>(data, size);
+      warehouse.zip = serialized::read<decltype(zip)>(data, size);
+      return warehouse;
+    }
 
     MSGPACK_DEFINE(id, tax, ytd, name, street_1, street_2, city, state, zip);
   };
@@ -242,12 +335,63 @@ namespace tpcc
     {
       int32_t i_id;
       int32_t w_id;
+
+      std::vector<uint8_t> serialize() const
+      {
+        auto size = sizeof(i_id) + sizeof(w_id);
+        std::vector<uint8_t> v(size);
+        auto data = v.data();
+        serialized::write(data, size, i_id);
+        serialized::write(data, size, w_id);
+        return v;
+      }
+
+      static Stock::Key deserialize(const uint8_t* data, size_t size)
+      {
+        Stock::Key key;
+        key.i_id = serialized::read<decltype(i_id)>(data, size);
+        key.w_id = serialized::read<decltype(w_id)>(data, size);
+        return key;
+      }
+
       MSGPACK_DEFINE(i_id, w_id);
     };
 
     Key get_key()
     {
       return {i_id, w_id};
+    }
+
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = sizeof(i_id) + sizeof(w_id) + sizeof(quantity) + sizeof(ytd) +
+        sizeof(order_cnt) + sizeof(remote_cnt) + sizeof(dist) + sizeof(data_field);
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, i_id);
+      serialized::write(data, size, w_id);
+      serialized::write(data, size, quantity);
+      serialized::write(data, size, ytd);
+      serialized::write(data, size, order_cnt);
+      serialized::write(data, size, remote_cnt);
+      serialized::write(data, size, dist);
+      serialized::write(data, size, data_field);
+      return v;
+    }
+
+    static Stock deserialize(const uint8_t* data, size_t size)
+    {
+      Stock stock;
+      stock.i_id = serialized::read<decltype(i_id)>(data, size);
+      stock.w_id = serialized::read<decltype(w_id)>(data, size);
+      stock.quantity = serialized::read<decltype(quantity)>(data, size);
+      stock.ytd = serialized::read<decltype(ytd)>(data, size);
+      stock.order_cnt = serialized::read<decltype(order_cnt)>(data, size);
+      stock.remote_cnt = serialized::read<decltype(remote_cnt)>(data, size);
+      stock.dist = serialized::read<decltype(dist)>(data, size);
+      stock.data_field = serialized::read<decltype(data_field)>(data, size);
+
+      return stock;
     }
 
     MSGPACK_DEFINE(
@@ -313,6 +457,67 @@ namespace tpcc
     std::array<char, CREDIT + 1> credit;
     std::array<char, MAX_DATA + 1> data;
 
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = sizeof(id) + sizeof(d_id) + sizeof(w_id) +
+        sizeof(credit_lim) + sizeof(discount) + sizeof(balance) +
+        sizeof(ytd_payment) + sizeof(payment_cnt) + sizeof(delivery_cnt) +
+        sizeof(first) + sizeof(middle) + sizeof(last) + sizeof(street_1) +
+        sizeof(street_2) + sizeof(city) + sizeof(state) + sizeof(zip) +
+        sizeof(phone) + sizeof(since) + sizeof(credit) + sizeof(data_field);
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, id);
+      serialized::write(data, size, d_id);
+      serialized::write(data, size, w_id);
+      serialized::write(data, size, credit_lim);
+      serialized::write(data, size, discount);
+      serialized::write(data, size, balance);
+      serialized::write(data, size, ytd_payment);
+      serialized::write(data, size, payment_cnt);
+      serialized::write(data, size, delivery_cnt);
+      serialized::write(data, size, first);
+      serialized::write(data, size, middle);
+      serialized::write(data, size, last);
+      serialized::write(data, size, street_1);
+      serialized::write(data, size, street_2);
+      serialized::write(data, size, city);
+      serialized::write(data, size, state);
+      serialized::write(data, size, zip);
+      serialized::write(data, size, phone);
+      serialized::write(data, size, since);
+      serialized::write(data, size, credit);
+      serialized::write(data, size, data_field);
+      return v;
+    }
+    
+    static Customer deserialize(const uint8_t* data, size_t size)
+    {
+      Customer customer;
+      customer.id = serialized::read<decltype(id)>(data, size);
+      customer.d_id = serialized::read<decltype(d_id)>(data, size);
+      customer.w_id = serialized::read<decltype(w_id)>(data, size);
+      customer.credit_lim = serialized::read<decltype(credit_lim)>(data, size);
+      customer.discount = serialized::read<decltype(discount)>(data, size);
+      customer.balance = serialized::read<decltype(balance)>(data, size);
+      customer.ytd_payment = serialized::read<decltype(ytd_payment)>(data, size);
+      customer.payment_cnt = serialized::read<decltype(payment_cnt)>(data, size);
+      customer.delivery_cnt = serialized::read<decltype(delivery_cnt)>(data, size);
+      customer.first = serialized::read<decltype(first)>(data, size);
+      customer.middle = serialized::read<decltype(middle)>(data, size);
+      customer.last = serialized::read<decltype(last)>(data, size);
+      customer.street_1 = serialized::read<decltype(street_1)>(data, size);
+      customer.street_2 = serialized::read<decltype(street_2)>(data, size);
+      customer.city = serialized::read<decltype(city)>(data, size);
+      customer.state = serialized::read<decltype(state)>(data, size);
+      customer.zip = serialized::read<decltype(zip)>(data, size);
+      customer.phone = serialized::read<decltype(phone)>(data, size);
+      customer.since = serialized::read<decltype(since)>(data, size);
+      customer.credit = serialized::read<decltype(credit)>(data, size);
+      customer.data_field = serialized::read<decltype(data_field)>(data, size);
+      return customer;
+    }
+    
     MSGPACK_DEFINE(
       id,
       d_id,
@@ -396,6 +601,37 @@ namespace tpcc
     int32_t all_local;
     std::array<char, DATETIME_SIZE + 1> entry_d;
 
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = sizeof(id) + sizeof(c_id) + sizeof(d_id) + sizeof(w_id) +
+        sizeof(carrier_id) + sizeof(ol_cnt) + sizeof(all_local) + sizeof(entry_d);
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, id);
+      serialized::write(data, size, c_id);
+      serialized::write(data, size, d_id);
+      serialized::write(data, size, w_id);
+      serialized::write(data, size, carrier_id);
+      serialized::write(data, size, ol_cnt);
+      serialized::write(data, size, all_local);
+      serialized::write(data, size, entry_d);
+      return v;
+    }
+
+    static Order deserialize(const uint8_t* data, size_t size)
+    {
+      Order order;
+      order.id = serialized::read<decltype(id)>(data, size);
+      order.c_id = serialized::read<decltype(c_id)>(data, size);
+      order.d_id = serialized::read<decltype(d_id)>(data, size);
+      order.w_id = serialized::read<decltype(w_id)>(data, size);
+      order.carrier_id = serialized::read<decltype(carrier_id)>(data, size);
+      order.ol_cnt = serialized::read<decltype(ol_cnt)>(data, size);
+      order.all_local = serialized::read<decltype(all_local)>(data, size);
+      order.entry_d = serialized::read<decltype(entry_d)>(data, size);
+      return order;
+    }
+
     MSGPACK_DEFINE(
       id, c_id, d_id, w_id, carrier_id, ol_cnt, all_local, entry_d);
   };
@@ -420,6 +656,29 @@ namespace tpcc
       int32_t d_id;
       int32_t w_id;
       int32_t number;
+
+      std::vector<uint8_t> serialize() const
+      {
+        auto size = sizeof(o_id) + sizeof(d_id) + sizeof(w_id) + sizeof(number);
+        std::vector<uint8_t> v(size);
+        auto data = v.data();
+        serialized::write(data, size, o_id);
+        serialized::write(data, size, d_id);
+        serialized::write(data, size, w_id);
+        serialized::write(data, size, number);
+        return v;
+      }
+
+      static OrderLine::Key deserialize(const uint8_t* data, size_t size)
+      {
+        OrderLine::Key key;
+        key.o_id = serialized::read<decltype(o_id)>(data, size);
+        key.d_id = serialized::read<decltype(d_id)>(data, size);
+        key.w_id = serialized::read<decltype(w_id)>(data, size);
+        key.number = serialized::read<decltype(number)>(data, size);
+        return key;
+      }
+
       MSGPACK_DEFINE(o_id, d_id, w_id, number);
     };
 
@@ -438,6 +697,42 @@ namespace tpcc
     float amount;
     std::array<char, DATETIME_SIZE + 1> delivery_d;
     std::array<char, Stock::DIST + 1> dist_info;
+
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = sizeof(o_id) + sizeof(d_id) + sizeof(w_id) + sizeof(number) +
+        sizeof(i_id) + sizeof(supply_w_id) + sizeof(quantity) + sizeof(amount) +
+        sizeof(delivery_d) + sizeof(dist_info);
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, o_id);
+      serialized::write(data, size, d_id);
+      serialized::write(data, size, w_id);
+      serialized::write(data, size, number);
+      serialized::write(data, size, i_id);
+      serialized::write(data, size, supply_w_id);
+      serialized::write(data, size, quantity);
+      serialized::write(data, size, amount);
+      serialized::write(data, size, delivery_d);
+      serialized::write(data, size, dist_info);
+      return v;
+    }
+
+    static OrderLine deserialize(const uint8_t* data, size_t size)
+    {
+      OrderLine order_line;
+      order_line.o_id = serialized::read<decltype(o_id)>(data, size);
+      order_line.d_id = serialized::read<decltype(d_id)>(data, size);
+      order_line.w_id = serialized::read<decltype(w_id)>(data, size);
+      order_line.number = serialized::read<decltype(number)>(data, size);
+      order_line.i_id = serialized::read<decltype(i_id)>(data, size);
+      order_line.supply_w_id = serialized::read<decltype(supply_w_id)>(data, size);
+      order_line.quantity = serialized::read<decltype(quantity)>(data, size);
+      order_line.delivery_d = serialized::read<decltype(delivery_d)>(data, size);
+      order_line.dist_info = serialized::read<decltype(dist_info)>(data, size);
+
+      return order_line;
+    }
 
     MSGPACK_DEFINE(
       o_id,
@@ -487,6 +782,26 @@ namespace tpcc
     int32_t w_id;
     int32_t d_id;
     int32_t o_id;
+
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = sizeof(w_id) + sizeof(d_id) + sizeof(o_id);
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, w_id);
+      serialized::write(data, size, d_id);
+      serialized::write(data, size, o_id);
+      return v;
+    }
+
+    static NewOrder deserialize(const uint8_t* data, size_t size)
+    {
+      NewOrder new_order;
+      new_order.w_id = serialized::read<decltype(w_id)>(data, size);
+      new_order.d_id = serialized::read<decltype(d_id)>(data, size);
+      new_order.o_id = serialized::read<decltype(o_id)>(data, size);
+      return new_order;
+    }
 
     MSGPACK_DEFINE(w_id, d_id, o_id);
   };
