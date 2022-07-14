@@ -19,7 +19,7 @@ namespace tpcc
     virtual std::optional<Stock> get_stock(Stock::Key key) = 0;
     virtual std::optional<Warehouse> get_warehouse(Warehouse::Key key) = 0;
     virtual std::optional<Customer> get_customer(TpccTables::DistributeKey table_key, Customer::Key key) = 0;
-    virtual std::optional<Customer> get_customer_by_name(TpccTables::DistributeKey table_key, string last_name) = 0;
+    virtual std::optional<Customer> get_customer_by_name(TpccTables::DistributeKey table_key, std::string last_name) = 0;
     virtual std::optional<Order> get_order(TpccTables::DistributeKey table_key, Order::Key key) = 0;
 
 //    TODO how to enforce "last" order?
