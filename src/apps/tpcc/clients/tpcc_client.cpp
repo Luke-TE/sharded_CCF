@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache 2.0 License.
-#include "../app/tpcc_global.h"
 #include "../tpcc_serializer.h"
 #include "perf_client.h"
 
