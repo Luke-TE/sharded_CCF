@@ -72,14 +72,14 @@ namespace tpcc
 
     std::vector<uint8_t> serialize() const
     {
-      auto size = sizeof(id) + sizeof(im_id) + sizeof(price) + sizeof(name) + sizeof(data_field);
+      auto size = sizeof(id) + sizeof(im_id) + sizeof(price) + sizeof(name) + sizeof(data);
       std::vector<uint8_t> v(size);
       auto data = v.data();
       serialized::write(data, size, id);
       serialized::write(data, size, im_id);
       serialized::write(data, size, price);
       serialized::write(data, size, name);
-      serialized::write(data, size, data_field);
+      serialized::write(data, size, data);
       return v;
     }
 
@@ -90,7 +90,7 @@ namespace tpcc
       item.im_id = serialized::read<decltype(im_id)>(data, size);
       item.price = serialized::read<decltype(price)>(data, size);
       item.name = serialized::read<decltype(name)>(data, size);
-      item.data_field = serialized::read<decltype(data_field)>(data, size);
+      item.data = serialized::read<decltype(data)>(data, size);
 
       return item;
     }
@@ -365,7 +365,7 @@ namespace tpcc
     std::vector<uint8_t> serialize() const
     {
       auto size = sizeof(i_id) + sizeof(w_id) + sizeof(quantity) + sizeof(ytd) +
-        sizeof(order_cnt) + sizeof(remote_cnt) + sizeof(dist) + sizeof(data_field);
+        sizeof(order_cnt) + sizeof(remote_cnt) + sizeof(dist) + sizeof(data);
       std::vector<uint8_t> v(size);
       auto data = v.data();
       serialized::write(data, size, i_id);
@@ -375,7 +375,7 @@ namespace tpcc
       serialized::write(data, size, order_cnt);
       serialized::write(data, size, remote_cnt);
       serialized::write(data, size, dist);
-      serialized::write(data, size, data_field);
+      serialized::write(data, size, data);
       return v;
     }
 
@@ -389,7 +389,7 @@ namespace tpcc
       stock.order_cnt = serialized::read<decltype(order_cnt)>(data, size);
       stock.remote_cnt = serialized::read<decltype(remote_cnt)>(data, size);
       stock.dist = serialized::read<decltype(dist)>(data, size);
-      stock.data_field = serialized::read<decltype(data_field)>(data, size);
+      stock.data = serialized::read<decltype(data)>(data, size);
 
       return stock;
     }
@@ -464,7 +464,7 @@ namespace tpcc
         sizeof(ytd_payment) + sizeof(payment_cnt) + sizeof(delivery_cnt) +
         sizeof(first) + sizeof(middle) + sizeof(last) + sizeof(street_1) +
         sizeof(street_2) + sizeof(city) + sizeof(state) + sizeof(zip) +
-        sizeof(phone) + sizeof(since) + sizeof(credit) + sizeof(data_field);
+        sizeof(phone) + sizeof(since) + sizeof(credit) + sizeof(data);
       std::vector<uint8_t> v(size);
       auto data = v.data();
       serialized::write(data, size, id);
@@ -487,7 +487,7 @@ namespace tpcc
       serialized::write(data, size, phone);
       serialized::write(data, size, since);
       serialized::write(data, size, credit);
-      serialized::write(data, size, data_field);
+      serialized::write(data, size, data);
       return v;
     }
     
@@ -514,7 +514,7 @@ namespace tpcc
       customer.phone = serialized::read<decltype(phone)>(data, size);
       customer.since = serialized::read<decltype(since)>(data, size);
       customer.credit = serialized::read<decltype(credit)>(data, size);
-      customer.data_field = serialized::read<decltype(data_field)>(data, size);
+      customer.data = serialized::read<decltype(data)>(data, size);
       return customer;
     }
     
