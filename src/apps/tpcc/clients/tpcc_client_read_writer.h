@@ -94,17 +94,17 @@ namespace tpcc
       }
     }
 
-    virtual std::optional<Customer> get_customer(TpccTables::DistributeKey table_key, Customer::Key key) = 0;
-    virtual std::optional<Customer> get_customer_by_name(TpccTables::DistributeKey table_key, string last_name) = 0;
-    virtual std::optional<Order> get_order(TpccTables::DistributeKey table_key, Order::Key key) = 0;
+    std::optional<Customer> get_customer(TpccTables::DistributeKey table_key, Customer::Key key) {};
+    std::optional<Customer> get_customer_by_name(TpccTables::DistributeKey table_key, string last_name) {};
+    std::optional<Order> get_order(TpccTables::DistributeKey table_key, Order::Key key) {};
 
-    virtual std::optional<Order> get_last_order_by_customer(TpccTables::DistributeKey table_key, Customer::Key key) = 0;
-    virtual std::optional<NewOrder> get_last_new_order(TpccTables::DistributeKey table_key, NewOrder::Key key) = 0;
+    std::optional<Order> get_last_order_by_customer(TpccTables::DistributeKey table_key, Customer::Key key) {};
+    std::optional<NewOrder> get_last_new_order(TpccTables::DistributeKey table_key, NewOrder::Key key) {};
 
-    virtual void put_order(TpccTables::DistributeKey table_key, Order::Key key, Order order) = 0;
-    virtual void put_new_order(TpccTables::DistributeKey table_key, NewOrder::Key key, NewOrder new_order) = 0;
-    virtual void put_order_line(OrderLine::Key key, OrderLine order_line) = 0;
-    virtual void put_history(History::Key key, History history) = 0;
-    virtual void remove_new_order(NewOrder::Key key) = 0;
+    void put_order(TpccTables::DistributeKey table_key, Order::Key key, Order order) {};
+    void put_new_order(TpccTables::DistributeKey table_key, NewOrder::Key key, NewOrder new_order) {};
+    void put_order_line(OrderLine::Key key, OrderLine order_line) {};
+    void put_history(History::Key key, History history) {};
+    void remove_new_order(NewOrder::Key key) {};
   };
 }
