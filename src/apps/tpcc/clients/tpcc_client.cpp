@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 License.
 #include "../tpcc_serializer.h"
 #include "perf_client.h"
+#include "../tpcc_tables.h"
 
 #include <chrono>
 
