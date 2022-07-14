@@ -130,12 +130,111 @@ namespace ccfapp
 
       auto get_district = [this](auto& args) {
         const auto& body = args.rpc_ctx->get_request_body();
-        auto district_request = tpcc::DistrictRequest::deserialize(body.data(), body.size());
+        auto request = tpcc::DistrictRequest::deserialize(body.data(), body.size());
 
         tpcc::DistrictResponse response;
-        response.id = district_request.id;
-        response.w_id = district_request.w_id;
+        response.id = request.id;
+        response.w_id = request.w_id;
         // TODO fetch district from local store
+
+        set_ok_status(args);
+        args.rpc_ctx->set_response_body(response.serialize());
+      };
+
+      auto get_order_line = [this](auto& args) {
+        const auto& body = args.rpc_ctx->get_request_body();
+        auto request = tpcc::OrderLineRequest::deserialize(body.data(), body.size());
+
+        tpcc::OrderLineResponse response;
+        // TODO fetch it from local store
+
+        set_ok_status(args);
+        args.rpc_ctx->set_response_body(response.serialize());
+      };
+
+      auto get_item = [this](auto& args) {
+        const auto& body = args.rpc_ctx->get_request_body();
+        auto request = tpcc::ItemRequest::deserialize(body.data(), body.size());
+
+        tpcc::ItemResponse response;
+        // TODO fetch it from local store
+
+        set_ok_status(args);
+        args.rpc_ctx->set_response_body(response.serialize());
+      };
+
+      auto get_stock = [this](auto& args) {
+        const auto& body = args.rpc_ctx->get_request_body();
+        auto request = tpcc::StockRequest::deserialize(body.data(), body.size());
+
+        tpcc::StockResponse response;
+        // TODO fetch it from local store
+
+        set_ok_status(args);
+        args.rpc_ctx->set_response_body(response.serialize());
+      };
+
+      auto get_warehouse = [this](auto& args) {
+        const auto& body = args.rpc_ctx->get_request_body();
+        auto request = tpcc::WarehouseRequest::deserialize(body.data(), body.size());
+
+        tpcc::WarehouseResponse response;
+        // TODO fetch it from local store
+
+        set_ok_status(args);
+        args.rpc_ctx->set_response_body(response.serialize());
+      };
+
+      auto get_customer = [this](auto& args) {
+        const auto& body = args.rpc_ctx->get_request_body();
+        auto request = tpcc::CustomerRequest::deserialize(body.data(), body.size());
+
+        tpcc::CustomerResponse response;
+        // TODO fetch it from local store
+
+        set_ok_status(args);
+        args.rpc_ctx->set_response_body(response.serialize());
+      };
+
+      auto get_customer_by_name = [this](auto& args) {
+        const auto& body = args.rpc_ctx->get_request_body();
+        auto request = tpcc::CustomerByNameRequest::deserialize(body.data(), body.size());
+
+        tpcc::CustomerResponse response;
+        // TODO fetch it from local store
+
+        set_ok_status(args);
+        args.rpc_ctx->set_response_body(response.serialize());
+      };
+
+      auto get_order = [this](auto& args) {
+        const auto& body = args.rpc_ctx->get_request_body();
+        auto request = tpcc::OrderRequest::deserialize(body.data(), body.size());
+
+        tpcc::OrderResponse response;
+        // TODO fetch it from local store
+
+        set_ok_status(args);
+        args.rpc_ctx->set_response_body(response.serialize());
+      };
+
+      auto get_last_order_by_customer = [this](auto& args) {
+        const auto& body = args.rpc_ctx->get_request_body();
+        auto request = tpcc::LastOrderRequest::deserialize(body.data(), body.size());
+
+        tpcc::OrderResponse response;
+        // TODO fetch it from local store
+
+        set_ok_status(args);
+        args.rpc_ctx->set_response_body(response.serialize());
+      };
+
+      auto get_last_new_order = [this](auto& args) {
+        const auto& body = args.rpc_ctx->get_request_body();
+        auto request = tpcc::LastNewOrderRequest::deserialize(body.data(), body.size());
+
+        tpcc::NewOrderResponse response;
+        // TODO fetch it from local store
 
         set_ok_status(args);
         args.rpc_ctx->set_response_body(response.serialize());
@@ -160,6 +259,24 @@ namespace ccfapp
         make_endpoint("test", verb, do_test, user_sig_or_cert)
           .install();
         make_endpoint("get_district", verb, get_district, user_sig_or_cert)
+          .install();
+        make_endpoint("get_order_line", verb, get_order_line, user_sig_or_cert)
+          .install();
+        make_endpoint("get_item", verb, get_item, user_sig_or_cert)
+          .install();
+        make_endpoint("get_stock", verb, get_stock, user_sig_or_cert)
+          .install();
+        make_endpoint("get_warehouse", verb, get_warehouse, user_sig_or_cert)
+          .install();
+        make_endpoint("get_customer", verb, get_customer, user_sig_or_cert)
+          .install();
+        make_endpoint("get_customer_by_name", verb, get_customer_by_name, user_sig_or_cert)
+          .install();
+        make_endpoint("get_order", verb, get_order, user_sig_or_cert)
+          .install();
+        make_endpoint("get_last_order_by_customer", verb, get_last_order_by_customer, user_sig_or_cert)
+          .install();
+        make_endpoint("get_last_new_order", verb, get_last_new_order, user_sig_or_cert)
           .install();
       }
 
