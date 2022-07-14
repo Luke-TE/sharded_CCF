@@ -101,8 +101,9 @@ private:
     LOG_INFO_FMT("Old Value: {0}, {1}", std::to_string(key.id), std::to_string(key.w_id));
 
     auto optional_district = read_writer.get_district(key);
-    if (district.has_value())
+    if (optional_district.has_value())
     {
+      auto district = optional_district.value();
       LOG_INFO_FMT("New Value: {0}, {1}", std::to_string(district.id), std::to_string(district.w_id));
     }
     else {
