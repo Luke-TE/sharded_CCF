@@ -324,6 +324,57 @@ namespace tpcc
     }
   };
 
+  struct StockResponse
+  {
+    static const int MIN_QUANTITY = 10;
+    static const int MAX_QUANTITY = 100;
+    static const int DIST = 24;
+    static const int MIN_DATA = 26;
+    static const int MAX_DATA = 50;
+    static const int NUM_STOCK_PER_WAREHOUSE = 100000;
+
+    int32_t i_id;
+    int32_t w_id;
+    int32_t quantity;
+    int32_t ytd;
+    int32_t order_cnt;
+    int32_t remote_cnt;
+    std::array<std::array<char, DIST + 1>, DistrictResponse::NUM_PER_WAREHOUSE> dist;
+    std::array<char, MAX_DATA + 1> data_field;
+
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = sizeof(i_id) + sizeof(w_id) + sizeof(quantity) + sizeof(ytd) +
+        sizeof(order_cnt) + sizeof(remote_cnt) + sizeof(dist) + sizeof(data_field);
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, i_id);
+      serialized::write(data, size, w_id);
+      serialized::write(data, size, quantity);
+      serialized::write(data, size, ytd);
+      serialized::write(data, size, order_cnt);
+      serialized::write(data, size, remote_cnt);
+      serialized::write(data, size, dist);
+      serialized::write(data, size, data_field);
+      return v;
+    }
+
+    static StockResponse deserialize(const uint8_t* data, size_t size)
+    {
+      StockResponse stock_response;
+      stock_response.i_id = serialized::read<decltype(i_id)>(data, size);
+      stock_response.w_id = serialized::read<decltype(w_id)>(data, size);
+      stock_response.quantity = serialized::read<decltype(quantity)>(data, size);
+      stock_response.ytd = serialized::read<decltype(ytd)>(data, size);
+      stock_response.order_cnt = serialized::read<decltype(order_cnt)>(data, size);
+      stock_response.remote_cnt = serialized::read<decltype(remote_cnt)>(data, size);
+      stock_response.dist = serialized::read<decltype(dist)>(data, size);
+      stock_response.data_field = serialized::read<decltype(data_field)>(data, size);
+
+      return stock_response;
+    }
+  };
+
   struct OrderLineResponse
   {
     static const int MIN_I_ID = 1;
@@ -422,57 +473,6 @@ namespace tpcc
       item_response.data_field = serialized::read<decltype(data_field)>(data, size);
 
       return item_response;
-    }
-  };
-
-  struct StockResponse
-  {
-    static const int MIN_QUANTITY = 10;
-    static const int MAX_QUANTITY = 100;
-    static const int DIST = 24;
-    static const int MIN_DATA = 26;
-    static const int MAX_DATA = 50;
-    static const int NUM_STOCK_PER_WAREHOUSE = 100000;
-
-    int32_t i_id;
-    int32_t w_id;
-    int32_t quantity;
-    int32_t ytd;
-    int32_t order_cnt;
-    int32_t remote_cnt;
-    std::array<std::array<char, DIST + 1>, DistrictResponse::NUM_PER_WAREHOUSE> dist;
-    std::array<char, MAX_DATA + 1> data_field;
-
-    std::vector<uint8_t> serialize() const
-    {
-      auto size = sizeof(i_id) + sizeof(w_id) + sizeof(quantity) + sizeof(ytd) +
-        sizeof(order_cnt) + sizeof(remote_cnt) + sizeof(dist) + sizeof(data_field);
-      std::vector<uint8_t> v(size);
-      auto data = v.data();
-      serialized::write(data, size, i_id);
-      serialized::write(data, size, w_id);
-      serialized::write(data, size, quantity);
-      serialized::write(data, size, ytd);
-      serialized::write(data, size, order_cnt);
-      serialized::write(data, size, remote_cnt);
-      serialized::write(data, size, dist);
-      serialized::write(data, size, data_field);
-      return v;
-    }
-
-    static StockResponse deserialize(const uint8_t* data, size_t size)
-    {
-      StockResponse stock_response;
-      stock_response.i_id = serialized::read<decltype(i_id)>(data, size);
-      stock_response.w_id = serialized::read<decltype(w_id)>(data, size);
-      stock_response.quantity = serialized::read<decltype(quantity)>(data, size);
-      stock_response.ytd = serialized::read<decltype(ytd)>(data, size);
-      stock_response.order_cnt = serialized::read<decltype(order_cnt)>(data, size);
-      stock_response.remote_cnt = serialized::read<decltype(remote_cnt)>(data, size);
-      stock_response.dist = serialized::read<decltype(dist)>(data, size);
-      stock_response.data_field = serialized::read<decltype(data_field)>(data, size);
-
-      return stock_response;
     }
   };
 
