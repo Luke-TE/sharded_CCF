@@ -3,6 +3,22 @@
 #pragma once
 
 #include "ds/serialized.h"
+#include <cstring>
+#include <stdint.h>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+#include <array>
+
+namespace Address
+{
+  static const int MIN_STREET = 10;
+  static const int MAX_STREET = 20;
+  static const int MIN_CITY = 10;
+  static const int MAX_CITY = 20;
+  static const int STATE = 2;
+  static const int ZIP = 9;
+};
 
 namespace tpcc
 {
@@ -143,25 +159,33 @@ namespace tpcc
     static DistrictRequest deserialize(const uint8_t* data, size_t size)
     {
       DistrictRequest district_request;
-      district_request.id = serialized::read<decltype(key.id)>(data, size);
-      district_request.w_id = serialized::read<decltype(key.w_id)>(data, size)
+      district_request.id = serialized::read<decltype(id)>(data, size);
+      district_request.w_id = serialized::read<decltype(w_id)>(data, size);
       return district_request;
     }
   };
 
   struct DistrictResponse
   {
+    static constexpr float MIN_TAX = 0;
+    static constexpr float MAX_TAX = 0.2000f;
+    static constexpr float INITIAL_YTD = 30000.00;
+    static const int INITIAL_NEXT_O_ID = 3001;
+    static const int MIN_NAME = 6;
+    static const int MAX_NAME = 10;
+    static const int NUM_PER_WAREHOUSE = 10;
+
     int32_t id;
     int32_t w_id;
     float tax;
     float ytd;
     int32_t next_o_id;
-    std::array<char> name;
-    std::array<char> street_1;
-    std::array<char> street_2;
-    std::array<char> city;
-    std::array<char> state;
-    std::array<char> zip;
+    std::array<char, MAX_NAME + 1> name;
+    std::array<char, Address::MAX_STREET + 1> street_1;
+    std::array<char, Address::MAX_STREET + 1> street_2;
+    std::array<char, Address::MAX_CITY + 1> city;
+    std::array<char, Address::STATE + 1> state;
+    std::array<char, Address::ZIP + 1> zip;
 
     std::vector<uint8_t> serialize() const
     {
