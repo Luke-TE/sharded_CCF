@@ -137,15 +137,15 @@ namespace ccfapp
         auto districts_table = args.tx.ro(tpcc::TpccTables::districts);
         auto optional_district = districts_table->get(key);
 
-        if (true)
-        {
-          throw std::logic_error("district does not exist");
-        }
-
-        auto response = optional_district.value();
-
-        set_ok_status(args);
-        args.rpc_ctx->set_response_body(response.serialize());
+//        if (true)
+//        {
+//          throw std::logic_error("district does not exist");
+//        }
+//
+//        auto response = optional_district.value();
+//
+//        set_ok_status(args);
+//        args.rpc_ctx->set_response_body(response.serialize());
       };
 
       auto get_order_line = [this](auto& args) {
