@@ -3,6 +3,7 @@
 #include "../tpcc_serializer.h"
 #include "perf_client.h"
 #include "../tpcc_tables.h"
+#include "tpcc_client_read_writer.h"
 
 #include <chrono>
 
@@ -92,27 +93,17 @@ private:
   void prepare_transactions() override
   {
     auto connection = create_connection(true, false);
+    tpcc::ClientReadWriter read_writer(connection);
+
     tpcc::District::Key key;
     key.id = 123;
     key.w_id = 456;
     LOG_INFO_FMT("Old Value: {0}, {1}", std::to_string(key.id), std::to_string(key.w_id));
-    const auto body = key.serialize();
-    const auto response =
-      connection->call("get_district", CBuffer{body.data(), body.size()});
-    check_response(response);
 
-    tpcc::District district;
-//    tpcc::District district;
-    if (response.body.size() > 0)
+    auto optional_district = read_writer.get_district(key);
+    if (district.has_value())
     {
-      district = tpcc::District::deserialize(response.body.data(), response.body.size());
-
       LOG_INFO_FMT("New Value: {0}, {1}", std::to_string(district.id), std::to_string(district.w_id));
-      if (!district.street_2.empty())
-      {
-        std::string street(std::begin(district.street_2), std::end(district.street_2));
-        LOG_INFO_FMT("Non-empty: {}", street);
-      }
     }
     else {
       LOG_INFO_FMT("No Value :(");
