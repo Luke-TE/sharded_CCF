@@ -21,9 +21,9 @@ namespace tpcc
       const auto body = key.serialize();
       const auto response =
         connection->call("get_district", CBuffer{body.data(), body.size()});
-      check_response(response);
+//      check_response(response);
 
-      if (response.body.size() > 0)
+      if (http::status_success(r.status) && response.body.size() > 0)
       {
         return tpcc::District::deserialize(response.body.data(), response.body.size());
       }
@@ -37,9 +37,9 @@ namespace tpcc
       const auto body = key.serialize();
       const auto response =
         connection->call("get_order_line", CBuffer{body.data(), body.size()});
-      check_response(response);
+//      check_response(response);
 
-      if (response.body.size() > 0)
+      if (http::status_success(r.status) && response.body.size() > 0)
       {
         return tpcc::OrderLine::deserialize(response.body.data(), response.body.size());
       }
@@ -53,9 +53,9 @@ namespace tpcc
       const auto body = key.serialize();
       const auto response =
         connection->call("get_item", CBuffer{body.data(), body.size()});
-      check_response(response);
+//      check_response(response);
 
-      if (response.body.size() > 0)
+      if (http::status_success(r.status) && response.body.size() > 0)
       {
         return tpcc::Item::deserialize(response.body.data(), response.body.size());
       }
@@ -69,9 +69,9 @@ namespace tpcc
       const auto body = key.serialize();
       const auto response =
         connection->call("get_stock", CBuffer{body.data(), body.size()});
-      check_response(response);
+//      check_response(response);
 
-      if (response.body.size() > 0)
+      if (http::status_success(r.status) && response.body.size() > 0)
       {
         return tpcc::Stock::deserialize(response.body.data(), response.body.size());
       }
@@ -85,9 +85,9 @@ namespace tpcc
       const auto body = key.serialize();
       const auto response =
         connection->call("get_warehouse", CBuffer{body.data(), body.size()});
-      check_response(response);
+//      check_response(response);
 
-      if (response.body.size() > 0)
+      if (http::status_success(r.status) && response.body.size() > 0)
       {
         return tpcc::Warehouse::deserialize(response.body.data(), response.body.size());
       }
@@ -120,17 +120,17 @@ namespace tpcc
     void put_history(History::Key key, History history) override {};
     void remove_new_order(NewOrder::Key key) override {};
 
-  private:
-    bool check_response(const RpcTlsClient::Response& r)
-    {
-      if (!http::status_success(r.status))
-      {
-        const std::string error_msg(r.body.begin(), r.body.end());
-        throw logic_error(error_msg);
-        return false;
-      }
-
-      return true;
-    }
+//  private:
+//    bool check_response(const RpcTlsClient::Response& r)
+//    {
+//      if (!http::status_success(r.status))
+//      {
+//        const std::string error_msg(r.body.begin(), r.body.end());
+//        throw logic_error(error_msg);
+//        return false;
+//      }
+//
+//      return true;
+//    }
   };
 }
