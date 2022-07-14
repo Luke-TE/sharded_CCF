@@ -262,6 +262,148 @@ namespace tpcc
     }
   };
 
+  struct CustomerRequest
+  {
+    int32_t id;
+    int32_t w_id;
+    int32_t d_id;
+
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = sizeof(id) + sizeof(w_id) + sizeof(d_id);
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, id);
+      serialized::write(data, size, w_id);
+      serialized::write(data, size, d_id);
+      return v;
+    }
+
+    static CustomerRequest deserialize(const uint8_t* data, size_t size)
+    {
+      CustomerRequest customer_request;
+      customer_request.id = serialized::read<decltype(id)>(data, size);
+      customer_request.w_id = serialized::read<decltype(w_id)>(data, size);
+      customer_request.d_id = serialized::read<decltype(d_id)>(data, size);
+      return customer_request;
+    }
+  };
+
+  struct CustomerByNameRequest
+  {
+    string last_name;
+    int32_t w_id;
+    int32_t d_id;
+
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = sizeof(last_name) + sizeof(w_id) + sizeof(d_id);
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, last_name);
+      serialized::write(data, size, w_id);
+      serialized::write(data, size, d_id);
+      return v;
+    }
+
+    static CustomerByNameRequest deserialize(const uint8_t* data, size_t size)
+    {
+      CustomerByNameRequest customer_by_name_request;
+      customer_by_name_request.last_name = serialized::read<decltype(last_name)>(data, size);
+      customer_by_name_request.w_id = serialized::read<decltype(w_id)>(data, size);
+      customer_by_name_request.d_id = serialized::read<decltype(d_id)>(data, size);
+      return customer_by_name_request;
+    }
+  };
+
+  struct OrderRequest
+  {
+    int32_t id;
+    int32_t w_id;
+    int32_t d_id;
+
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = sizeof(id) + sizeof(w_id) + sizeof(d_id);
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, id);
+      serialized::write(data, size, w_id);
+      serialized::write(data, size, d_id);
+      return v;
+    }
+
+    static OrderRequest deserialize(const uint8_t* data, size_t size)
+    {
+      OrderRequest order_request;
+      order_request.id = serialized::read<decltype(id)>(data, size);
+      order_request.w_id = serialized::read<decltype(w_id)>(data, size);
+      order_request.d_id = serialized::read<decltype(d_id)>(data, size);
+      return order_request;
+    }
+  };
+
+  struct LastOrderRequest
+  {
+    int32_t id;
+    int32_t w_id;
+    int32_t d_id;
+
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = sizeof(id) + sizeof(w_id) + sizeof(d_id);
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, id);
+      serialized::write(data, size, w_id);
+      serialized::write(data, size, d_id);
+      return v;
+    }
+
+    static LastOrderRequest deserialize(const uint8_t* data, size_t size)
+    {
+      LastOrderRequest last_order_request;
+      last_order_request.id = serialized::read<decltype(id)>(data, size);
+      last_order_request.w_id = serialized::read<decltype(w_id)>(data, size);
+      last_order_request.d_id = serialized::read<decltype(d_id)>(data, size);
+      return last_order_request;
+    }
+  };
+
+  struct LastNewOrderRequest
+  {
+    int32_t table_w_id;
+    int32_t table_d_id;
+    int32_t w_id;
+    int32_t d_id;
+    int32_t o_id;
+
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = sizeof(o_id) + sizeof(w_id) + sizeof(d_id) +
+        sizeof(table_w_id) + sizeof(table_d_id);
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, table_w_id);
+      serialized::write(data, size, table_d_id);
+      serialized::write(data, size, w_id);
+      serialized::write(data, size, d_id);
+      serialized::write(data, size, o_id);
+      return v;
+    }
+
+    static LastNewOrderRequest deserialize(const uint8_t* data, size_t size)
+    {
+      LastNewOrderRequest last_new_order_request;
+      last_new_order_request.table_w_id = serialized::read<decltype(table_w_id)>(data, size);
+      last_new_order_request.table_d_id = serialized::read<decltype(table_d_id)>(data, size);
+      last_new_order_request.w_id = serialized::read<decltype(w_id)>(data, size);
+      last_new_order_request.d_id = serialized::read<decltype(d_id)>(data, size);
+      last_new_order_request.o_id = serialized::read<decltype(o_id)>(data, size);
+      return last_new_order_request;
+    }
+  };
+
 
   struct DistrictResponse
   {
