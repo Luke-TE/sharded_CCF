@@ -168,6 +168,19 @@ private:
     }
   }
 
+  void process_reply(const RpcTlsClient::Response& reply) override
+  {
+    if (options.check_responses)
+    {
+      if (!check_response(reply))
+      {
+        throw std::logic_error("Response failed check");
+      }
+    }
+
+    reply.
+  }
+
   bool check_response(const RpcTlsClient::Response& r) override
   {
     if (!http::status_success(r.status))

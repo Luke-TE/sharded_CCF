@@ -219,9 +219,9 @@ function(add_ccf_app name)
       add_dependencies(${virt_name} ${PARSED_ARGS_DEPS})
     endif()
 
-    if(${PARSED_ARGS_INSTALL_LIBS})
-      install(TARGETS ${virt_name} DESTINATION lib)
-    endif()
+    # if(${PARSED_ARGS_INSTALL_LIBS})
+    install(TARGETS ${virt_name} DESTINATION lib)
+    # endif()
   endif()
 endfunction()
 
