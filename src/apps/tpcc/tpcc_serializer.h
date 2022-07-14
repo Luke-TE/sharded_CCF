@@ -373,34 +373,24 @@ namespace tpcc
 
   struct LastNewOrderRequest
   {
-    int32_t table_w_id;
-    int32_t table_d_id;
     int32_t w_id;
     int32_t d_id;
-    int32_t o_id;
 
     std::vector<uint8_t> serialize() const
     {
-      auto size = sizeof(o_id) + sizeof(w_id) + sizeof(d_id) +
-        sizeof(table_w_id) + sizeof(table_d_id);
+      auto size = sizeof(w_id) + sizeof(d_id);
       std::vector<uint8_t> v(size);
       auto data = v.data();
-      serialized::write(data, size, table_w_id);
-      serialized::write(data, size, table_d_id);
       serialized::write(data, size, w_id);
       serialized::write(data, size, d_id);
-      serialized::write(data, size, o_id);
       return v;
     }
 
     static LastNewOrderRequest deserialize(const uint8_t* data, size_t size)
     {
       LastNewOrderRequest last_new_order_request;
-      last_new_order_request.table_w_id = serialized::read<decltype(table_w_id)>(data, size);
-      last_new_order_request.table_d_id = serialized::read<decltype(table_d_id)>(data, size);
       last_new_order_request.w_id = serialized::read<decltype(w_id)>(data, size);
       last_new_order_request.d_id = serialized::read<decltype(d_id)>(data, size);
-      last_new_order_request.o_id = serialized::read<decltype(o_id)>(data, size);
       return last_new_order_request;
     }
   };
