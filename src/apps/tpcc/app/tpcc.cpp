@@ -8,6 +8,7 @@
 #include "tpcc_setup.h"
 #include "tpcc_tables.h"
 #include "tpcc_transactions.h"
+#include <string.h>
 
 #include <charconv>
 
