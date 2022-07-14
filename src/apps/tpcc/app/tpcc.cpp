@@ -139,7 +139,7 @@ namespace ccfapp
 
         if (true)
         {
-          set_error_status(args, HTTP_STATUS_BAD_REQUEST, "district does not exist")
+          set_error_status(args, HTTP_STATUS_BAD_REQUEST, "district does not exist");
         }
         else
         {
