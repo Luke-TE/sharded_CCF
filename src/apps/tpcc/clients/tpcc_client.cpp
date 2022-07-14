@@ -92,10 +92,15 @@ private:
     auto connection = create_connection(true, false);
     tpcc::TestStruct test_struct;
     test_struct.int_val = 12345;
+    LOG_INFO_FMT("Old Value: {}", std::to_string(test_struct.int_val));
     const auto body = test_struct.serialize();
     const auto response =
       connection->call("test", CBuffer{body.data(), body.size()});
     check_response(response);
+
+    tpcc::TestStructResponse test_response;
+    test_response = tpcc::TestStructResponse::deserialize(response.body.data(), response.body.size());
+    LOG_INFO_FMT("New Value: {}", std::to_string(test_response.int_val));
 
     // Reserve space for transfer transactions
     prepared_txs.resize(options.num_transactions);

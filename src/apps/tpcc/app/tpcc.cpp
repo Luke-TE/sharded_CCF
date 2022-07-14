@@ -118,13 +118,14 @@ namespace ccfapp
       };
 
       auto do_test = [this](auto& args) {
-        LOG_INFO_FMT("Test is beginning");
         const auto& body = args.rpc_ctx->get_request_body();
         auto test_struct = tpcc::TestStruct::deserialize(body.data(), body.size());
-        LOG_INFO_FMT("Value: {}", std::to_string(test_struct.int_val));
-        LOG_INFO_FMT("Test is ending");
 
-        set_no_content_status(args);
+        tpcc::TestStructResponse response;
+        response.int_val = test_struct.int_val * 2;
+
+        set_ok_status(args);
+        args.rpc_ctx->set_response_body(response.serialize());
       };
 
       const ccf::AuthnPolicies user_sig_or_cert = {user_signature_auth_policy,

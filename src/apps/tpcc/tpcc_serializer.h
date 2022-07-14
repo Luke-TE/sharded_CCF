@@ -103,4 +103,25 @@ namespace tpcc
       return test_struct;
     }
   };
+
+  struct TestStructResponse
+  {
+    int32_t int_val;
+
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = sizeof(int_val);
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, int_val);
+      return v;
+    }
+
+    static TestStructResponse deserialize(const uint8_t* data, size_t size)
+    {
+      TestStructResponse response;
+      response.int_val = serialized::read<decltype(int_val)>(data, size);
+      return response;
+    }
+  };
 }
