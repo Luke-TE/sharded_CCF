@@ -23,7 +23,7 @@ namespace tpcc
         connection->call("get_district", CBuffer{body.data(), body.size()});
 //      check_response(response);
 
-      if (http::status_success(r.status) && response.body.size() > 0)
+      if (http::status_success(response.status) && response.body.size() > 0)
       {
         return tpcc::District::deserialize(response.body.data(), response.body.size());
       }
@@ -39,7 +39,7 @@ namespace tpcc
         connection->call("get_order_line", CBuffer{body.data(), body.size()});
 //      check_response(response);
 
-      if (http::status_success(r.status) && response.body.size() > 0)
+      if (http::status_success(response.status) && response.body.size() > 0)
       {
         return tpcc::OrderLine::deserialize(response.body.data(), response.body.size());
       }
@@ -55,7 +55,7 @@ namespace tpcc
         connection->call("get_item", CBuffer{body.data(), body.size()});
 //      check_response(response);
 
-      if (http::status_success(r.status) && response.body.size() > 0)
+      if (http::status_success(response.status) && response.body.size() > 0)
       {
         return tpcc::Item::deserialize(response.body.data(), response.body.size());
       }
@@ -71,7 +71,7 @@ namespace tpcc
         connection->call("get_stock", CBuffer{body.data(), body.size()});
 //      check_response(response);
 
-      if (http::status_success(r.status) && response.body.size() > 0)
+      if (http::status_success(response.status) && response.body.size() > 0)
       {
         return tpcc::Stock::deserialize(response.body.data(), response.body.size());
       }
@@ -87,7 +87,7 @@ namespace tpcc
         connection->call("get_warehouse", CBuffer{body.data(), body.size()});
 //      check_response(response);
 
-      if (http::status_success(r.status) && response.body.size() > 0)
+      if (http::status_success(response.status) && response.body.size() > 0)
       {
         return tpcc::Warehouse::deserialize(response.body.data(), response.body.size());
       }
