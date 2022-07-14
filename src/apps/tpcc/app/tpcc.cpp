@@ -132,13 +132,10 @@ namespace ccfapp
         const auto& body = args.rpc_ctx->get_request_body();
         auto district_request = tpcc::DistrictRequest::deserialize(body.data(), body.size());
 
-        tpcc::District district;
-        district.id = district_request.key.id;
-        district.w_id = district_request.key.w_id;
-        district.street_2 =  { 'H', 'e', 'l', 'l', 'o', '\0' };
-
         tpcc::DistrictResponse response;
-        response.district = district;
+        response.id = district_request.id;
+        response.w_id = district_request.w_id;
+        response.street_2 =  { 'H', 'e', 'l', 'l', 'o', '\0' };
 
         set_ok_status(args);
         args.rpc_ctx->set_response_body(response.serialize());

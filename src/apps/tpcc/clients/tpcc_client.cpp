@@ -91,19 +91,22 @@ private:
   {
     auto connection = create_connection(true, false);
     tpcc::DistrictRequest district_request;
-    district_request.key = {123, 456};
-    LOG_INFO_FMT("Old Value: \\{{}\\}, \\{{}\\}", district_request.key.id, district_request.key.w_id);
+    district_request.id = 123;
+    district_request.w_id = 456;
+    LOG_INFO_FMT("Old Value: \\{{}\\}, \\{{}\\}", district_request.id, district_request.w_id);
     const auto body = district_request.serialize();
     const auto response =
       connection->call("get_district", CBuffer{body.data(), body.size()});
     check_response(response);
 
-    tpcc::District district;
+    tpcc::DistrictResponse district_response;
+//    tpcc::District district;
     if (response.body.size() > 0)
     {
-      district = tpcc::DistrictResponse::deserialize(response.body.data(), response.body.size());
-      LOG_INFO_FMT("New Value: \\{{}\\}, \\{{}\\}", district.id, district.w_id);
-      if (!district.street_2.empty()) {
+      district_response = tpcc::DistrictResponse::deserialize(response.body.data(), response.body.size());
+
+      LOG_INFO_FMT("New Value: \\{{}\\}, \\{{}\\}", district_response.id, district_response.w_id);
+      if (!district_response.street_2.empty()) {
         LOG_INFO_FMT("Non-empty!");
       }
     }
