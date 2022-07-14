@@ -148,7 +148,7 @@ namespace ccfapp
         response.w_id = key.w_id;
         response.street_2 = {'a','b','c','\0'};;
 
-        auto response = optional_district.value();
+//        auto response = optional_district.value();
 
         set_ok_status(args);
         args.rpc_ctx->set_response_body(response.serialize());
