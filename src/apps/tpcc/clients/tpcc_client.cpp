@@ -4,6 +4,9 @@
 #include "perf_client.h"
 #include <chrono>
 
+// temp
+#include "../tpcc_global.h"
+
 using namespace std;
 using namespace nlohmann;
 
