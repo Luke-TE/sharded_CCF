@@ -99,8 +99,14 @@ private:
     check_response(response);
 
     tpcc::TestStructResponse test_response;
-    test_response = tpcc::TestStructResponse::deserialize(response.body.data(), response.body.size());
-    LOG_INFO_FMT("New Value: {}", std::to_string(test_response.int_val));
+    if (response.body.size() > 0)
+    {
+      test_response = tpcc::TestStructResponse::deserialize(response.body.data(), response.body.size());
+      LOG_INFO_FMT("New Value: {}", std::to_string(test_response.int_val));
+    }
+    else {
+      LOG_INFO_FMT("No Value :(");
+    }
 
     // Reserve space for transfer transactions
     prepared_txs.resize(options.num_transactions);
