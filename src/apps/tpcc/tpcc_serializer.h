@@ -3,6 +3,7 @@
 #pragma once
 
 #include "ds/serialized.h"
+#include "app/tpcc_tables.h"
 
 namespace tpcc
 {
@@ -122,6 +123,73 @@ namespace tpcc
       TestStructResponse response;
       response.int_val = serialized::read<decltype(int_val)>(data, size);
       return response;
+    }
+  };
+
+  struct DistrictRequest
+  {
+    District::Key key;
+
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = sizeof(key.id) + sizeof(key.w_id);
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, key.id);
+      serialized::write(data, size, key.w_id);
+      return v;
+    }
+
+    static DistrictRequest deserialize(const uint8_t* data, size_t size)
+    {
+      DistrictRequest district_request;
+      auto id = serialized::read<decltype(key.id)>(data, size);
+      auto w_id = serialized::read<decltype(key.w_id)>(data, size)
+      district_request.key = { id, w_id };
+      return district_request;
+    }
+  };
+
+  struct DistrictResponse
+  {
+    District district;
+
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = sizeof(district.id) + sizeof(district.w_id) + sizeof(district.tax) + sizeof(district.ytd) + sizeof(district.next_o_id)
+        + sizeof(district.name) + sizeof(district.street_1) + sizeof(district.street_2) + sizeof(district.city) + sizeof(district.state) + sizeof(district.zip);
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, district.id);
+      serialized::write(data, size, district.w_id);
+      serialized::write(data, size, district.tax);
+      serialized::write(data, size, district.ytd);
+      serialized::write(data, size, district.next_o_id);
+      serialized::write(data, size, district.name);
+      serialized::write(data, size, district.street_1);
+      serialized::write(data, size, district.street_2);
+      serialized::write(data, size, district.city);
+      serialized::write(data, size, district.state);
+      serialized::write(data, size, district.zip);
+      return v;
+    }
+
+    static District deserialize(const uint8_t* data, size_t size)
+    {
+      District district;
+      district.id = serialized::read<decltype(district.id)>(data, size);
+      district.w_id = serialized::read<decltype(district.w_id)>(data, size);
+      district.tax = serialized::read<decltype(district.tax)>(data, size);
+      district.ytd = serialized::read<decltype(district.ytd)>(data, size);
+      district.next_o_id = serialized::read<decltype(district.next_o_id)>(data, size);
+      district.name = serialized::read<decltype(district.name)>(data, size);
+      district.street_1 = serialized::read<decltype(district.street_1)>(data, size);
+      district.street_2 = serialized::read<decltype(district.street_2)>(data, size);
+      district.city = serialized::read<decltype(district.city)>(data, size);
+      district.state = serialized::read<decltype(district.state)>(data, size);
+      district.zip = serialized::read<decltype(district.zip)>(data, size);
+
+      return district;
     }
   };
 }

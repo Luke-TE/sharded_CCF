@@ -128,6 +128,22 @@ namespace ccfapp
 //        args.rpc_ctx->set_response_body(response.serialize());
       };
 
+      auto get_district = [this](auto& args) {
+        const auto& body = args.rpc_ctx->get_request_body();
+        auto district_request = tpcc::DistrictRequest::deserialize(body.data(), body.size());
+
+        tpcc::District district;
+        district.id = district_request.key.id;
+        district.w_id = district_request.key.w_id;
+        district.street_2 =  { 'H', 'e', 'l', 'l', 'o', '\0' };
+
+        tpcc::DistrictResponse response;
+        response.district = district;
+
+        set_ok_status(args);
+        args.rpc_ctx->set_response_body(response.serialize());
+      };
+
       const ccf::AuthnPolicies user_sig_or_cert = {user_signature_auth_policy,
                                                    user_cert_auth_policy};
 
@@ -145,6 +161,8 @@ namespace ccfapp
         make_endpoint("new_order", verb, do_new_order, user_sig_or_cert)
           .install();
         make_endpoint("test", verb, do_test, user_sig_or_cert)
+          .install();
+        make_endpoint("get_district", verb, get_district, user_sig_or_cert)
           .install();
       }
 

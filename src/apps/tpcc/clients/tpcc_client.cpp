@@ -90,19 +90,22 @@ private:
   void prepare_transactions() override
   {
     auto connection = create_connection(true, false);
-    tpcc::TestStruct test_struct;
-    test_struct.int_val = 12345;
-    LOG_INFO_FMT("Old Value: {}", std::to_string(test_struct.int_val));
-    const auto body = test_struct.serialize();
+    tpcc::DistrictRequest district_request;
+    district_request.key = {123, 456};
+    LOG_INFO_FMT("Old Value: \\{{}\\}, \\{{}\\}", district_request.key.id, district_request.key.w_id);
+    const auto body = district_request.serialize();
     const auto response =
-      connection->call("test", CBuffer{body.data(), body.size()});
+      connection->call("get_district", CBuffer{body.data(), body.size()});
     check_response(response);
 
-    tpcc::TestStructResponse test_response;
+    tpcc::District district;
     if (response.body.size() > 0)
     {
-      test_response = tpcc::TestStructResponse::deserialize(response.body.data(), response.body.size());
-      LOG_INFO_FMT("New Value: {}", std::to_string(test_response.int_val));
+      district = tpcc::DistrictResponse::deserialize(response.body.data(), response.body.size());
+      LOG_INFO_FMT("New Value: \\{{}\\}, \\{{}\\}", district.id, district.w_id);
+      if (!district.street_2.empty()) {
+        LOG_INFO_FMT("Non-empty!");
+      }
     }
     else {
       LOG_INFO_FMT("No Value :(");
