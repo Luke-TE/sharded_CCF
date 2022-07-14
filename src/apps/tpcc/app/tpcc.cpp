@@ -135,7 +135,7 @@ namespace ccfapp
 
         tpcc::DistrictResponse response;
 
-        District::Key key = {request.id, request.w_id};
+        tpcc::District::Key key = {request.id, request.w_id};
         auto districts_table = args.tx.ro(tpcc::TpccTables::districts);
         auto districts = districts_table->get(key);
 
