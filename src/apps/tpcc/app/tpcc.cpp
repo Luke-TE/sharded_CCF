@@ -282,7 +282,7 @@ namespace ccfapp
         table_key.v.w_id = request.w_id;
         table_key.v.d_id = request.d_id;
         auto it = tpcc::TpccTables::customers.find(table_key.k);
-        Customer::Key key = {request.id};
+        tpcc::Customer::Key key = {request.id};
         auto customers_table = args.tx.ro(it->second);
         auto optional_customer = customers_table->get(key);
 
@@ -329,7 +329,7 @@ namespace ccfapp
         table_key.v.d_id = request.d_id;
         auto it = tpcc::TpccTables::customers.find(table_key.k);
         auto customers_table = args.tx.ro(it->second);
-        customers_table->foreach([&](const Customer::Key&, const Customer& c) {
+        customers_table->foreach([&](const tpcc::Customer::Key&, const tpcc::Customer& c) {
           if (strcmp(c.last.data(), request.last_name) == 0)
           {
             customer = c;
@@ -376,13 +376,14 @@ namespace ccfapp
 
         auto it = tpcc::TpccTables::orders.find(table_key.k);
         auto orders_table = args.tx.ro(it->second);
-        Order::Key key = {request.id};
+        tpcc::Order::Key key = {request.id};
         auto optional_order = orders_table->get(key);
         if (!optional_order.has_value())
         {
           throw std::logic_error("order does not exist");
         }
 
+        auto order = optional_order.value();
         response.id = order.id;
         response.c_id = order.c_id;
         response.d_id = order.d_id;
@@ -409,7 +410,7 @@ namespace ccfapp
         auto it = tpcc::TpccTables::orders.find(table_key.k);
 
         auto orders_table = args.tx.ro(it->second);
-        orders_table->foreach([&](const Order::Key&, const Order& o) {
+        orders_table->foreach([&](const tpcc::Order::Key&, const tpcc::Order& o) {
           if (o.c_id == request.id)
           {
             order = o;
@@ -446,7 +447,7 @@ namespace ccfapp
         tpcc::NewOrder::Key new_order_key = {request.w_id, request.d_id, 1};
         int32_t o_id;
         new_orders_table->foreach(
-          [&](const NewOrder::Key& k, const NewOrder& no) {
+          [&](const tpcc::NewOrder::Key& k, const tpcc::NewOrder& no) {
             new_order_key = k;
             o_id = no.o_id;
             return false;
