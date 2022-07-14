@@ -114,6 +114,24 @@ namespace tpcc
       int32_t id;
       int32_t w_id;
       MSGPACK_DEFINE(id, w_id);
+
+      std::vector<uint8_t> serialize() const
+      {
+        auto size = sizeof(id) + sizeof(w_id);
+        std::vector<uint8_t> v(size);
+        auto data = v.data();
+        serialized::write(data, size, id);
+        serialized::write(data, size, w_id);
+        return v;
+      }
+
+      static District::Key deserialize(const uint8_t* data, size_t size)
+      {
+        District::Key key;
+        key.id = serialized::read<decltype(id)>(data, size);
+        key.w_id = serialized::read<decltype(w_id)>(data, size);
+        return key;
+      }
     };
 
     int32_t id;
@@ -131,6 +149,43 @@ namespace tpcc
     Key get_key()
     {
       return {id, w_id};
+    }
+
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = sizeof(id) + sizeof(w_id) + sizeof(tax) + sizeof(ytd) + sizeof(next_o_id)
+        + sizeof(name) + sizeof(street_1) + sizeof(street_2) + sizeof(city) + sizeof(state) + sizeof(zip);
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, id);
+      serialized::write(data, size, w_id);
+      serialized::write(data, size, tax);
+      serialized::write(data, size, ytd);
+      serialized::write(data, size, next_o_id);
+      serialized::write(data, size, name);
+      serialized::write(data, size, street_1);
+      serialized::write(data, size, street_2);
+      serialized::write(data, size, city);
+      serialized::write(data, size, state);
+      serialized::write(data, size, zip);
+      return v;
+    }
+
+    static District deserialize(const uint8_t* data, size_t size)
+    {
+      District district;
+      district.id = serialized::read<decltype(id)>(data, size);
+      district.w_id = serialized::read<decltype(w_id)>(data, size);
+      district.tax = serialized::read<decltype(tax)>(data, size);
+      district.ytd = serialized::read<decltype(ytd)>(data, size);
+      district.next_o_id = serialized::read<decltype(next_o_id)>(data, size);
+      district.name = serialized::read<decltype(name)>(data, size);
+      district.street_1 = serialized::read<decltype(street_1)>(data, size);
+      district.street_2 = serialized::read<decltype(street_2)>(data, size);
+      district.city = serialized::read<decltype(city)>(data, size);
+      district.state = serialized::read<decltype(state)>(data, size);
+      district.zip = serialized::read<decltype(zip)>(data, size);
+      return district;
     }
 
     MSGPACK_DEFINE(

@@ -147,24 +147,6 @@ namespace tpcc
   {
     int32_t id;
     int32_t w_id;
-
-    std::vector<uint8_t> serialize() const
-    {
-      auto size = sizeof(id) + sizeof(w_id);
-      std::vector<uint8_t> v(size);
-      auto data = v.data();
-      serialized::write(data, size, id);
-      serialized::write(data, size, w_id);
-      return v;
-    }
-
-    static DistrictRequest deserialize(const uint8_t* data, size_t size)
-    {
-      DistrictRequest district_request;
-      district_request.id = serialized::read<decltype(id)>(data, size);
-      district_request.w_id = serialized::read<decltype(w_id)>(data, size);
-      return district_request;
-    }
   };
 
   struct OrderLineRequest

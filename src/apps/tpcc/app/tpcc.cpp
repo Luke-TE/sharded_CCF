@@ -132,30 +132,23 @@ namespace ccfapp
 
       auto get_district = [this](auto& args) {
         const auto& body = args.rpc_ctx->get_request_body();
-        auto request = tpcc::DistrictRequest::deserialize(body.data(), body.size());
+        auto key = tpcc::District::Key::deserialize(body.data(), body.size());
 
-        tpcc::DistrictResponse response;
+        tpcc::District response;
+//
+//        auto districts_table = args.tx.ro(tpcc::TpccTables::districts);
+//        auto optional_district = districts_table->get(key);
+//
+//        if (!optional_district.has_value())
+//        {
+//          throw std::logic_error("district does not exist");
+//        }
 
-        tpcc::District::Key key = {request.id, request.w_id};
-        auto districts_table = args.tx.ro(tpcc::TpccTables::districts);
-        auto optional_district = districts_table->get(key);
+        response.id = key.id;
+        response.w_id = key.w_id;
+        response.street_2 = {'a','b','c','\0'};;
 
-        if (!optional_district.has_value())
-        {
-          throw std::logic_error("district does not exist");
-        }
-        auto district = optional_district.value();
-        response.id = district.id;
-        response.w_id = district.w_id;
-        response.tax = district.tax;
-        response.ytd = district.ytd;
-        response.next_o_id = district.next_o_id;
-        response.name = district.name;
-        response.street_1 = district.street_1;
-        response.street_2 = district.street_2;
-        response.city = district.city;
-        response.state = district.state;
-        response.zip = district.zip;
+        auto response = optional_district.value();
 
         set_ok_status(args);
         args.rpc_ctx->set_response_body(response.serialize());

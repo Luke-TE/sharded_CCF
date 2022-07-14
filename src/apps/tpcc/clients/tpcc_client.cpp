@@ -92,25 +92,25 @@ private:
   void prepare_transactions() override
   {
     auto connection = create_connection(true, false);
-    tpcc::DistrictRequest district_request;
-    district_request.id = 123;
-    district_request.w_id = 456;
-    LOG_INFO_FMT("Old Value: {0}, {1}", std::to_string(district_request.id), std::to_string(district_request.w_id));
-    const auto body = district_request.serialize();
+    tpcc::District::Key key;
+    key.id = 123;
+    key.w_id = 456;
+    LOG_INFO_FMT("Old Value: {0}, {1}", std::to_string(key.id), std::to_string(key.w_id));
+    const auto body = key.serialize();
     const auto response =
       connection->call("get_district", CBuffer{body.data(), body.size()});
     check_response(response);
 
-    tpcc::DistrictResponse district_response;
+    tpcc::District district;
 //    tpcc::District district;
     if (response.body.size() > 0)
     {
-      district_response = tpcc::DistrictResponse::deserialize(response.body.data(), response.body.size());
+      district = tpcc::District::deserialize(response.body.data(), response.body.size());
 
-      LOG_INFO_FMT("New Value: {0}, {1}", std::to_string(district_response.id), std::to_string(district_response.w_id));
-      if (!district_response.street_2.empty())
+      LOG_INFO_FMT("New Value: {0}, {1}", std::to_string(district.id), std::to_string(district.w_id));
+      if (!district.street_2.empty())
       {
-        std::string street(std::begin(district_response.street_2), std::end(district_response.street_2));
+        std::string street(std::begin(district.street_2), std::end(district.street_2));
         LOG_INFO_FMT("Non-empty: {}", street);
       }
     }
