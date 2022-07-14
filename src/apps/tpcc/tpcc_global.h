@@ -2,6 +2,13 @@
 
 //#include "ds/serialized.h"
 #include "app/tpcc_tables.h"
+#include "tpcc_common.h"
+#include "tpcc_output.h"
+#include "tpcc_tables.h"
+
+#include <cinttypes>
+#include <string.h>
+#include <vector>
 
 namespace tpcc
 {
