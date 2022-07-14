@@ -3,17 +3,18 @@
 //#include "ds/serialized.h"
 #include "../app/tpcc_global.h"
 #include "../tpcc_tables.h"
+#include <stdexcept>
 
 namespace tpcc
 {
   class ClientReadWriter : public ReadWriter {
     std::shared_ptr<RpcTlsClient> connection;
 
-    public ClientReadWriter(std::shared_ptr<RpcTlsClient> conn) : connection(conn)
+  public:
+    ClientReadWriter(std::shared_ptr<RpcTlsClient> conn) : connection(conn)
     {
     }
 
-  public:
     std::optional<District> get_district(tpcc::District::Key key) override {
       const auto body = key.serialize();
       const auto response =
@@ -118,7 +119,7 @@ namespace tpcc
     void remove_new_order(NewOrder::Key key) override {};
 
   private:
-    bool check_response(const RpcTlsClient::Response& r) override
+    bool check_response(const RpcTlsClient::Response& r)
     {
       if (!http::status_success(r.status))
       {
