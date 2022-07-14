@@ -83,14 +83,14 @@ namespace tpcc
       return v;
     }
 
-    static Item deserialize(const uint8_t* data, size_t size)
+    static Item deserialize(const uint8_t* buffer, size_t size)
     {
       Item item;
-      item.id = serialized::read<decltype(id)>(data, size);
-      item.im_id = serialized::read<decltype(im_id)>(data, size);
-      item.price = serialized::read<decltype(price)>(data, size);
-      item.name = serialized::read<decltype(name)>(data, size);
-      item.data = serialized::read<decltype(data)>(data, size);
+      item.id = serialized::read<decltype(id)>(buffer, size);
+      item.im_id = serialized::read<decltype(im_id)>(buffer, size);
+      item.price = serialized::read<decltype(price)>(buffer, size);
+      item.name = serialized::read<decltype(name)>(buffer, size);
+      item.data = serialized::read<decltype(data)>(buffer, size);
 
       return item;
     }
@@ -379,17 +379,17 @@ namespace tpcc
       return v;
     }
 
-    static Stock deserialize(const uint8_t* data, size_t size)
+    static Stock deserialize(const uint8_t* buffer, size_t size)
     {
       Stock stock;
-      stock.i_id = serialized::read<decltype(i_id)>(data, size);
-      stock.w_id = serialized::read<decltype(w_id)>(data, size);
-      stock.quantity = serialized::read<decltype(quantity)>(data, size);
-      stock.ytd = serialized::read<decltype(ytd)>(data, size);
-      stock.order_cnt = serialized::read<decltype(order_cnt)>(data, size);
-      stock.remote_cnt = serialized::read<decltype(remote_cnt)>(data, size);
-      stock.dist = serialized::read<decltype(dist)>(data, size);
-      stock.data = serialized::read<decltype(data)>(data, size);
+      stock.i_id = serialized::read<decltype(i_id)>(buffer, size);
+      stock.w_id = serialized::read<decltype(w_id)>(buffer, size);
+      stock.quantity = serialized::read<decltype(quantity)>(buffer, size);
+      stock.ytd = serialized::read<decltype(ytd)>(buffer, size);
+      stock.order_cnt = serialized::read<decltype(order_cnt)>(buffer, size);
+      stock.remote_cnt = serialized::read<decltype(remote_cnt)>(buffer, size);
+      stock.dist = serialized::read<decltype(dist)>(buffer, size);
+      stock.data = serialized::read<decltype(data)>(buffer, size);
 
       return stock;
     }
@@ -490,34 +490,34 @@ namespace tpcc
       serialized::write(data, size, data);
       return v;
     }
-    
-    static Customer deserialize(const uint8_t* data, size_t size)
+
+    static Customer deserialize(const uint8_t* buffer, size_t size)
     {
       Customer customer;
-      customer.id = serialized::read<decltype(id)>(data, size);
-      customer.d_id = serialized::read<decltype(d_id)>(data, size);
-      customer.w_id = serialized::read<decltype(w_id)>(data, size);
-      customer.credit_lim = serialized::read<decltype(credit_lim)>(data, size);
-      customer.discount = serialized::read<decltype(discount)>(data, size);
-      customer.balance = serialized::read<decltype(balance)>(data, size);
-      customer.ytd_payment = serialized::read<decltype(ytd_payment)>(data, size);
-      customer.payment_cnt = serialized::read<decltype(payment_cnt)>(data, size);
-      customer.delivery_cnt = serialized::read<decltype(delivery_cnt)>(data, size);
-      customer.first = serialized::read<decltype(first)>(data, size);
-      customer.middle = serialized::read<decltype(middle)>(data, size);
-      customer.last = serialized::read<decltype(last)>(data, size);
-      customer.street_1 = serialized::read<decltype(street_1)>(data, size);
-      customer.street_2 = serialized::read<decltype(street_2)>(data, size);
-      customer.city = serialized::read<decltype(city)>(data, size);
-      customer.state = serialized::read<decltype(state)>(data, size);
-      customer.zip = serialized::read<decltype(zip)>(data, size);
-      customer.phone = serialized::read<decltype(phone)>(data, size);
-      customer.since = serialized::read<decltype(since)>(data, size);
-      customer.credit = serialized::read<decltype(credit)>(data, size);
-      customer.data = serialized::read<decltype(data)>(data, size);
+      customer.id = serialized::read<decltype(id)>(buffer, size);
+      customer.d_id = serialized::read<decltype(d_id)>(buffer, size);
+      customer.w_id = serialized::read<decltype(w_id)>(buffer, size);
+      customer.credit_lim = serialized::read<decltype(credit_lim)>(buffer, size);
+      customer.discount = serialized::read<decltype(discount)>(buffer, size);
+      customer.balance = serialized::read<decltype(balance)>(buffer, size);
+      customer.ytd_payment = serialized::read<decltype(ytd_payment)>(buffer, size);
+      customer.payment_cnt = serialized::read<decltype(payment_cnt)>(buffer, size);
+      customer.delivery_cnt = serialized::read<decltype(delivery_cnt)>(buffer, size);
+      customer.first = serialized::read<decltype(first)>(buffer, size);
+      customer.middle = serialized::read<decltype(middle)>(buffer, size);
+      customer.last = serialized::read<decltype(last)>(buffer, size);
+      customer.street_1 = serialized::read<decltype(street_1)>(buffer, size);
+      customer.street_2 = serialized::read<decltype(street_2)>(buffer, size);
+      customer.city = serialized::read<decltype(city)>(buffer, size);
+      customer.state = serialized::read<decltype(state)>(buffer, size);
+      customer.zip = serialized::read<decltype(zip)>(buffer, size);
+      customer.phone = serialized::read<decltype(phone)>(buffer, size);
+      customer.since = serialized::read<decltype(since)>(buffer, size);
+      customer.credit = serialized::read<decltype(credit)>(buffer, size);
+      customer.data = serialized::read<decltype(data)>(buffer, size);
       return customer;
     }
-    
+
     MSGPACK_DEFINE(
       id,
       d_id,
