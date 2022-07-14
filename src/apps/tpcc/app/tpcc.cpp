@@ -137,7 +137,7 @@ namespace ccfapp
         auto districts_table = args.tx.ro(tpcc::TpccTables::districts);
         auto optional_district = districts_table->get(key);
 
-        if (!optional_district.has_value())
+        if (true)
         {
           throw std::logic_error("district does not exist");
         }
