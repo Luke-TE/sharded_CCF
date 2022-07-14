@@ -12,12 +12,14 @@
 namespace tpcc
 {
   class ReadWriter {
+  public:
     ReadWriter(){}
     virtual std::optional<District> get_district(District::Key key) = 0;
     virtual std::optional<OrderLine> get_order_line(OrderLine::Key key) = 0;
     virtual std::optional<Item> get_item(Item::Key key) = 0;
     virtual std::optional<Stock> get_stock(Stock::Key key) = 0;
     virtual std::optional<Warehouse> get_warehouse(Warehouse::Key key) = 0;
+
     virtual std::optional<Customer> get_customer(TpccTables::DistributeKey table_key, Customer::Key key) = 0;
     virtual std::optional<Customer> get_customer_by_name(TpccTables::DistributeKey table_key, std::string last_name) = 0;
     virtual std::optional<Order> get_order(TpccTables::DistributeKey table_key, Order::Key key) = 0;

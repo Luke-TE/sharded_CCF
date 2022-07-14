@@ -97,7 +97,7 @@ namespace tpcc
     std::optional<Customer> get_customer(TpccTables::DistributeKey table_key, Customer::Key key) override {
       return std::nullopt;
     };
-    std::optional<Customer> get_customer_by_name(TpccTables::DistributeKey table_key, string last_name) override {
+    std::optional<Customer> get_customer_by_name(TpccTables::DistributeKey table_key, std::string last_name) override {
       return std::nullopt;
     };
     std::optional<Order> get_order(TpccTables::DistributeKey table_key, Order::Key key) override {
