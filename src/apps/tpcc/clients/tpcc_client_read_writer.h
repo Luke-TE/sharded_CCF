@@ -94,17 +94,27 @@ namespace tpcc
       }
     }
 
-    std::optional<Customer> get_customer(TpccTables::DistributeKey table_key, Customer::Key key) {};
-    std::optional<Customer> get_customer_by_name(TpccTables::DistributeKey table_key, string last_name) {};
-    std::optional<Order> get_order(TpccTables::DistributeKey table_key, Order::Key key) {};
+    std::optional<Customer> get_customer(TpccTables::DistributeKey table_key, Customer::Key key) override {
+      return std::nullopt;
+    };
+    std::optional<Customer> get_customer_by_name(TpccTables::DistributeKey table_key, string last_name) override {
+      return std::nullopt;
+    };
+    std::optional<Order> get_order(TpccTables::DistributeKey table_key, Order::Key key) override {
+      return std::nullopt;
+    };
 
-    std::optional<Order> get_last_order_by_customer(TpccTables::DistributeKey table_key, Customer::Key key) {};
-    std::optional<NewOrder> get_last_new_order(TpccTables::DistributeKey table_key, NewOrder::Key key) {};
+    std::optional<Order> get_last_order_by_customer(TpccTables::DistributeKey table_key, Customer::Key key) override {
+      return std::nullopt;
+    };
+    std::optional<NewOrder> get_last_new_order(TpccTables::DistributeKey table_key, NewOrder::Key key) override {
+      return std::nullopt;
+    };
 
-    void put_order(TpccTables::DistributeKey table_key, Order::Key key, Order order) {};
-    void put_new_order(TpccTables::DistributeKey table_key, NewOrder::Key key, NewOrder new_order) {};
-    void put_order_line(OrderLine::Key key, OrderLine order_line) {};
-    void put_history(History::Key key, History history) {};
-    void remove_new_order(NewOrder::Key key) {};
+    void put_order(TpccTables::DistributeKey table_key, Order::Key key, Order order) override {};
+    void put_new_order(TpccTables::DistributeKey table_key, NewOrder::Key key, NewOrder new_order) override {};
+    void put_order_line(OrderLine::Key key, OrderLine order_line) override {};
+    void put_history(History::Key key, History history) override {};
+    void remove_new_order(NewOrder::Key key) override {};
   };
 }
