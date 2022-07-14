@@ -116,5 +116,18 @@ namespace tpcc
     void put_order_line(OrderLine::Key key, OrderLine order_line) override {};
     void put_history(History::Key key, History history) override {};
     void remove_new_order(NewOrder::Key key) override {};
+
+  private:
+    bool check_response(const RpcTlsClient::Response& r) override
+    {
+      if (!http::status_success(r.status))
+      {
+        const std::string error_msg(r.body.begin(), r.body.end());
+        throw logic_error(error_msg);
+        return false;
+      }
+
+      return true;
+    }
   };
 }
