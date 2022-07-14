@@ -17,9 +17,9 @@ namespace tpcc
   namespace Address
   {
     static const int MIN_STREET = 10;
-    static const int MAX_STREET = 5;
+    static const int MAX_STREET = 20;
     static const int MIN_CITY = 10;
-    static const int MAX_CITY = 6;
+    static const int MAX_CITY = 20;
     static const int STATE = 2;
     static const int ZIP = 9;
   };
