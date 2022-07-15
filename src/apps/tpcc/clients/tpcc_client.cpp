@@ -192,7 +192,7 @@ private:
 //      auto c = create_connection(true, false);
 //      wait_for_global_commit(last_response_tx_id);
 //    }
-//    const auto last_commit = last_response_tx_id.seqno;
+    const auto last_commit = last_response_tx_id.seqno;
     auto timing_results = end_timing(last_commit);
     LOG_INFO_FMT("Timing ended");
     return timing_results;
