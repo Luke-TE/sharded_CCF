@@ -13,7 +13,7 @@
 #include <string>
 #include "app/tpcc_common.h"
 #include "tpcc_tables.h"
-#include "clients/tpcc_client_read_writer.h"
+#include "app/tpcc_global.h"
 
 namespace Address
 {
