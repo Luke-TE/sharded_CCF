@@ -120,10 +120,12 @@ private:
         //          auto serialised_key = serialized::read<>(data, size);
         auto key = tpcc::OrderLine::Key::deserialize(new_data, size);
         LOG_INFO_FMT("After Key Size: {0}", std::to_string(size));
+        LOG_INFO_FMT("Key w_id: {0}", std::to_string(key.w_id));
 
         //          auto serialised_order_line = serialized::read<>(data, size);
         auto order_line = tpcc::OrderLine::deserialize(new_data, size);
         LOG_INFO_FMT("After Order Line Size: {0}", std::to_string(size));
+        LOG_INFO_FMT("Order Line w_id: {0}", std::to_string(order_line.w_id));
 
         test_struct.order_lines[key] = order_line;
       }
