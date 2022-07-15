@@ -971,18 +971,18 @@ namespace tpcc
       serialized::write(data, size, data);
     }
 
-    static History::Key deserialize(const uint8_t* data, size_t size)
+    static History deserialize(const uint8_t* data, size_t size)
     {
-      History::Key key;
-      key.c_id = serialized::read<decltype(c_id)>(data, size);
-      key.c_d_id = serialized::read<decltype(c_d_id)>(data, size);
-      key.c_w_id = serialized::read<decltype(c_w_id)>(data, size);
-      key.d_id = serialized::read<decltype(d_id)>(data, size);
-      key.w_id = serialized::read<decltype(w_id)>(data, size);
-      key.amount = serialized::read<decltype(amount)>(data, size);
-      key.date = serialized::read<decltype(date)>(data, size);
-      key.data = serialized::read<decltype(data)>(data, size);
-      return key;
+      History history;
+      history.c_id = serialized::read<decltype(c_id)>(data, size);
+      history.c_d_id = serialized::read<decltype(c_d_id)>(data, size);
+      history.c_w_id = serialized::read<decltype(c_w_id)>(data, size);
+      history.d_id = serialized::read<decltype(d_id)>(data, size);
+      history.w_id = serialized::read<decltype(w_id)>(data, size);
+      history.amount = serialized::read<decltype(amount)>(data, size);
+      history.date = serialized::read<decltype(date)>(data, size);
+      history.data = serialized::read<decltype(data)>(data, size);
+      return history;
     }
 
     MSGPACK_DEFINE(c_id, c_d_id, c_w_id, d_id, w_id, amount, date, data);
