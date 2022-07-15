@@ -88,7 +88,7 @@ private:
 
     size = sizeof(int) + (tpcc::OrderLine::Key::get_size() + tpcc::OrderLine::get_size()) * num_entries;
 
-    TestOrderLineMapStruct test_struct;
+    tpcc::TestOrderLineMapStruct test_struct;
     LOG_INFO_FMT("Size: {0}", std::to_string(size));
     int new_num_entries = serialized::read<int>(data, size);
     LOG_INFO_FMT("After Num Entries Size: {0}", std::to_string(size));
