@@ -149,7 +149,7 @@ private:
      for(auto it = std::begin(new_test.ints); it != std::end(new_test.ints); ++it) {
        LOG_INFO_FMT("Hello");
        LOG_INFO_FMT("Size: {0}", std::to_string(size));
-       serialized::write(data, size, it);
+       serialized::write(data, size, *it);
      }
 
 //     auto newer_test = tpcc::TestVectorStruct::deserialize(ser.data(), ser.size());
