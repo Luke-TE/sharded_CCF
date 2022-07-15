@@ -193,10 +193,8 @@ namespace tpcc
 
       for (auto const& entry : order_lines)
       {
-        auto serialised_key = entry.first.serialize().data();
-        auto serialised_order_line = entry.second.serialize().data();
-        serialized::write(data, size, serialised_key);
-        serialized::write(data, size, serialised_order_line);
+        entry.first.serialize_to_buffer(data, size);
+        entry.second.serialize_to_buffer(data, size);
       }
 
       return v;
@@ -204,15 +202,20 @@ namespace tpcc
 
     static TestOrderLineMapStruct deserialize(const uint8_t* data, size_t size)
     {
+      auto order_line_key_size = tpcc::OrderLine::Key::get_size();
+      auto order_line_size = tpcc::OrderLine::get_size();
+
       TestOrderLineMapStruct test_struct;
       int num_entries = serialized::read<int>(data, size);
       if (num_entries > 0) {
         for (int i = 0; i < num_entries; i++) {
-//          auto serialised_key = serialized::read<>(data, size);
-          auto key = tpcc::OrderLine::Key::deserialize(data, tpcc::OrderLine::Key::get_size());
+          auto key = tpcc::OrderLine::Key::deserialize(data, size);
+          data += order_line_key_size;
+          size -= order_line_key_size;
 
-//          auto serialised_order_line = serialized::read<>(data, size);
-          auto order_line = tpcc::OrderLine::deserialize(data, tpcc::OrderLine::get_size());
+          auto order_line = tpcc::OrderLine::deserialize(data, size);
+          data += order_line_size;
+          size -= order_line_size;
 
           test_struct.order_lines[key] = order_line;
         }

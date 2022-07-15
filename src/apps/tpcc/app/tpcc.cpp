@@ -356,8 +356,13 @@ namespace ccfapp
           1,2,3,4,5,6,7,8.0, { 0 }, { 0 }
         };
 
+        tpcc::OrderLine::Key key_2 = {1, 5, 8, 9};
+        tpcc::OrderLine order_line_2 = {
+          1,2,3,4,5,6,7,8.0, { 0 }, { 0 }
+        };
+
         test_vector_struct.order_lines[key] = order_line;
-//        test_vector_struct.ints = ints;
+        test_vector_struct.order_lines[key_2] = order_line_2;
 
         set_ok_status(args);
         args.rpc_ctx->set_response_body(test_vector_struct.serialize());

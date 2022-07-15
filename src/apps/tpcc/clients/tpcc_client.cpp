@@ -71,99 +71,34 @@ private:
 //      LOG_INFO_FMT("No Value :(");
 //    }
 
-    std::map<tpcc::OrderLine::Key, tpcc::OrderLine> order_lines;
-    tpcc::OrderLine::Key key = {12, 34, 56, 78};
-    tpcc::OrderLine order_line = {
-      1,2,3,4,5,6,7,8.0, { 0 }, { 0 }
-    };
 
-    tpcc::OrderLine::Key key_2 = {1, 5, 8, 9};
-    tpcc::OrderLine order_line_2 = {
-      1,2,3,4,5,6,7,8.0, { 0 }, { 0 }
-    };
 
-    order_lines[key] = order_line;
-    order_lines[key_2] = order_line_2;
+    tpcc::TestStruct test_struct;
+    test_struct.int_val = 999;
 
-    int num_entries = order_lines.size();
-    LOG_INFO_FMT("Num Entries: {0}", std::to_string(num_entries));
-    auto size = sizeof(int) + (tpcc::OrderLine::Key::get_size() + tpcc::OrderLine::get_size()) * num_entries;
-    std::vector<uint8_t> v(size);
+    const auto body = test_struct.serialize();
+    const auto response =
+      connection->call("do_test_vector", CBuffer{body.data(), body.size()});
 
-    LOG_INFO_FMT("Size At Start: {0}", std::to_string(size));
-    auto data = v.data();
-    serialized::write(data, size, num_entries);
-    LOG_INFO_FMT("Size After Writing Num Entries: {0}", std::to_string(size));
-
-    for (auto const& entry : order_lines)
+    if (http::status_success(response.status))
     {
-      entry.first.serialize_to_buffer(data, size);
-      LOG_INFO_FMT("Size After Writing Key: {0}", std::to_string(size));
+      if (response.body.size() > 0) {
+        auto test_vector_struct = tpcc::TestOrderLineMapStruct::deserialize(response.body.data(), response.body.size());
+        LOG_INFO_FMT("Num of Entries: {0}", std::to_string(test_vector_struct.order_lines.size()));
 
-      entry.second.serialize_to_buffer(data, size);
-      LOG_INFO_FMT("Size After Writing Order Line: {0}", std::to_string(size));
-    }
-    LOG_INFO_FMT("Size After Writing: {0}", std::to_string(size));
-
-    size = sizeof(int) + (tpcc::OrderLine::Key::get_size() + tpcc::OrderLine::get_size()) * num_entries;
-    const uint8_t* new_data = v.data();
-
-    tpcc::TestOrderLineMapStruct test_struct;
-    LOG_INFO_FMT("Size: {0}", std::to_string(size));
-    int new_num_entries = serialized::read<int>(new_data, size);
-    LOG_INFO_FMT("New Num Entries: {0}", std::to_string(new_num_entries));
-    LOG_INFO_FMT("After Num Entries Size: {0}", std::to_string(size));
-
-    if (new_num_entries > 0) {
-      for (int i = 0; i < new_num_entries; i++) {
-
-        //          auto serialised_key = serialized::read<>(data, size);
-        auto key = tpcc::OrderLine::Key::deserialize(new_data, size);
-        new_data += tpcc::OrderLine::Key::get_size();
-        size -= tpcc::OrderLine::Key::get_size();
-
-        LOG_INFO_FMT("After Key Size: {0}", std::to_string(size));
-        LOG_INFO_FMT("Key w_id: {0}", std::to_string(key.d_id));
-
-        //          auto serialised_order_line = serialized::read<>(data, size);
-        auto order_line = tpcc::OrderLine::deserialize(new_data, size);
-        new_data += tpcc::OrderLine::get_size();
-        size -= tpcc::OrderLine::get_size();
-
-        LOG_INFO_FMT("After Order Line Size: {0}", std::to_string(size));
-        LOG_INFO_FMT("Order Line w_id: {0}", std::to_string(order_line.d_id));
-
-        test_struct.order_lines[key] = order_line;
-      }
-      LOG_INFO_FMT("End Size: {0}", std::to_string(size));
-    }
-//
-//    tpcc::TestStruct test_struct;
-//    test_struct.int_val = 999;
-//
-//    const auto body = test_struct.serialize();
-//    const auto response =
-//      connection->call("do_test_vector", CBuffer{body.data(), body.size()});
-//
-//    if (http::status_success(response.status))
-//    {
-//      if (response.body.size() > 0) {
-//        auto test_vector_struct = tpcc::TestOrderLineMapStruct::deserialize(response.body.data(), response.body.size());
-        LOG_INFO_FMT("Num of Entries: {0}", std::to_string(test_struct.order_lines.size()));
-
-        for (auto const& entry : test_struct.order_lines)
+        for (auto const& entry : test_vector_struct.order_lines)
         {
           LOG_INFO_FMT("Orderline Key w_id: {0}, Orderline w_id {1}", std::to_string(entry.first.w_id), std::to_string(entry.second.w_id));
           LOG_INFO_FMT("Orderline Key number: {0}, Orderline number {1}", std::to_string(entry.first.number), std::to_string(entry.second.number));
         }
-//      }
-//      else {
-//        LOG_INFO_FMT("No vals");
-//      }
-//    }
-//    else {
-//      LOG_INFO_FMT("bad response");
-//     }
+      }
+      else {
+        LOG_INFO_FMT("No vals");
+      }
+    }
+    else {
+      LOG_INFO_FMT("bad response");
+     }
 
     // Reserve space for transfer transactions
     prepared_txs.resize(options.num_transactions);
