@@ -97,7 +97,8 @@ private:
     {
       reconnect(connection);
     }
-  };
+  }
+  }
 
   void prepare_transactions() override
   {
