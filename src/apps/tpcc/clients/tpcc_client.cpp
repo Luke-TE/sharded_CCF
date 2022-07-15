@@ -211,7 +211,7 @@ private:
   }
 
 
-  void run() override
+  public void run() override
   {
     files::dump(fmt::format("{}", ::getpid()), options.pid_file);
 
