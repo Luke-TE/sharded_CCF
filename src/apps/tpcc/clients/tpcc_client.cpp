@@ -57,19 +57,19 @@ private:
     auto connection = create_connection(true, false);
     tpcc::ClientReadWriter read_writer(connection);
 
-    tpcc::District::Key key;
-    key.id = 123;
-    key.w_id = 456;
-
-    auto optional_district = read_writer.get_district(key);
-    if (optional_district.has_value())
-    {
-      auto district = optional_district.value();
-      LOG_INFO_FMT("New Value: {0}, {1}", std::to_string(district.id), std::to_string(district.w_id));
-    }
-    else {
-      LOG_INFO_FMT("No Value :(");
-    }
+//    tpcc::District::Key key;
+//    key.id = 123;
+//    key.w_id = 456;
+//
+//    auto optional_district = read_writer.get_district(key);
+//    if (optional_district.has_value())
+//    {
+//      auto district = optional_district.value();
+//      LOG_INFO_FMT("New Value: {0}, {1}", std::to_string(district.id), std::to_string(district.w_id));
+//    }
+//    else {
+//      LOG_INFO_FMT("No Value :(");
+//    }
 
     tpcc::TestStruct test_struct;
     test_struct.int_val = 999;
