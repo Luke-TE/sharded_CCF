@@ -254,7 +254,7 @@ public:
     rand_generator.seed(options.generator_seed);
 
     send_all_creation_transactions();
-//    prepare_all_transactions();
+    prepare_all_transactions();
 
     LOG_TRACE_FMT(
       "Sending {} transactions from {} clients {} times...",
