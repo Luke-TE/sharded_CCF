@@ -174,28 +174,64 @@ private:
     last_write_time = std::chrono::high_resolution_clock::now();
     kick_off_timing();
 
-    // Write everything
-    // store txs elsewhere rather thanin preparedtxs
-    // for each tx
-    // execute it
-    // extract writeset
-    // create request
-    // send and wait for response
+    for (decltype(options.num_transactions) i = 0; i < options.num_transactions;
+         i++)
+    {
+      uint8_t operation;
+      uint8_t x = rand_range(100);
 
-    // clientreadwriter.
-    //         write_set;
-    //         keys_deleted;
-    // TODO execute transaction
+      if (x < 4) // Stock Level
+      {
+        ClientReadWriter client_read_writer(connection);
+        tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
+        tx_client.stock_level(1, 1, 1000);
+        // TODO submit write set
 
-//    if (!options.no_wait)
-//    {
-//      auto c = create_connection(true, false);
-//      wait_for_global_commit(last_response_tx_id);
-//    }
+        // extract writeset
+        // clientreadwriter.
+        //         write_set;
+        //         keys_deleted;
+      }
+      else if (x < 8) // Delivery
+      {
+        ClientReadWriter client_read_writer(connection);
+        tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
+        tx_client.delivery();
+        // TODO submit write set
+      }
+      else if (x < 12) // Order Status
+      {
+        ClientReadWriter client_read_writer(connection);
+        tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
+        tx_client.order_status();
+        // TODO submit write set
+      }
+      else if (x < (12 + 43)) // Payment
+      {
+        ClientReadWriter client_read_writer(connection);
+        tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
+        tx_client.payment();
+        // TODO submit write set
+      }
+      else // New Order
+      {
+        ClientReadWriter client_read_writer(connection);
+        tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
+        tx_client.new_order();
+        // TODO submit write set
+      }
+    }
+
+
     const auto last_commit = last_response_tx_id.seqno;
     auto timing_results = end_timing(last_commit);
     LOG_INFO_FMT("Timing ended");
     return timing_results;
+  }
+
+  void submit_write_set() {
+    // create request
+    // send and wait for response
   }
 
 
