@@ -48,7 +48,7 @@ namespace tpcc
     {
       OrderFullKey order_full_key;
       order_full_key.table_key.v.w_id = serialized::read<decltype(table_key.v.w_id)>(data, size);
-      order_full_key.table_key.v.d_id.d_id = serialized::read<decltype(table_key.v.d_id)>(data, size);
+      order_full_key.table_key.v.d_id = serialized::read<decltype(table_key.v.d_id)>(data, size);
       order_full_key.key.id = serialized::read<decltype(key.id)>(data, size);
       return order_full_key;
     }
