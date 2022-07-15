@@ -110,7 +110,7 @@ private:
       LOG_INFO_FMT("No Value :(");
     }
 
-    TestStruct test_struct;
+    tpcc::TestStruct test_struct;
     test_struct.int_val = 999;
     const auto body = test_struct.serialize();
     const auto response =
@@ -118,7 +118,7 @@ private:
 
     if (http::status_success(response.status) && response.body.size() > 0)
     {
-      auto ints = tpcc::MsgPackSerialiser<std::vector<int>>::from_serialised();
+      auto ints = tpcc::MsgPackSerialiser<std::vector<int>>::from_serialised(response.body);
       LOG_INFO_FMT("Values: {0}, {1}", std::to_string(ints.at(0)), std::to_string(ints.at(1)));
     }
     LOG_INFO_FMT("No vals");
