@@ -186,7 +186,7 @@ namespace tpcc
     std::vector<uint8_t> serialize() const
     {
       int num_entries = order_lines.size();
-      auto size = sizeof(int) + (sizeof(tpcc::OrderLine::Key) + sizeof(tpcc::OrderLine)) * num_entries;
+      auto size = sizeof(int) + (tpcc::OrderLine::get_size + tpcc::OrderLine::Key::get_size()) * num_entries;
       std::vector<uint8_t> v(size);
       auto data = v.data();
       serialized::write(data, size, num_entries);

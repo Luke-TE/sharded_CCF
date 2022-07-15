@@ -668,9 +668,13 @@ namespace tpcc
           || (w_id == o.w_id && d_id == o.d_id && o_id == o.o_id && number < o.number);
       }
 
+      size_t get_size() {
+        return sizeof(o_id) + sizeof(d_id) + sizeof(w_id) + sizeof(number);
+      }
+
       std::vector<uint8_t> serialize() const
       {
-        auto size = sizeof(o_id) + sizeof(d_id) + sizeof(w_id) + sizeof(number);
+        auto size = get_size();
         std::vector<uint8_t> v(size);
         auto data = v.data();
         serialized::write(data, size, o_id);
@@ -698,6 +702,12 @@ namespace tpcc
       return {o_id, d_id, w_id, number};
     }
 
+    size_t get_size() {
+      return sizeof(o_id) + sizeof(d_id) + sizeof(w_id) + sizeof(number) +
+        sizeof(i_id) + sizeof(supply_w_id) + sizeof(quantity) + sizeof(amount) +
+        sizeof(delivery_d) + sizeof(dist_info);
+    }
+
     int32_t o_id;
     int32_t d_id;
     int32_t w_id;
@@ -711,9 +721,7 @@ namespace tpcc
 
     std::vector<uint8_t> serialize() const
     {
-      auto size = sizeof(o_id) + sizeof(d_id) + sizeof(w_id) + sizeof(number) +
-        sizeof(i_id) + sizeof(supply_w_id) + sizeof(quantity) + sizeof(amount) +
-        sizeof(delivery_d) + sizeof(dist_info);
+      auto size = get_size();
       std::vector<uint8_t> v(size);
       auto data = v.data();
       serialized::write(data, size, o_id);

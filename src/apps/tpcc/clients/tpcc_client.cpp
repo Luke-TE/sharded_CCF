@@ -71,6 +71,40 @@ private:
 //      LOG_INFO_FMT("No Value :(");
 //    }
 
+//    std::map<tpcc::OrderLine::Key, tpcc::OrderLine> order_lines;
+//    int num_entries = order_lines.size();
+//    auto size = sizeof(int) + (sizeof(tpcc::OrderLine::Key) + sizeof(tpcc::OrderLine)) * num_entries;
+//    std::vector<uint8_t> v(size);
+//    auto data = v.data();
+//    serialized::write(data, size, num_entries);
+//
+//    for (auto const& entry : order_lines)
+//    {
+//      auto serialised_key = entry.first.serialize().data();
+//      auto serialised_order_line = entry.second.serialize().data();
+//      serialized::write(data, size, serialised_key);
+//      serialized::write(data, size, serialised_order_line);
+//    }
+//
+//    size = sizeof(int) + (sizeof(tpcc::OrderLine::Key) + sizeof(tpcc::OrderLine)) * num_entries;
+//
+//    TestOrderLineMapStruct test_struct;
+//    LOG_INFO_FMT("Size: {0}", std::to_string(test_vector_struct.order_lines.size()));
+//    int num_entries = serialized::read<int>(data, size);
+//
+//    if (num_entries > 0) {
+//      for (int i = 0; i < num_entries; i++) {
+//
+//        //          auto serialised_key = serialized::read<>(data, size);
+//        auto key = tpcc::OrderLine::Key::deserialize(data, sizeof(tpcc::OrderLine::Key));
+//
+//        //          auto serialised_order_line = serialized::read<>(data, size);
+//        auto order_line = tpcc::OrderLine::deserialize(data, sizeof(tpcc::OrderLine));
+//
+//        test_struct.order_lines[key] = order_line;
+//      }
+//    }
+
     tpcc::TestStruct test_struct;
     test_struct.int_val = 999;
 
