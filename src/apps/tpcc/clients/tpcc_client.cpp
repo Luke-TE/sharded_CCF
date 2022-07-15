@@ -177,7 +177,7 @@ private:
     Base::verify_params(expected);
   }
 
-  void send_commit_request(tpcc::ClientReadWriter read_writer) {
+  void send_commit_request(std::shared_ptr<RpcTlsClient>& connection, tpcc::ClientReadWriter read_writer) {
     tpcc::CommitRequest commitRequest;
     commitRequest.write_set = read_writer.write_set;
     commitRequest.keys_deleted = read_writer.keys_deleted;
@@ -203,7 +203,7 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.stock_level(1, 1, 1000);
-        send_commit_request(client_read_writer);
+        send_commit_request(connection, client_read_writer);
       }
       else if (x < 8) // Delivery
       {
@@ -211,7 +211,7 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.delivery();
-        send_commit_request(client_read_writer);
+        send_commit_request(connection, client_read_writer);
       }
       else if (x < 12) // Order Status
       {
@@ -219,7 +219,7 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.order_status();
-        send_commit_request(client_read_writer);
+        send_commit_request(connection, client_read_writer);
       }
       else if (x < (12 + 43)) // Payment
       {
@@ -227,7 +227,7 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.payment();
-        send_commit_request(client_read_writer);
+        send_commit_request(connection, client_read_writer);
       }
       else // New Order
       {
@@ -235,7 +235,7 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.new_order();
-        send_commit_request(client_read_writer);
+        send_commit_request(connection, client_read_writer);
       }
     }
 
