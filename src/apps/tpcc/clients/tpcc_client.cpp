@@ -104,7 +104,7 @@ private:
       // Create a new connection, because we need to do some GETs
       // and when all you have is a WebSocket, everything looks like a POST!
       auto c = create_connection(true, false);
-      wait_for_global_commit(last_response_tx_id);
+      wait_for_global_commit(last_response_tx_id, false);
     }
     const auto last_commit = last_response_tx_id.seqno;
     auto timing_results = end_timing(last_commit);
