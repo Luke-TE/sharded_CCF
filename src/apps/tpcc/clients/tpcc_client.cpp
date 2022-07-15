@@ -182,7 +182,7 @@ private:
     using std::chrono::duration_cast;
     using std::chrono::duration;
     using std::chrono::milliseconds;
-    
+
     tpcc::CommitRequest commitRequest;
     commitRequest.write_set = read_writer.write_set;
     commitRequest.keys_deleted = read_writer.keys_deleted;
@@ -282,7 +282,7 @@ private:
     LOG_INFO_FMT("Txs per second: {}", std::to_string(options.num_transactions / dur));
     LOG_INFO_FMT("Avg commit response time: {}", std::to_string(total_response_time / options.num_transactions));
     LOG_INFO_FMT("Avg new order tx commit response time: {}", std::to_string(total_new_order_response_time / num_new_order_txs));
-    LOG_INFO_FMT("Avg payment tx commit response time: {}", std::to_string(total_payment_response_time / num_payment_txs);
+    LOG_INFO_FMT("Avg payment tx commit response time: {}", std::to_string(total_payment_response_time / num_payment_txs));
     LOG_INFO_FMT("Avg delivery tx commit response time: {}", std::to_string(total_delivery_response_time / num_delivery_txs));
 
   }
