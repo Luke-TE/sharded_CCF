@@ -240,11 +240,11 @@ namespace tpcc
       int num_new_orders_deleted = keys_deleted.new_order_keys.size();
 
       auto size =
-        sizeof(int) + (tpcc::Order::get_size() + tpcc::Order::Key::get_size()) * num_orders
-        + sizeof(int) + (tpcc::NewOrder::get_size() + tpcc::NewOrder::Key::get_size()) * num_new_orders
+        sizeof(int) + (tpcc::Order::get_size() + tpcc::OrderFullKey::get_size()) * num_orders
+        + sizeof(int) + (tpcc::NewOrder::get_size() + tpcc::OrderFullKey::get_size()) * num_new_orders
         + sizeof(int) + (tpcc::OrderLine::get_size() + tpcc::OrderLine::Key::get_size()) * num_order_lines
         + sizeof(int) + (tpcc::History::get_size() + tpcc::History::Key::get_size()) * num_histories
-        + sizeof(int) + tpcc::NewOrder::get_size() * num_new_orders_deleted;
+        + sizeof(int) + tpcc::NewOrder::Key::get_size() * num_new_orders_deleted;
 
       std::vector<uint8_t> v(size);
       auto data = v.data();
