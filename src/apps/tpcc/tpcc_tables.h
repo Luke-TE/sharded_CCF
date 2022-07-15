@@ -971,17 +971,17 @@ namespace tpcc
       serialized::write(data, size, data);
     }
 
-    static History deserialize(const uint8_t* data, size_t size)
+    static History deserialize(const uint8_t* buffer, size_t size)
     {
       History history;
-      history.c_id = serialized::read<decltype(c_id)>(data, size);
-      history.c_d_id = serialized::read<decltype(c_d_id)>(data, size);
-      history.c_w_id = serialized::read<decltype(c_w_id)>(data, size);
-      history.d_id = serialized::read<decltype(d_id)>(data, size);
-      history.w_id = serialized::read<decltype(w_id)>(data, size);
-      history.amount = serialized::read<decltype(amount)>(data, size);
-      history.date = serialized::read<decltype(date)>(data, size);
-      history.data = serialized::read<decltype(data)>(data, size);
+      history.c_id = serialized::read<decltype(c_id)>(buffer, size);
+      history.c_d_id = serialized::read<decltype(c_d_id)>(buffer, size);
+      history.c_w_id = serialized::read<decltype(c_w_id)>(buffer, size);
+      history.d_id = serialized::read<decltype(d_id)>(buffer, size);
+      history.w_id = serialized::read<decltype(w_id)>(buffer, size);
+      history.amount = serialized::read<decltype(amount)>(buffer, size);
+      history.date = serialized::read<decltype(date)>(buffer, size);
+      history.data = serialized::read<decltype(data)>(buffer, size);
       return history;
     }
 
