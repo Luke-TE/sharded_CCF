@@ -62,42 +62,54 @@ private:
   }
 
   timing::Results call_raw_batch(
-  std::shared_ptr<RpcTlsClient>& connection, const PreparedTxs& txs) override
-{
-  size_t read;
-  size_t written;
-
-  if (options.transactions_per_s > 0)
+    std::shared_ptr<RpcTlsClient>& connection, const PreparedTxs& txs) override
   {
-    write_delay_ns =
-      std::chrono::nanoseconds{1000000000 / options.transactions_per_s};
-    connection->set_tcp_nodelay(true);
-  }
+    size_t read;
+    size_t written;
 
-  last_write_time = std::chrono::high_resolution_clock::now();
-  kick_off_timing();
-
-  // Repeat for each session
-  for (size_t session = 1; session <= options.session_count; ++session)
-  {
-    read = 0;
-    written = 0;
-
-    // Write everything
-    while (written < txs.size())
+    if (options.transactions_per_s > 0)
     {
-      write(txs[written], read, written, connection);
-      LOG_INFO_FMT("Write!");
+      write_delay_ns =
+        std::chrono::nanoseconds{1000000000 / options.transactions_per_s};
+      connection->set_tcp_nodelay(true);
     }
 
-    blocking_read(read, written, connection);
+    last_write_time = std::chrono::high_resolution_clock::now();
+    kick_off_timing();
 
-    // Reconnect for each session (except the last)
-    if (session != options.session_count)
+    // Repeat for each session
+    for (size_t session = 1; session <= options.session_count; ++session)
     {
-      reconnect(connection);
+      read = 0;
+      written = 0;
+
+      // Write everything
+      while (written < txs.size())
+      {
+        write(txs[written], read, written, connection);
+        LOG_INFO_FMT("Write!");
+      }
+
+      blocking_read(read, written, connection);
+
+      // Reconnect for each session (except the last)
+      if (session != options.session_count)
+      {
+        reconnect(connection);
+      }
     }
-  }
+
+    if (!options.no_wait)
+    {
+      // Create a new connection, because we need to do some GETs
+      // and when all you have is a WebSocket, everything looks like a POST!
+      auto c = create_connection(true, false);
+      wait_for_global_commit(last_response_tx_id);
+    }
+    const auto last_commit = last_response_tx_id.seqno;
+    auto timing_results = end_timing(last_commit);
+    LOG_INFO_FMT("Timing ended");
+    return timing_results;
   }
 
   void prepare_transactions() override
