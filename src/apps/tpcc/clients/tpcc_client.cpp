@@ -188,9 +188,15 @@ private:
     check_response(response);
   }
 
-  timing::Results send_transactions(std::shared_ptr<RpcTlsClient>& connection, const PreparedTxs& txs) {
+  void send_transactions(std::shared_ptr<RpcTlsClient>& connection, const PreparedTxs& txs) {
     last_write_time = std::chrono::high_resolution_clock::now();
-    kick_off_timing();
+
+    using std::chrono::high_resolution_clock;
+    using std::chrono::duration_cast;
+    using std::chrono::duration;
+    using std::chrono::milliseconds;
+
+    auto start_time = high_resolution_clock::now();
 
     for (decltype(options.num_transactions) i = 0; i < options.num_transactions;
          i++)
@@ -239,18 +245,18 @@ private:
       }
     }
 
+    auto finish_time = high_resolution_clock::now();
+    duration<double, std::milli> s_double = (finish_time - start_time) * 1000.0;
+    LOG_INFO_FMT("Total duration (seconds): {}", std::to_string(s_double));
+    LOG_INFO_FMT("Txs per second: {}", std::to_string(options.num_transactions / s_double));
+
+    // get txs per second
 
     const auto last_commit = last_response_tx_id.seqno;
     auto timing_results = end_timing(last_commit);
-    LOG_INFO_FMT("Timing ended");
+//    LOG_INFO_FMT("Timing ended");
     return timing_results;
   }
-
-  void submit_write_set() {
-    // create request
-    // send and wait for response
-  }
-
 
 public:
   TpccClient(const TpccClientOptions& o) : Base(o) {}
@@ -276,10 +282,8 @@ public:
     init_connection();
     try
     {
-      auto timing_results = send_transactions(rpc_connection, prepared_txs);
+      send_transactions(rpc_connection, prepared_txs);
       LOG_INFO_FMT("Done");
-
-      summarize_results(timing_results);
     }
     catch (std::exception& e)
     {
