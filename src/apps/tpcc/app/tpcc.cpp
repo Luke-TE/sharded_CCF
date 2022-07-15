@@ -390,14 +390,14 @@ namespace ccfapp
         {
           auto it = tpcc::TpccTables::orders.find(entry.first.table_key.k);
           auto orders_table = args.tx.rw(it->second);
-          orders_table->put(entry.second.get_key(), entry.second);
+          orders_table->put(entry.first.key, entry.second);
         }
 
         for (auto const& entry : request.write_set.new_orders)
         {
           auto it = tpcc::TpccTables::new_orders.find(entry.first.table_key.k);
           auto new_orders_table = args.tx.rw(it->second);
-          new_orders_table->put(entry.second.get_key(), entry.second);
+          new_orders_table->put(entry.first.key, entry.second);
         }
 
         for (auto const& entry : request.write_set.order_lines)
