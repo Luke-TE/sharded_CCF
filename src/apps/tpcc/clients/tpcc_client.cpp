@@ -99,6 +99,7 @@ private:
       serialized::write(data, size, serialised_key);
       serialized::write(data, size, serialised_order_line);
     }
+    LOG_INFO_FMT("Size After Writing: {0}", std::to_string(size));
 
     size = sizeof(int) + (tpcc::OrderLine::Key::get_size() + tpcc::OrderLine::get_size()) * num_entries;
     const uint8_t* new_data = v.data();
