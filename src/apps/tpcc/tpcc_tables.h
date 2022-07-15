@@ -592,6 +592,11 @@ namespace tpcc
       return {id};
     }
 
+    static size_t get_size() {
+      return sizeof(id) + sizeof(c_id) + sizeof(d_id) + sizeof(w_id) +
+        sizeof(carrier_id) + sizeof(ol_cnt) + sizeof(all_local) + sizeof(entry_d);
+    }
+
     int32_t id;
     int32_t c_id;
     int32_t d_id;
@@ -603,10 +608,15 @@ namespace tpcc
 
     std::vector<uint8_t> serialize() const
     {
-      auto size = sizeof(id) + sizeof(c_id) + sizeof(d_id) + sizeof(w_id) +
-        sizeof(carrier_id) + sizeof(ol_cnt) + sizeof(all_local) + sizeof(entry_d);
+      auto size = get_size();
       std::vector<uint8_t> v(size);
       auto data = v.data();
+      serialize_to_buffer(data, size);
+      return v;
+    }
+
+    void serialize_to_buffer(uint8_t*& data, size_t& size) const
+    {
       serialized::write(data, size, id);
       serialized::write(data, size, c_id);
       serialized::write(data, size, d_id);
@@ -615,7 +625,6 @@ namespace tpcc
       serialized::write(data, size, ol_cnt);
       serialized::write(data, size, all_local);
       serialized::write(data, size, entry_d);
-      return v;
     }
 
     static Order deserialize(const uint8_t* data, size_t size)
@@ -823,15 +832,24 @@ namespace tpcc
     int32_t d_id;
     int32_t o_id;
 
+    static size_t get_size() {
+      return sizeof(w_id) + sizeof(d_id) + sizeof(o_id);
+    }
+
     std::vector<uint8_t> serialize() const
     {
-      auto size = sizeof(w_id) + sizeof(d_id) + sizeof(o_id);
+      auto size = get_size();
       std::vector<uint8_t> v(size);
       auto data = v.data();
+      serialize_to_buffer(data, size);
+      return v;
+    }
+
+    void serialize_to_buffer(uint8_t*& data, size_t& size) const
+    {
       serialized::write(data, size, w_id);
       serialized::write(data, size, d_id);
       serialized::write(data, size, o_id);
-      return v;
     }
 
     static NewOrder deserialize(const uint8_t* data, size_t size)
@@ -864,6 +882,10 @@ namespace tpcc
       int32_t d_id;
       int32_t w_id;
 
+      static size_t get_size() {
+        return sizeof(c_id) + sizeof(c_d_id) + sizeof(c_w_id) + sizeof(d_id) + sizeof(w_id);
+      }
+
       bool operator==(const Key &o) const {
         return c_id == o.c_id && d_id == o.d_id && w_id == o.w_id && c_d_id == o.c_d_id && c_w_id == o.c_w_id;
       }
@@ -876,12 +898,47 @@ namespace tpcc
           || (c_id == o.c_id && c_d_id == o.c_d_id && c_w_id == o.c_w_id && d_id == o.d_id && w_id < o.w_id);
       }
 
+      std::vector<uint8_t> serialize() const
+      {
+        auto size = get_size();
+        std::vector<uint8_t> v(size);
+        auto data = v.data();
+        serialize_to_buffer(data, size);
+        return v;
+      }
+
+      void serialize_to_buffer(uint8_t*& data, size_t& size) const
+      {
+        serialized::write(data, size, c_id);
+        serialized::write(data, size, c_d_id);
+        serialized::write(data, size, c_w_id);
+        serialized::write(data, size, d_id);
+        serialized::write(data, size, w_id);
+      }
+
+      static History::Key deserialize(const uint8_t* data, size_t size)
+      {
+        History::Key key;
+        key.c_id = serialized::read<decltype(c_id)>(data, size);
+        key.c_d_id = serialized::read<decltype(c_d_id)>(data, size);
+        key.c_w_id = serialized::read<decltype(c_w_id)>(data, size);
+        key.d_id = serialized::read<decltype(d_id)>(data, size);
+        key.w_id = serialized::read<decltype(w_id)>(data, size);
+        return key;
+      }
+
+
       MSGPACK_DEFINE(c_id, c_d_id, c_w_id, d_id, w_id);
     };
 
     Key get_key()
     {
       return {c_id, c_d_id, c_w_id, d_id, w_id};
+    }
+
+    static size_t get_size() {
+      return sizeof(c_id) + sizeof(c_d_id) + sizeof(c_w_id) + sizeof(d_id) + sizeof(w_id)
+        + sizeof(amount) + sizeof(date) + sizeof(data);
     }
 
     int32_t c_id;
@@ -892,6 +949,41 @@ namespace tpcc
     float amount;
     std::array<char, DATETIME_SIZE + 1> date;
     std::array<char, MAX_DATA + 1> data;
+
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = get_size();
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialize_to_buffer(data, size);
+      return v;
+    }
+
+    void serialize_to_buffer(uint8_t*& data, size_t& size) const
+    {
+      serialized::write(data, size, c_id);
+      serialized::write(data, size, c_d_id);
+      serialized::write(data, size, c_w_id);
+      serialized::write(data, size, d_id);
+      serialized::write(data, size, w_id);
+      serialized::write(data, size, amount);
+      serialized::write(data, size, date);
+      serialized::write(data, size, data);
+    }
+
+    static History::Key deserialize(const uint8_t* data, size_t size)
+    {
+      History::Key key;
+      key.c_id = serialized::read<decltype(c_id)>(data, size);
+      key.c_d_id = serialized::read<decltype(c_d_id)>(data, size);
+      key.c_w_id = serialized::read<decltype(c_w_id)>(data, size);
+      key.d_id = serialized::read<decltype(d_id)>(data, size);
+      key.w_id = serialized::read<decltype(w_id)>(data, size);
+      key.amount = serialized::read<decltype(amount)>(data, size);
+      key.date = serialized::read<decltype(date)>(data, size);
+      key.data = serialized::read<decltype(data)>(data, size);
+      return key;
+    }
 
     MSGPACK_DEFINE(c_id, c_d_id, c_w_id, d_id, w_id, amount, date, data);
   };

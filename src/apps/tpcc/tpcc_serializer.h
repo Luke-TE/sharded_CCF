@@ -13,6 +13,7 @@
 #include <string>
 #include "app/tpcc_common.h"
 #include "tpcc_tables.h"
+#include "clients/tpcc_client_read_writer.h"
 
 namespace Address
 {
@@ -187,6 +188,62 @@ namespace tpcc
     {
       int num_entries = order_lines.size();
       auto size = sizeof(int) + (tpcc::OrderLine::get_size() + tpcc::OrderLine::Key::get_size()) * num_entries;
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, num_entries);
+
+      for (auto const& entry : order_lines)
+      {
+        entry.first.serialize_to_buffer(data, size);
+        entry.second.serialize_to_buffer(data, size);
+      }
+
+      return v;
+    }
+
+    static TestOrderLineMapStruct deserialize(const uint8_t* data, size_t size)
+    {
+      auto order_line_key_size = tpcc::OrderLine::Key::get_size();
+      auto order_line_size = tpcc::OrderLine::get_size();
+
+      TestOrderLineMapStruct test_struct;
+      int num_entries = serialized::read<int>(data, size);
+      if (num_entries > 0) {
+        for (int i = 0; i < num_entries; i++) {
+          auto key = tpcc::OrderLine::Key::deserialize(data, size);
+          data += order_line_key_size;
+          size -= order_line_key_size;
+
+          auto order_line = tpcc::OrderLine::deserialize(data, size);
+          data += order_line_size;
+          size -= order_line_size;
+
+          test_struct.order_lines[key] = order_line;
+        }
+      }
+
+      return test_struct;
+    }
+  };
+
+  struct CommitRequest
+  {
+    tpcc::WriteSet write_set;
+    tpcc::KeysDeleted keys_deleted;
+
+    std::map<tpcc::OrderLine::Key, tpcc::OrderLine> order_lines;
+
+    std::vector<uint8_t> serialize() const
+    {
+      int num_orders = write_set.orders.size();
+      int num_new_orders = write_set.new_orders.size();
+      int num_order_lines = write_set.order_lines.size();
+      int num_histories = write_set.histories.size();
+      int num_new_orders_deleted = keys_deleted.new_order_keys.size();
+
+      int num_entries = order_lines.size();
+      auto size =
+        sizeof(int) + (tpcc::OrderLine::get_size() + tpcc::OrderLine::Key::get_size()) * num_entries;
       std::vector<uint8_t> v(size);
       auto data = v.data();
       serialized::write(data, size, num_entries);

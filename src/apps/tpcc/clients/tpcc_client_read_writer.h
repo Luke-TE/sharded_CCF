@@ -23,28 +23,58 @@ namespace tpcc
     bool operator<(const OrderFullKey &o) const {
       return table_key.k < o.table_key.k || (table_key.k == o.table_key.k && key.id < o.key.id);
     }
-  };
 
-  struct NewOrderFullKey {
-    tpcc::TpccTables::DistributeKey table_key;
-    tpcc::NewOrder::Key key;
-
-    bool operator==(const NewOrderFullKey &o) const {
-      return table_key.k == o.table_key.k && key.o_id == o.key.o_id;
+    static size_t get_size() {
+      return sizeof(table_key.k) + sizeof(key.id);
     }
 
-    bool operator<(const NewOrderFullKey &o) const {
-      return table_key.k < o.table_key.k || (table_key.k == o.table_key.k && key.o_id < o.key.o_id);
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = get_size();
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialize_to_buffer(data, size);
+      return v;
     }
+
+    void serialize_to_buffer(uint8_t*& data, size_t& size) const
+    {
+      serialized::write(data, size, table_key.v.w_id);
+      serialized::write(data, size, table_key.v.d_id);
+      serialized::write(data, size, key.id);
+    }
+
+    static OrderFullKey deserialize(const uint8_t* data, size_t size)
+    {
+      OrderFullKey order_full_key;
+      order_full_key.table_key.v.w_id = serialized::read<decltype(table_key.v.w_id)>(data, size);
+      order_full_key.table_key.v.d_id.d_id = serialized::read<decltype(table_key.v.d_id)>(data, size);
+      order_full_key.key.id = serialized::read<decltype(key.id)>(data, size);
+      return order_full_key;
+    }
+
   };
 
-  struct KeysDeleted {
+//  struct NewOrderFullKey {
+//    tpcc::TpccTables::DistributeKey table_key;
+//    tpcc::NewOrder::Key key;
+//
+//    bool operator==(const NewOrderFullKey &o) const {
+//      return table_key.k == o.table_key.k && key.o_id == o.key.o_id;
+//    }
+//
+//    bool operator<(const NewOrderFullKey &o) const {
+//      return table_key.k < o.table_key.k || (table_key.k == o.table_key.k && key.o_id < o.key.o_id);
+//    }
+//  };
+
+    struct KeysDeleted {
     std::set<tpcc::NewOrder::Key> new_order_keys;
   };
 
   struct WriteSet {
     std::map<OrderFullKey, tpcc::Order> orders;
-    std::map<NewOrderFullKey, tpcc::NewOrder> new_orders;
+    std::map<OrderFullKey, tpcc::NewOrder> new_orders;
     std::map<tpcc::OrderLine::Key, tpcc::OrderLine> order_lines;
     std::map<tpcc::History::Key, tpcc::History> histories;
   };
@@ -59,7 +89,7 @@ namespace tpcc
     ClientReadWriter(std::shared_ptr<RpcTlsClient> conn) : connection(conn)
     {
       std::map<OrderFullKey, tpcc::Order> orders;
-      std::map<NewOrderFullKey, tpcc::NewOrder> new_orders;
+      std::map<OrderFullKey, tpcc::NewOrder> new_orders;
       std::map<tpcc::OrderLine::Key, tpcc::OrderLine> order_lines;
       std::map<tpcc::History::Key, tpcc::History> histories;
 
@@ -262,7 +292,7 @@ namespace tpcc
       write_set.orders[order_full_key] = order;
     };
     void put_new_order(TpccTables::DistributeKey table_key, NewOrder::Key key, NewOrder new_order) override {
-      NewOrderFullKey new_order_full_key;
+      OrderFullKey new_order_full_key;
       new_order_full_key.table_key = table_key;
       new_order_full_key.key = key;
       write_set.new_orders[new_order_full_key] = new_order;
