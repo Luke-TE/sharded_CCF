@@ -20,7 +20,7 @@ struct TpccClientOptions : public client::PerfOptions
     client::PerfOptions("Tpcc_ClientCpp", default_pid_file, app)
   {
     app
-      .add_option(
+      .add_flag(
         "--sharded",
         sharded,
         "Use the sharded client")
