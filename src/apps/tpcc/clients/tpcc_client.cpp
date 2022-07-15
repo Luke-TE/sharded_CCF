@@ -116,12 +116,20 @@ private:
     const auto response =
       connection->call("do_test_vector", CBuffer{body.data(), body.size()});
 
-    if (http::status_success(response.status) && response.body.size() > 0)
+    if (http::status_success(response.status))
     {
-      auto test_vector_struct = tpcc::TestVectorStruct::deserialize(body.data(), body.size());
-      LOG_INFO_FMT("Values: {0}, {1}", std::to_string(test_vector_struct.ints.at(0)), std::to_string(test_vector_struct.ints.at(1)));
+      if (response.body.size() > 0) {
+        auto test_vector_struct = tpcc::TestVectorStruct::deserialize(body.data(), body.size());
+        LOG_INFO_FMT("Values: {0}, {1}", std::to_string(test_vector_struct.ints.at(0)), std::to_string(test_vector_struct.ints.at(1)));
+      }
+      else {
+        LOG_INFO_FMT("empty body");
+      }
     }
-    LOG_INFO_FMT("No vals");
+    else {
+      LOG_INFO_FMT("bad response");
+     }
+
 
     // Reserve space for transfer transactions
     prepared_txs.resize(options.num_transactions);
