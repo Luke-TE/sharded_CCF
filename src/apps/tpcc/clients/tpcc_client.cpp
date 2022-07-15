@@ -89,15 +89,21 @@ private:
     LOG_INFO_FMT("Num Entries: {0}", std::to_string(num_entries));
     auto size = sizeof(int) + (tpcc::OrderLine::Key::get_size() + tpcc::OrderLine::get_size()) * num_entries;
     std::vector<uint8_t> v(size);
+
+    LOG_INFO_FMT("Size At Start: {0}", std::to_string(size));
     auto data = v.data();
     serialized::write(data, size, num_entries);
+    LOG_INFO_FMT("Size After Writing Num Entries: {0}", std::to_string(size));
 
     for (auto const& entry : order_lines)
     {
       auto serialised_key = entry.first.serialize().data();
-      auto serialised_order_line = entry.second.serialize().data();
       serialized::write(data, size, serialised_key);
+      LOG_INFO_FMT("Size After Writing Key: {0}", std::to_string(size));
+
+      auto serialised_order_line = entry.second.serialize().data();
       serialized::write(data, size, serialised_order_line);
+      LOG_INFO_FMT("Size After Writing Order Line: {0}", std::to_string(size));
     }
     LOG_INFO_FMT("Size After Writing: {0}", std::to_string(size));
 
