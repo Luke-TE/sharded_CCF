@@ -399,7 +399,7 @@ namespace ccfapp
         }
 
         for(auto entry = std::begin(request.keys_deleted.new_order_keys); entry != std::end(request.keys_deleted.new_order_keys); ++entry) {
-          TpccTables::DistributeKey table_key;
+          tpcc::TpccTables::DistributeKey table_key;
           table_key.v.w_id = (*entry).w_id;
           table_key.v.d_id = (*entry).d_id;
 
@@ -409,7 +409,6 @@ namespace ccfapp
         }
 
         set_ok_status(args);
-        args.rpc_ctx->set_response_body(response.serialize());
       };
 
       const ccf::AuthnPolicies user_sig_or_cert = {user_signature_auth_policy,
