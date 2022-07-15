@@ -207,15 +207,15 @@ private:
     using std::chrono::duration;
     using std::chrono::milliseconds;
 
-    auto total_response_time = 0;
-    auto total_new_order_response_time = 0;
-    auto total_payment_response_time = 0;
-    auto total_delivery_response_time = 0;
+    auto total_response_time = 0.0;
+    auto total_new_order_response_time = 0.0;
+    auto total_payment_response_time = 0.0;
+    auto total_delivery_response_time = 0.0;
     auto start_time = high_resolution_clock::now();
 
-    auto num_new_order_txs = 0;
-    auto num_payment_txs = 0;
-    auto num_delivery_txs = 0;
+    auto num_new_order_txs = 0.0;
+    auto num_payment_txs = 0.0;
+    auto num_delivery_txs = 0.0;
 
     for (decltype(options.num_transactions) i = 0; i < options.num_transactions;
          i++)
