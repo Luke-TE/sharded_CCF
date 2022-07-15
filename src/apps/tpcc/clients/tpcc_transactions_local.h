@@ -3,8 +3,8 @@
 #pragma once
 
 #include "../tpcc_tables.h"
-#include "tpcc_common.h"
-#include "tpcc_output.h"
+#include "../app/tpcc_common.h"
+#include "../app/tpcc_output.h"
 #include "tpcc_client_read_writer.h"
 
 #include <cinttypes>
