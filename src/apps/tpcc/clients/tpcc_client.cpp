@@ -300,7 +300,7 @@ private:
 public:
   TpccClient(const TpccClientOptions& o) : Base(o) {}
 
-  void run() override
+  void run_sharded()
   {
     files::dump(fmt::format("{}", ::getpid()), options.pid_file);
 
@@ -339,7 +339,7 @@ int main(int argc, char** argv)
   CLI11_PARSE(cli_app, argc, argv);
 
   TpccClient client(options);
-  client.run();
+  client.run_sharded();
 
   return 0;
 }
