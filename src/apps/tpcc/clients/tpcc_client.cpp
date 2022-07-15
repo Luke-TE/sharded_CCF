@@ -99,6 +99,7 @@ private:
     tpcc::TestOrderLineMapStruct test_struct;
     LOG_INFO_FMT("Size: {0}", std::to_string(size));
     int new_num_entries = serialized::read<int>(new_data, size);
+    LOG_INFO_FMT("Num Entries: {0}", std::to_string(new_num_entries));
     LOG_INFO_FMT("After Num Entries Size: {0}", std::to_string(size));
 
     if (new_num_entries > 0) {
