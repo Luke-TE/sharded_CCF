@@ -143,6 +143,7 @@ private:
      auto size = sizeof(new_test.num_ints) + new_test.ints.size() * sizeof(int);
      std::vector<uint8_t> v(size);
      auto data = v.data();
+     LOG_INFO_FMT("Size: {0}", std::to_string(size));
      serialized::write(data, size, new_test.num_ints);
 
      for(auto it = std::begin(new_test.ints); it != std::end(new_test.ints); ++it) {
