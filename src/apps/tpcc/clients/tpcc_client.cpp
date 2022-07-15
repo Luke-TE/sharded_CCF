@@ -72,6 +72,13 @@ private:
 //    }
 
     std::map<tpcc::OrderLine::Key, tpcc::OrderLine> order_lines;
+    tpcc::OrderLine::Key key = {12, 34, 56, 78};
+    tpcc::OrderLine order_line = {
+      1,2,3,4,5,6,7,8.0, { 0 }, { 0 }
+    };
+
+    order_lines[key] = order_line;
+
     int num_entries = order_lines.size();
     auto size = sizeof(int) + (tpcc::OrderLine::Key::get_size() + tpcc::OrderLine::get_size()) * num_entries;
     std::vector<uint8_t> v(size);
