@@ -194,28 +194,28 @@ private:
       }
       else if (x < 8) // Delivery
       {
-        ClientReadWriter client_read_writer(connection);
+        tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.delivery();
         // TODO submit write set
       }
       else if (x < 12) // Order Status
       {
-        ClientReadWriter client_read_writer(connection);
+        tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.order_status();
         // TODO submit write set
       }
       else if (x < (12 + 43)) // Payment
       {
-        ClientReadWriter client_read_writer(connection);
+        tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.payment();
         // TODO submit write set
       }
       else // New Order
       {
-        ClientReadWriter client_read_writer(connection);
+        tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.new_order();
         // TODO submit write set
