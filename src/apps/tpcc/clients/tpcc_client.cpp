@@ -182,7 +182,7 @@ private:
 
       if (x < 4) // Stock Level
       {
-        ClientReadWriter client_read_writer(connection);
+        tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.stock_level(1, 1, 1000);
         // TODO submit write set
