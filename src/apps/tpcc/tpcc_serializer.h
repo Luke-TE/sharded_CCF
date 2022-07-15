@@ -3,6 +3,7 @@
 #pragma once
 
 #include "ds/serialized.h"
+#include "ds/logging.h"
 #include <cstring>
 #include <stdint.h>
 #include <unordered_map>
