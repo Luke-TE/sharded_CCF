@@ -661,9 +661,12 @@ namespace tpcc
         return o_id == o.o_id && d_id == o.d_id && w_id == o.w_id && number == o.number;
       }
 
-//      bool operator<(const Key &o) const {
-//        return id < o.id;
-//      }
+      bool operator<(const Key &o) const {
+        return o_id < o.o_id
+          || (o_id == o.o_id && d_id < o.d_id)
+          || (o_id == o.o_id && d_id == o.d_id && w_id < o.w_id)
+          || (o_id == o.o_id && d_id == o.d_id && w_id == o.w_id && number < o.number);
+      }
 
       std::vector<uint8_t> serialize() const
       {
@@ -837,9 +840,13 @@ namespace tpcc
         return c_id == o.c_id && d_id == o.d_id && w_id == o.w_id && c_d_id == o.c_d_id && c_w_id == o.c_w_id;
       }
 
-//      bool operator<(const Key &o) const {
-//        return id < o.id;
-//      }
+      bool operator<(const Key &o) const {
+        return c_id < o.c_id
+          || (c_id == o.c_id && c_d_id < o.c_d_id)
+          || (c_id == o.c_id && c_d_id == o.c_d_id && c_w_id < o.c_w_id)
+          || (c_id == o.c_id && c_d_id == o.c_d_id && c_w_id == o.c_w_id && d_id < o.d_id)
+          || (c_id == o.c_id && c_d_id == o.c_d_id && c_w_id == o.c_w_id && d_id == o.d_id && w_id < o.w_id);
+      }
 
       MSGPACK_DEFINE(c_id, c_d_id, c_w_id, d_id, w_id);
     };
