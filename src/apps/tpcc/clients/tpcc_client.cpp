@@ -178,6 +178,11 @@ private:
   }
 
   double send_commit_request(std::shared_ptr<RpcTlsClient>& connection, tpcc::ClientReadWriter read_writer) {
+    using std::chrono::high_resolution_clock;
+    using std::chrono::duration_cast;
+    using std::chrono::duration;
+    using std::chrono::milliseconds;
+    
     tpcc::CommitRequest commitRequest;
     commitRequest.write_set = read_writer.write_set;
     commitRequest.keys_deleted = read_writer.keys_deleted;
