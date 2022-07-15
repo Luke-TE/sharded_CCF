@@ -677,10 +677,7 @@ namespace tpcc
         auto size = get_size();
         std::vector<uint8_t> v(size);
         auto data = v.data();
-        serialized::write(data, size, o_id);
-        serialized::write(data, size, d_id);
-        serialized::write(data, size, w_id);
-        serialized::write(data, size, number);
+        serialize_to_buffer(data, size);
         return v;
       }
 
@@ -732,16 +729,7 @@ namespace tpcc
       auto size = get_size();
       std::vector<uint8_t> v(size);
       auto data = v.data();
-      serialized::write(data, size, o_id);
-      serialized::write(data, size, d_id);
-      serialized::write(data, size, w_id);
-      serialized::write(data, size, number);
-      serialized::write(data, size, i_id);
-      serialized::write(data, size, supply_w_id);
-      serialized::write(data, size, quantity);
-      serialized::write(data, size, amount);
-      serialized::write(data, size, delivery_d);
-      serialized::write(data, size, dist_info);
+      serialize_to_buffer(data, size);
       return v;
     }
 
