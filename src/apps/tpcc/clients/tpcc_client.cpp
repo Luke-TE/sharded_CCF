@@ -77,7 +77,13 @@ private:
       1,2,3,4,5,6,7,8.0, { 0 }, { 0 }
     };
 
+    tpcc::OrderLine::Key key_2 = {1, 5, 8, 9};
+    tpcc::OrderLine order_line_2 = {
+      1,2,3,4,5,6,7,8.0, { 0 }, { 0 }
+    };
+
     order_lines[key] = order_line;
+    order_lines[key_2] = order_line_2;
 
     int num_entries = order_lines.size();
     LOG_INFO_FMT("Num Entries: {0}", std::to_string(num_entries));
@@ -130,14 +136,13 @@ private:
 //    {
 //      if (response.body.size() > 0) {
 //        auto test_vector_struct = tpcc::TestOrderLineMapStruct::deserialize(response.body.data(), response.body.size());
-//        LOG_INFO_FMT("Num of Entries: {0}", std::to_string(test_vector_struct.order_lines.size()));
-//        tpcc::OrderLine::Key key = {12, 34, 56, 78};
-//
-//        for (auto const& entry : test_vector_struct.order_lines)
-//        {
-//          LOG_INFO_FMT("Orderline Key w_id: {0}, Orderline w_id {1}", std::to_string(entry.first.w_id), std::to_string(entry.second.w_id));
-//          LOG_INFO_FMT("Orderline Key number: {0}, Orderline number {1}", std::to_string(entry.first.number), std::to_string(entry.second.number));
-//        }
+        LOG_INFO_FMT("Num of Entries: {0}", std::to_string(test_struct.order_lines.size()));
+
+        for (auto const& entry : test_struct.order_lines)
+        {
+          LOG_INFO_FMT("Orderline Key w_id: {0}, Orderline w_id {1}", std::to_string(entry.first.w_id), std::to_string(entry.second.w_id));
+          LOG_INFO_FMT("Orderline Key number: {0}, Orderline number {1}", std::to_string(entry.first.number), std::to_string(entry.second.number));
+        }
 //      }
 //      else {
 //        LOG_INFO_FMT("No vals");
