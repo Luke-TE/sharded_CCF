@@ -190,8 +190,8 @@ private:
 
 
     //// remove soon
-    read = 0;
-    written = 0;
+    size_t read = 0;
+    size_t written = 0;
 
     while (written < txs.size())
       write(txs[written], read, written, connection);
