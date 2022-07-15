@@ -353,11 +353,8 @@ namespace ccfapp
         tpcc::TestOrderLineMapStruct test_vector_struct;
         tpcc::OrderLine::Key key = {12, 34, 56, 78};
         tpcc::OrderLine order_line = {
-          1,2,3,4,5,6,7,8.0
+          1,2,3,4,5,6,7,8.0, { 0 }, { 0 }
         };
-
-        order_line.delivery_d = { 0 };
-        order_line.dist_info = { 0 };
 
         test_vector_struct.order_lines[key] = order_line;
 //        test_vector_struct.ints = ints;
