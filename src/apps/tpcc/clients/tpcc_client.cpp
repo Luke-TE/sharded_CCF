@@ -68,6 +68,7 @@ private:
 
       // Write everything
       while (written < txs.size()) {
+        LOG_INFO_FMT("Timing");
         // store txs elsewhere rather thanin preparedtxs
         // for each tx
           // execute it
