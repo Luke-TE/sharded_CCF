@@ -209,10 +209,10 @@ namespace tpcc
       if (num_entries > 0) {
         for (int i = 0; i < num_entries; i++) {
 //          auto serialised_key = serialized::read<>(data, size);
-          auto key = tpcc::OrderLine::Key::deserialize(data, sizeof(tpcc::OrderLine::Key));
+          auto key = tpcc::OrderLine::Key::deserialize(data, tpcc::OrderLine::Key::get_size());
 
 //          auto serialised_order_line = serialized::read<>(data, size);
-          auto order_line = tpcc::OrderLine::deserialize(data, sizeof(tpcc::OrderLine));
+          auto order_line = tpcc::OrderLine::deserialize(data, tpcc::OrderLine::get_size());
 
           test_struct.order_lines[key] = order_line;
         }
