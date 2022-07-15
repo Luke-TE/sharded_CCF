@@ -167,9 +167,12 @@ namespace tpcc
     {
       TestVectorStruct test_struct;
       test_struct.num_ints = serialized::read<decltype(num_ints)>(data, size);
-      for (int i = 0; i < test_struct.num_ints; i++) {
-        test_struct.ints.push_back(serialized::read<decltype(int)>(data, size))
+      if (test_struct.num_ints > 0) {
+        for (int i = 0; i < test_struct.num_ints; i++) {
+          test_struct.ints.push_back(serialized::read<decltype(test_struct.ints.at(0))>(data, size))
+        }
       }
+
       return test_struct;
     }
   };
