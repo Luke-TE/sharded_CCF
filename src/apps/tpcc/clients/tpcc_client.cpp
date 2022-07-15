@@ -84,15 +84,12 @@ private:
         auto test_vector_struct = tpcc::TestOrderLineMapStruct::deserialize(response.body.data(), response.body.size());
         LOG_INFO_FMT("Num of Entries: {0}", std::to_string(test_vector_struct.order_lines.size()));
         tpcc::OrderLine::Key key = {12, 34, 56, 78};
-        auto order_line = test_vector_struct.order_lines[key];
 
-        for (auto const& entry : order_lines)
+        for (auto const& entry : test_vector_struct.order_lines)
         {
           LOG_INFO_FMT("Orderline Key w_id: {0}, Orderline w_id {1}", std::to_string(entry.first.w_id), std::to_string(entry.second.w_id));
           LOG_INFO_FMT("Orderline Key number: {0}, Orderline number {1}", std::to_string(entry.first.number), std::to_string(entry.second.number));
         }
-
-
       }
       else {
         LOG_INFO_FMT("No vals");
