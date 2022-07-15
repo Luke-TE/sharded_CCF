@@ -118,8 +118,8 @@ private:
 
     if (http::status_success(response.status) && response.body.size() > 0)
     {
-      auto ints = tpcc::MsgPackSerialiser<std::vector<int>>::from_serialised(response.body);
-      LOG_INFO_FMT("Values: {0}, {1}", std::to_string(ints.at(0)), std::to_string(ints.at(1)));
+      auto test_vector_struct = tpcc::TestVectorStruct::deserialize(body.data(), body.size());
+      LOG_INFO_FMT("Values: {0}, {1}", std::to_string(test_vector_struct.ints.at(0)), std::to_string(test_vector_struct.ints.at(1)));
     }
     LOG_INFO_FMT("No vals");
 
