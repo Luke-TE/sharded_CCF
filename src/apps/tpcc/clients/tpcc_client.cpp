@@ -304,6 +304,11 @@ public:
   {
     files::dump(fmt::format("{}", ::getpid()), options.pid_file);
 
+    if (options.randomise)
+    {
+      options.generator_seed = std::random_device()();
+    }
+
     LOG_INFO_FMT(
       "Random choices determined by seed: {}", options.generator_seed);
     rand_generator.seed(options.generator_seed);
