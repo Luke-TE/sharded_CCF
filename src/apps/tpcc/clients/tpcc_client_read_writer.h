@@ -227,7 +227,7 @@ namespace tpcc
     void put_new_order(TpccTables::DistributeKey table_key, NewOrder::Key key, NewOrder new_order) override {
       OrderFullKey new_order_full_key;
       new_order_full_key.table_key = table_key;
-      new_order_full_key.key = key;
+      new_order_full_key.key = {key.o_id};
       write_set.new_orders[new_order_full_key] = new_order;
     };
     void put_order_line(OrderLine::Key key, OrderLine order_line) override {
