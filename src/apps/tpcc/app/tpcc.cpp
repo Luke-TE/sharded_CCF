@@ -355,11 +355,9 @@ namespace ccfapp
         tpcc::OrderLine order_line = {
           1,2,3,4,5,6,7,8.0
         };
-        std::array<char, tpcc::DATETIME_SIZE + 1> delivery_d;
-        delivery_d = { 'a', 'a','a','a','a','a','a','a','a','a','a','a','a', '\0', 0};
-        std::array<char, tpcc::Stock::DIST + 1> dist_info = { 'a','a','a','a','a','a','a','a','a','a','a','a', 'a','a','a','a','a','a','a','a','a','a','a','\0', 0};
-        order_line.delivery_d = delivery_d;
-        order_line.dist_info = dist_info;
+        
+        order_line.delivery_d = { 'a', 'a','a','a','a','a','a','a','a','a','a','a','a', '\0'};
+        order_line.dist_info = { 'a','a','a','a','a','a','a','a','a','a','a','a', 'a','a','a','a','a','a','a','a','a','a','a','\0'};
 
         test_vector_struct.order_lines[key] = order_line;
 //        test_vector_struct.ints = ints;
