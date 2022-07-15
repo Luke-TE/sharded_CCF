@@ -401,7 +401,7 @@ namespace ccfapp
           tpcc::NewOrder::Key key = {entry.first.table_key.v.w_id,
                                      entry.first.table_key.v.d_id,
                                      entry.first.key.id};
-          new_orders_table->put(entry.first.key, entry.second);
+          new_orders_table->put(key, entry.second);
         }
 
         for (auto const& entry : request.write_set.order_lines)
