@@ -207,12 +207,12 @@ namespace tpcc
       TestOrderLineMapStruct test_struct;
       int num_entries = serialized::read<int>(data, size);
       if (num_entries > 0) {
-        for (int i = 0; i < num_ints; i++) {
+        for (int i = 0; i < num_entries; i++) {
 //          auto serialised_key = serialized::read<>(data, size);
           auto key = tpcc::OrderLine::Key::deserialize(data, sizeof(tpcc::OrderLine::Key));
 
 //          auto serialised_order_line = serialized::read<>(data, size);
-          auto order_line = tpcc::OrderLine::Key::deserialize(data, sizeof(tpcc::OrderLine));
+          auto order_line = tpcc::OrderLine::deserialize(data, sizeof(tpcc::OrderLine));
 
           test_struct.order_lines[key] = order_line;
         }
