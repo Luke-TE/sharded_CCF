@@ -4,13 +4,15 @@
 #include "perf_client.h"
 #include "tpcc_client_read_writer.h"
 #include "tpcc_transactions_local.h"
+#include <chrono>
+#include <thread>
 
 namespace tpcc
 {
   class TpccCoordinator
   {
   public:
-    TpccCoordinator(std::shared_ptr<RpcTlsClient>& c, tpcc::ClientReadWriter r) : connection(c), read_writer(r) {
+    TpccCoordinator(std::shared_ptr<RpcTlsClient>& c, tpcc::ClientReadWriter r, int p) : connection(c), read_writer(r), prop_delay_ms(p) {
     }
     double two_phase_commit(int tx_id) {
       auto can_commit = prepare(tx_id);
@@ -29,6 +31,7 @@ namespace tpcc
   private:
     std::shared_ptr<RpcTlsClient>& connection;
     tpcc::ClientReadWriter read_writer;
+    int prop_delay_ms;
 
     bool prepare(int tx_id) {
       tpcc::WriteSet2pc write_set_2pc;
@@ -37,6 +40,7 @@ namespace tpcc
       write_set_2pc.keys_deleted = read_writer.keys_deleted;
 
       const auto body = write_set_2pc.serialize();
+      std::this_thread::sleep_for(std::chrono::milliseconds(options.prop_delay_ms));
       const auto response =
         connection->call("prepare_2pc", CBuffer{body.data(), body.size()});
       return http::status_success(response.status);
@@ -53,6 +57,7 @@ namespace tpcc
 
       const auto body = commit_request.serialize();
       auto tx_start_time = high_resolution_clock::now();
+      std::this_thread::sleep_for(std::chrono::milliseconds(options.prop_delay_ms));
       const auto response =
         connection->call("commit_2pc", CBuffer{body.data(), body.size()});
       auto tx_finish_time = high_resolution_clock::now();

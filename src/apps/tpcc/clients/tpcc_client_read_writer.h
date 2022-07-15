@@ -18,8 +18,9 @@ namespace tpcc
   public:
     UpdateSet update_set;
     KeysDeleted keys_deleted;
+    int prop_delay_ms;
 
-    ClientReadWriter(std::shared_ptr<RpcTlsClient> conn) : connection(conn)
+    ClientReadWriter(std::shared_ptr<RpcTlsClient> conn, int p) : connection(conn), prop_delay_ms(p)
     {
       std::map<OrderFullKey, tpcc::Order> orders;
       std::map<OrderFullKey, tpcc::NewOrder> new_orders;
@@ -39,6 +40,7 @@ namespace tpcc
 
     std::optional<District> get_district(tpcc::District::Key key) override {
       const auto body = key.serialize();
+      std::this_thread::sleep_for(std::chrono::milliseconds(prop_delay_ms));
       const auto response =
         connection->call("get_district", CBuffer{body.data(), body.size()});
 //      check_response(response);
@@ -55,6 +57,7 @@ namespace tpcc
 
     std::optional<OrderLine> get_order_line(tpcc::OrderLine::Key key) override {
       const auto body = key.serialize();
+      std::this_thread::sleep_for(std::chrono::milliseconds(prop_delay_ms));
       const auto response =
         connection->call("get_order_line", CBuffer{body.data(), body.size()});
 //      check_response(response);
@@ -71,6 +74,7 @@ namespace tpcc
 
     std::optional<Item> get_item(Item::Key key) override {
       const auto body = key.serialize();
+      std::this_thread::sleep_for(std::chrono::milliseconds(prop_delay_ms));
       const auto response =
         connection->call("get_item", CBuffer{body.data(), body.size()});
 //      check_response(response);
@@ -87,6 +91,7 @@ namespace tpcc
 
     std::optional<Stock> get_stock(Stock::Key key) override {
       const auto body = key.serialize();
+      std::this_thread::sleep_for(std::chrono::milliseconds(prop_delay_ms));
       const auto response =
         connection->call("get_stock", CBuffer{body.data(), body.size()});
 //      check_response(response);
@@ -103,6 +108,7 @@ namespace tpcc
 
     std::optional<Warehouse> get_warehouse(Warehouse::Key key) override {
       const auto body = key.serialize();
+      std::this_thread::sleep_for(std::chrono::milliseconds(prop_delay_ms));
       const auto response =
         connection->call("get_warehouse", CBuffer{body.data(), body.size()});
 //      check_response(response);
@@ -124,6 +130,7 @@ namespace tpcc
       customer_request.d_id = table_key.v.d_id;
 
       const auto body = customer_request.serialize();
+      std::this_thread::sleep_for(std::chrono::milliseconds(prop_delay_ms));
       const auto response =
         connection->call("get_customer", CBuffer{body.data(), body.size()});
       //      check_response(response);
@@ -144,6 +151,7 @@ namespace tpcc
       customer_request.d_id = table_key.v.d_id;
 
       const auto body = customer_request.serialize();
+      std::this_thread::sleep_for(std::chrono::milliseconds(prop_delay_ms));
       const auto response =
         connection->call("get_customer_by_name", CBuffer{body.data(), body.size()});
       //      check_response(response);
@@ -164,6 +172,7 @@ namespace tpcc
       order_request.d_id = table_key.v.d_id;
 
       const auto body = order_request.serialize();
+      std::this_thread::sleep_for(std::chrono::milliseconds(prop_delay_ms));
       const auto response =
         connection->call("get_order", CBuffer{body.data(), body.size()});
       //      check_response(response);
@@ -185,6 +194,7 @@ namespace tpcc
       order_request.d_id = table_key.v.d_id;
 
       const auto body = order_request.serialize();
+      std::this_thread::sleep_for(std::chrono::milliseconds(prop_delay_ms));
       const auto response =
         connection->call("get_last_order_by_customer", CBuffer{body.data(), body.size()});
       //      check_response(response);
@@ -204,6 +214,7 @@ namespace tpcc
       new_order_request.d_id = table_key.v.d_id;
 
       const auto body = new_order_request.serialize();
+      std::this_thread::sleep_for(std::chrono::milliseconds(prop_delay_ms));
       const auto response =
         connection->call("get_last_new_order", CBuffer{body.data(), body.size()});
       //      check_response(response);

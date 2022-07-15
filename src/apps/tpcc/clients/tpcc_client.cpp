@@ -9,6 +9,7 @@
 #include "tpcc_coordinator.h"
 
 #include <chrono>
+#include <thread>
 
 using namespace std;
 using namespace nlohmann;
@@ -16,6 +17,7 @@ using namespace nlohmann;
 struct TpccClientOptions : public client::PerfOptions
 {
   bool sharded = false;
+  int prop_delay_ms = 0;
 
   TpccClientOptions(CLI::App& app, const std::string& default_pid_file) :
     client::PerfOptions("Tpcc_ClientCpp", default_pid_file, app)
@@ -25,6 +27,13 @@ struct TpccClientOptions : public client::PerfOptions
         "--sharded",
         sharded,
         "Use the sharded client")
+      ->capture_default_str();
+
+    app
+      .add_option(
+        "--delay",
+        prop_delay_ms,
+        "Propagation delay in ms")
       ->capture_default_str();
   }
 };
@@ -87,8 +96,9 @@ private:
       // Write everything
       while (written < txs.size())
       {
+        // maybe already implemented above? still do it here
+        std::this_thread::sleep_for(std::chrono::milliseconds(options.prop_delay_ms));
         write(txs[written], read, written, connection);
-        LOG_INFO_FMT("Write!");
       }
 
       blocking_read(read, written, connection);
@@ -230,8 +240,8 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.stock_level(1, 1, 1000);
-        tpcc::TpccCoordinator coordinator(connection, client_read_writer);
-        auto response_time = coordinator.two_phase_commit(i);
+        tpcc::TpccCoordinator coordinator(connection, client_read_writer, options.prop_delay_ms);
+        auto response_time = coordinator.two_phase_commit(i, options.prop_delay_ms);
         total_response_time += response_time;
         total_stock_level_response_time += response_time;
         num_stock_level_txs++;
@@ -242,8 +252,8 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.delivery();
-        tpcc::TpccCoordinator coordinator(connection, client_read_writer);
-        auto response_time = coordinator.two_phase_commit(i);
+        tpcc::TpccCoordinator coordinator(connection, client_read_writer, options.prop_delay_ms);
+        auto response_time = coordinator.two_phase_commit(i, options.prop_delay_ms);
         total_response_time += response_time;
         total_delivery_response_time += response_time;
         num_delivery_txs++;
@@ -254,8 +264,8 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.order_status();
-        tpcc::TpccCoordinator coordinator(connection, client_read_writer);
-        auto response_time = coordinator.two_phase_commit(i);
+        tpcc::TpccCoordinator coordinator(connection, client_read_writer, options.prop_delay_ms);
+        auto response_time = coordinator.two_phase_commit(i, options.prop_delay_ms);
         total_response_time += response_time;
         total_order_status_response_time += response_time;
         num_order_status_txs++;
@@ -266,8 +276,8 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.payment();
-        tpcc::TpccCoordinator coordinator(connection, client_read_writer);
-        auto response_time = coordinator.two_phase_commit(i);
+        tpcc::TpccCoordinator coordinator(connection, client_read_writer, options.prop_delay_ms);
+        auto response_time = coordinator.two_phase_commit(i, options.prop_delay_ms);
         total_response_time += response_time;
         total_payment_response_time += response_time;
         num_payment_txs++;
@@ -278,8 +288,8 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.new_order();
-        tpcc::TpccCoordinator coordinator(connection, client_read_writer);
-        auto response_time = coordinator.two_phase_commit(i);
+        tpcc::TpccCoordinator coordinator(connection, client_read_writer, options.prop_delay_ms);
+        auto response_time = coordinator.two_phase_commit(i, options.prop_delay_ms);
         total_response_time += response_time;
         total_new_order_response_time += response_time;
         num_new_order_txs++;
