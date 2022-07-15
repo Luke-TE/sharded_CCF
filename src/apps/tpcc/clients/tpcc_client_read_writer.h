@@ -59,7 +59,7 @@ namespace tpcc
     ClientReadWriter(std::shared_ptr<RpcTlsClient> conn) : connection(conn)
     {
       std::map<OrderFullKey, tpcc::Order> orders;
-      std::map<NewOrderFullKey::Key, tpcc::NewOrder> new_orders;
+      std::map<NewOrderFullKey, tpcc::NewOrder> new_orders;
       std::map<tpcc::OrderLine::Key, tpcc::OrderLine> order_lines;
       std::map<tpcc::History::Key, tpcc::History> histories;
 
