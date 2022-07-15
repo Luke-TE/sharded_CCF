@@ -397,6 +397,10 @@ namespace ccfapp
         {
           auto it = tpcc::TpccTables::new_orders.find(entry.first.table_key.k);
           auto new_orders_table = args.tx.rw(it->second);
+
+          tpcc::NewOrder::Key key = {entry.first.table_key.v.w_id,
+                                     entry.first.table_key.v.d_id,
+                                     entry.first.key.id};
           new_orders_table->put(entry.first.key, entry.second);
         }
 
