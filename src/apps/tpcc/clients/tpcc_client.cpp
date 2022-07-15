@@ -5,6 +5,7 @@
 #include "../tpcc_tables.h"
 #include "tpcc_client_read_writer.h"
 #include "tpcc_transactions_local.h"
+#include "../serialise_msgpack.h"
 
 #include <chrono>
 
@@ -98,7 +99,6 @@ private:
     tpcc::District::Key key;
     key.id = 123;
     key.w_id = 456;
-    LOG_INFO_FMT("Old Value: {0}, {1}", std::to_string(key.id), std::to_string(key.w_id));
 
     auto optional_district = read_writer.get_district(key);
     if (optional_district.has_value())
@@ -109,6 +109,19 @@ private:
     else {
       LOG_INFO_FMT("No Value :(");
     }
+
+    TestStruct test_struct;
+    test_struct.int_val = 999;
+    const auto body = test_struct.serialize();
+    const auto response =
+      connection->call("do_test_vector", CBuffer{body.data(), body.size()});
+
+    if (http::status_success(response.status) && response.body.size() > 0)
+    {
+      auto ints = tpcc::MsgPackSerialiser<std::vector<int>>::from_serialised();
+      LOG_INFO_FMT("Values: {0}, {1}", std::to_string(ints.at(0)), std::to_string(ints.at(1)));
+    }
+    LOG_INFO_FMT("No vals");
 
     // Reserve space for transfer transactions
     prepared_txs.resize(options.num_transactions);

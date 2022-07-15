@@ -11,6 +11,7 @@
 
 #include <charconv>
 #include <string.h>
+#include <vector>
 
 using namespace std;
 using namespace nlohmann;
@@ -344,6 +345,18 @@ namespace ccfapp
         args.rpc_ctx->set_response_body(response.serialize());
       };
 
+      auto do_test_vector = [this](auto& args) {
+        const auto& body = args.rpc_ctx->get_request_body();
+        auto test_struct = tpcc::TestStruct::deserialize(body.data(), body.size());
+
+        std::vector<int> ints;
+        ints.push_back(123);
+        ints.push_back(456);
+
+        set_ok_status(args);
+        args.rpc_ctx->set_response_body(tpcc::MsgPackSerialiser<std::vector<int>>::to_serialised(ints));
+      };
+
       const ccf::AuthnPolicies user_sig_or_cert = {user_signature_auth_policy,
                                                    user_cert_auth_policy};
 
@@ -381,6 +394,8 @@ namespace ccfapp
         make_endpoint("get_last_order_by_customer", verb, get_last_order_by_customer, user_sig_or_cert)
           .install();
         make_endpoint("get_last_new_order", verb, get_last_new_order, user_sig_or_cert)
+          .install();
+        make_endpoint("do_test_vector", verb, do_test_vector, user_sig_or_cert)
           .install();
       }
 
