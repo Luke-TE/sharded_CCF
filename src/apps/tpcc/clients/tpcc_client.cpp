@@ -68,7 +68,8 @@ private:
 
       // Write everything
       while (written < txs.size()) {
-        LOG_INFO_FMT("Timing");
+        LOG_INFO_FMT("written: {0}", std::to_string(written));
+        LOG_INFO_FMT("size: {0}", std::to_string(txs.size()));
         // store txs elsewhere rather thanin preparedtxs
         // for each tx
           // execute it
