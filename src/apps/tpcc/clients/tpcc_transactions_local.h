@@ -32,7 +32,6 @@ namespace tpcc
 
       if (!districts.has_value())
       {
-        // TODO this should fail due to lack of error package
         throw std::logic_error("district does not exist");
       }
       return districts.value();

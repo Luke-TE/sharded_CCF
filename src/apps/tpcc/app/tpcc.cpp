@@ -465,6 +465,8 @@ namespace ccfapp
           .install();
         make_endpoint("do_test_vector", verb, do_test_vector, user_sig_or_cert)
           .install();
+        make_endpoint("commit_2pc", verb, commit_2pc, user_sig_or_cert)
+          .install();
       }
 
       metrics_tracker.install_endpoint(*this);

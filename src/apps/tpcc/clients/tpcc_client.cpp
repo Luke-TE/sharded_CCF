@@ -177,6 +177,17 @@ private:
     Base::verify_params(expected);
   }
 
+  void send_commit_request(tpcc::ClientReadWriter read_writer) {
+    tpcc::CommitRequest commitRequest;
+    commitRequest.write_set = read_writer.write_set;
+    commitRequest.keys_deleted = read_writer.keys_deleted;
+
+    const auto body = commitRequest.serialize();
+    const auto response =
+      connection->call("commit_2pc", CBuffer{body.data(), body.size()});
+    check_response(response);
+  }
+
   timing::Results send_transactions(std::shared_ptr<RpcTlsClient>& connection, const PreparedTxs& txs) {
     last_write_time = std::chrono::high_resolution_clock::now();
     kick_off_timing();
@@ -192,12 +203,7 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.stock_level(1, 1, 1000);
-        // TODO submit write set
-
-        // extract writeset
-        // clientreadwriter.
-        //         write_set;
-        //         keys_deleted;
+        send_commit_request(client_read_writer);
       }
       else if (x < 8) // Delivery
       {
@@ -205,7 +211,7 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.delivery();
-        // TODO submit write set
+        send_commit_request(client_read_writer);
       }
       else if (x < 12) // Order Status
       {
@@ -213,7 +219,7 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.order_status();
-        // TODO submit write set
+        send_commit_request(client_read_writer);
       }
       else if (x < (12 + 43)) // Payment
       {
@@ -221,7 +227,7 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.payment();
-        // TODO submit write set
+        send_commit_request(client_read_writer);
       }
       else // New Order
       {
@@ -229,7 +235,7 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.new_order();
-        // TODO submit write set
+        send_commit_request(client_read_writer);
       }
     }
 
@@ -258,7 +264,7 @@ public:
     rand_generator.seed(options.generator_seed);
 
     send_all_creation_transactions();
-    prepare_all_transactions();
+//    prepare_all_transactions();
 
     LOG_TRACE_FMT(
       "Sending {} transactions from {} clients {} times...",
