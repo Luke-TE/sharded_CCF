@@ -139,7 +139,7 @@ namespace ccfapp
         auto districts_table = args.tx.ro(tpcc::TpccTables::districts);
         auto optional_district = districts_table->get(key);
 
-        if (optional_order_line.has_value())
+        if (optional_district.has_value())
         {
           auto response = optional_district.value();
 
