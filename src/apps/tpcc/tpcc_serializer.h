@@ -9,8 +9,10 @@
 #include <unordered_set>
 #include <vector>
 #include <array>
+#include <map>
 #include <string>
 #include "app/tpcc_common.h"
+#include "tpcc_tables.h"
 
 namespace Address
 {
@@ -170,6 +172,49 @@ namespace tpcc
       if (num_ints > 0) {
         for (int i = 0; i < num_ints; i++) {
           test_struct.ints.push_back(serialized::read<int>(data, size));
+        }
+      }
+
+      return test_struct;
+    }
+  };
+
+  struct TestOrderLineMapStruct
+  {
+    std::map<tpcc::OrderLine::Key, tpcc::OrderLine> order_lines;
+
+    std::vector<uint8_t> serialize() const
+    {
+      int num_entries = order_lines.size();
+      auto size = sizeof(int) + (sizeof(tpcc::OrderLine::Key) + sizeof(tpcc::OrderLine)) * num_entries;
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, num_entries);
+
+      for (auto const& entry : order_lines)
+      {
+        auto serialised_key = entry.first.serialize().data();
+        auto serialised_order_line = entry.second.serialize().data();
+        serialized::write(data, size, serialised_key);
+        serialized::write(data, size, serialised_order_line);
+      }
+
+      return v;
+    }
+
+    static TestOrderLineMapStruct deserialize(const uint8_t* data, size_t size)
+    {
+      TestOrderLineMapStruct test_struct;
+      int num_entries = serialized::read<int>(data, size);
+      if (num_entries > 0) {
+        for (int i = 0; i < num_ints; i++) {
+//          auto serialised_key = serialized::read<>(data, size);
+          auto key = tpcc::OrderLine::Key::deserialize(data, sizeof(tpcc::OrderLine::Key));
+
+//          auto serialised_order_line = serialized::read<>(data, size);
+          auto order_line = tpcc::OrderLine::Key::deserialize(data, sizeof(tpcc::OrderLine));
+
+          test_struct.order_lines[key] = order_line;
         }
       }
 
