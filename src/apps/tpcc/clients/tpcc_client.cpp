@@ -264,7 +264,7 @@ public:
 
   void run_() {
     if (options.sharded) {
-      run_sharded()
+      run_sharded();
     } else {
       run();
     }
