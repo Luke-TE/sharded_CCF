@@ -97,12 +97,10 @@ private:
 
     for (auto const& entry : order_lines)
     {
-      auto serialised_key = entry.first.serialize().data();
-      serialized::write(data, size, serialised_key);
+      entry.first.serialize_to_buffer(data, size);
       LOG_INFO_FMT("Size After Writing Key: {0}", std::to_string(size));
 
-      auto serialised_order_line = entry.second.serialize().data();
-      serialized::write(data, size, serialised_order_line);
+      entry.second.serialize_to_buffer(data, size);
       LOG_INFO_FMT("Size After Writing Order Line: {0}", std::to_string(size));
     }
     LOG_INFO_FMT("Size After Writing: {0}", std::to_string(size));

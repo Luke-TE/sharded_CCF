@@ -684,6 +684,14 @@ namespace tpcc
         return v;
       }
 
+      void serialize_to_buffer(uint8_t*& data, size_t& size) const
+      {
+        serialized::write(data, size, o_id);
+        serialized::write(data, size, d_id);
+        serialized::write(data, size, w_id);
+        serialized::write(data, size, number);
+      }
+
       static OrderLine::Key deserialize(const uint8_t* data, size_t size)
       {
         OrderLine::Key key;
@@ -735,6 +743,20 @@ namespace tpcc
       serialized::write(data, size, delivery_d);
       serialized::write(data, size, dist_info);
       return v;
+    }
+
+    void serialize_to_buffer(uint8_t*& data, size_t& size) const
+    {
+      serialized::write(data, size, o_id);
+      serialized::write(data, size, d_id);
+      serialized::write(data, size, w_id);
+      serialized::write(data, size, number);
+      serialized::write(data, size, i_id);
+      serialized::write(data, size, supply_w_id);
+      serialized::write(data, size, quantity);
+      serialized::write(data, size, amount);
+      serialized::write(data, size, delivery_d);
+      serialized::write(data, size, dist_info);
     }
 
     static OrderLine deserialize(const uint8_t* data, size_t size)
