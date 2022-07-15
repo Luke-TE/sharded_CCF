@@ -368,6 +368,50 @@ namespace ccfapp
         args.rpc_ctx->set_response_body(test_vector_struct.serialize());
       };
 
+      auto commit_2pc = [this](auto& args) {
+        const auto& body = args.rpc_ctx->get_request_body();
+        auto request = tpcc::CommitRequest::deserialize(body.data(), body.size());
+
+        for (auto const& entry : request.write_set.orders)
+        {
+          auto it = tpcc::TpccTables::orders.find(entry.first.table_key.k);
+          auto orders_table = args.tx.rw(it->second);
+          orders_table->put(entry.second.get_key(), entry.second);
+        }
+
+        for (auto const& entry : request.write_set.new_orders)
+        {
+          auto it = tpcc::TpccTables::new_orders.find(entry.first.table_key.k);
+          auto new_orders_table = args.tx.rw(it->second);
+          new_orders_table->put(entry.second.get_key(), entry.second);
+        }
+
+        for (auto const& entry : request.write_set.order_lines)
+        {
+          auto order_lines = args.tx.rw(tpcc::TpccTables::order_lines);
+          order_lines->put(entry.first, entry.second);
+        }
+
+        for (auto const& entry : request.write_set.histories)
+        {
+          auto history_table = args.tx.rw(tpcc::TpccTables::histories);
+          history_table->put(entry.first, entry.second);
+        }
+
+        for(auto entry = std::begin(request.keys_deleted.new_order_keys); entry != std::end(request.keys_deleted.new_order_keys); ++entry) {
+          TpccTables::DistributeKey table_key;
+          table_key.v.w_id = (*entry).w_id;
+          table_key.v.d_id = (*entry).d_id;
+
+          auto it = tpcc::TpccTables::new_orders.find(table_key.k);
+          auto new_orders_table = args.tx.rw(it->second);
+          new_orders_table->remove(*entry);
+        }
+
+        set_ok_status(args);
+        args.rpc_ctx->set_response_body(response.serialize());
+      };
+
       const ccf::AuthnPolicies user_sig_or_cert = {user_signature_auth_policy,
                                                    user_cert_auth_policy};
 
