@@ -90,11 +90,11 @@ private:
 
     TestOrderLineMapStruct test_struct;
     LOG_INFO_FMT("Size: {0}", std::to_string(size));
-    int num_entries = serialized::read<int>(data, size);
+    int new_num_entries = serialized::read<int>(data, size);
     LOG_INFO_FMT("After Num Entries Size: {0}", std::to_string(size));
 
-    if (num_entries > 0) {
-      for (int i = 0; i < num_entries; i++) {
+    if (new_num_entries > 0) {
+      for (int i = 0; i < new_num_entries; i++) {
 
         //          auto serialised_key = serialized::read<>(data, size);
         auto key = tpcc::OrderLine::Key::deserialize(data, tpcc::OrderLine::Key::get_size());
