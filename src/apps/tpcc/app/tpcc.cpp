@@ -139,16 +139,16 @@ namespace ccfapp
         auto districts_table = args.tx.ro(tpcc::TpccTables::districts);
         auto optional_district = districts_table->get(key);
 
-        if (true)
-        {
-          set_error_status(args, HTTP_STATUS_BAD_REQUEST, "district does not exist");
-        }
-        else
+        if (optional_order_line.has_value())
         {
           auto response = optional_district.value();
 
           set_ok_status(args);
           args.rpc_ctx->set_response_body(response.serialize());
+        }
+        else
+        {
+          set_error_status(args, HTTP_STATUS_BAD_REQUEST, "district does not exist");
         }
       };
 
@@ -159,15 +159,17 @@ namespace ccfapp
         auto order_lines_table = args.tx.ro(tpcc::TpccTables::order_lines);
         auto optional_order_line = order_lines_table->get(key);
 
-        if (!optional_order_line.has_value())
+        if (optional_order_line.has_value())
         {
-          throw std::logic_error("order_line does not exist");
+          auto response = optional_order_line.value();
+
+          set_ok_status(args);
+          args.rpc_ctx->set_response_body(response.serialize());
         }
-
-        auto response = optional_order_line.value();
-
-        set_ok_status(args);
-        args.rpc_ctx->set_response_body(response.serialize());
+        else
+        {
+          set_error_status(args, HTTP_STATUS_BAD_REQUEST, "order_line does not exist");
+        }
       };
 
       auto get_item = [this](auto& args) {
@@ -177,15 +179,17 @@ namespace ccfapp
         auto items_table = args.tx.ro(tpcc::TpccTables::items);
         auto optional_item = items_table->get(key);
 
-        if (!optional_item.has_value())
+        if (optional_item.has_value())
         {
-          throw std::logic_error("item does not exist");
+          auto response = optional_item.value();
+
+          set_ok_status(args);
+          args.rpc_ctx->set_response_body(response.serialize());
         }
-
-        auto response = optional_item.value();
-
-        set_ok_status(args);
-        args.rpc_ctx->set_response_body(response.serialize());
+        else
+        {
+          set_error_status(args, HTTP_STATUS_BAD_REQUEST, "item does not exist");
+        }
       };
 
       auto get_stock = [this](auto& args) {
@@ -195,15 +199,17 @@ namespace ccfapp
         auto stocks_table = args.tx.ro(tpcc::TpccTables::stocks);
         auto optional_stock = stocks_table->get(key);
 
-        if (!optional_stock.has_value())
+        if (optional_stock.has_value())
         {
-          throw std::logic_error("stock does not exist");
+          auto response = optional_stock.value();
+
+          set_ok_status(args);
+          args.rpc_ctx->set_response_body(response.serialize());
         }
-
-        auto response = optional_stock.value();
-
-        set_ok_status(args);
-        args.rpc_ctx->set_response_body(response.serialize());
+        else
+        {
+          set_error_status(args, HTTP_STATUS_BAD_REQUEST, "item does not exist");
+        }
       };
 
       auto get_warehouse = [this](auto& args) {
@@ -213,15 +219,17 @@ namespace ccfapp
         auto warehouses_table = args.tx.ro(tpcc::TpccTables::warehouses);
         auto optional_warehouse = warehouses_table->get(key);
 
-        if (!optional_warehouse.has_value())
+        if (optional_warehouse.has_value())
         {
-          throw std::logic_error("warehouse does not exist");
+          auto response = optional_warehouse.value();
+
+          set_ok_status(args);
+          args.rpc_ctx->set_response_body(response.serialize());
         }
-
-        auto response = optional_warehouse.value();
-
-        set_ok_status(args);
-        args.rpc_ctx->set_response_body(response.serialize());
+        else
+        {
+          set_error_status(args, HTTP_STATUS_BAD_REQUEST, "warehouse does not exist");
+        }
       };
 
       auto get_customer = [this](auto& args) {
@@ -236,14 +244,17 @@ namespace ccfapp
         auto customers_table = args.tx.ro(it->second);
         auto optional_customer = customers_table->get(key);
 
-        if (!optional_customer.has_value())
+        if (optional_customer.has_value())
         {
-          throw std::logic_error("customer does not exist");
-        }
-        auto response = optional_customer.value();
+          auto response = optional_customer.value();
 
-        set_ok_status(args);
-        args.rpc_ctx->set_response_body(response.serialize());
+          set_ok_status(args);
+          args.rpc_ctx->set_response_body(response.serialize());
+        }
+        else
+        {
+          set_error_status(args, HTTP_STATUS_BAD_REQUEST, "customer does not exist");
+        }
       };
 
       auto get_customer_by_name = [this](auto& args) {
@@ -282,15 +293,18 @@ namespace ccfapp
         auto orders_table = args.tx.ro(it->second);
         tpcc::Order::Key key = {request.id};
         auto optional_order = orders_table->get(key);
-        if (!optional_order.has_value())
+
+        if (optional_order.has_value())
         {
-          throw std::logic_error("order does not exist");
+          auto response = optional_order.value();
+
+          set_ok_status(args);
+          args.rpc_ctx->set_response_body(response.serialize());
         }
-
-        auto response = optional_order.value();
-
-        set_ok_status(args);
-        args.rpc_ctx->set_response_body(response.serialize());
+        else
+        {
+          set_error_status(args, HTTP_STATUS_BAD_REQUEST, "order does not exist");
+        }
       };
 
       auto get_last_order_by_customer = [this](auto& args) {
