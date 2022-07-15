@@ -112,7 +112,7 @@ private:
     return timing_results;
   }
 
-  void wait_for_global_commit(const ccf::TxID& target) override
+  void wait_for_global_commit(const ccf::TxID& target)
   {
     response_times.wait_for_global_commit(target, false);
   }
