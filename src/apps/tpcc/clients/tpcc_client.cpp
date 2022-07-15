@@ -104,12 +104,17 @@ private:
       // Create a new connection, because we need to do some GETs
       // and when all you have is a WebSocket, everything looks like a POST!
       auto c = create_connection(true, false);
-      wait_for_global_commit(last_response_tx_id, false);
+      wait_for_global_commit(last_response_tx_id);
     }
     const auto last_commit = last_response_tx_id.seqno;
     auto timing_results = end_timing(last_commit);
     LOG_INFO_FMT("Timing ended");
     return timing_results;
+  }
+
+  void wait_for_global_commit(const ccf::TxID& target) override
+  {
+    response_times.wait_for_global_commit(target, false);
   }
 
   void prepare_transactions() override
