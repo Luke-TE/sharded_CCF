@@ -114,7 +114,7 @@ private:
 
   void wait_for_global_commit(const ccf::TxID& target)
   {
-    response_times.wait_for_global_commit(target, false);
+    response_times.wait_for_global_commit(target, true);
   }
 
   void prepare_transactions() override
