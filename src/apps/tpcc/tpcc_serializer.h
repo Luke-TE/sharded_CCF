@@ -151,14 +151,15 @@ namespace tpcc
 
     std::vector<uint8_t> serialize() const
     {
-      auto size = sizeof(num_ints) + ints.size() * sizeof(int);
+      auto size = sizeof(num_ints) + ints.size();
+//      auto size = sizeof(num_ints) + ints.size() * sizeof(int);
       std::vector<uint8_t> v(size);
       auto data = v.data();
       serialized::write(data, size, num_ints);
 
-      for(auto it = std::begin(ints); it != std::end(ints); ++it) {
-        serialized::write(data, size, it);
-      }
+//      for(auto it = std::begin(ints); it != std::end(ints); ++it) {
+//        serialized::write(data, size, it);
+//      }
 
       return v;
     }
@@ -167,11 +168,11 @@ namespace tpcc
     {
       TestVectorStruct test_struct;
       test_struct.num_ints = serialized::read<decltype(num_ints)>(data, size);
-      if (test_struct.num_ints > 0) {
-        for (int i = 0; i < test_struct.num_ints; i++) {
-          test_struct.ints.push_back(serialized::read<int>(data, size));
-        }
-      }
+//      if (test_struct.num_ints > 0) {
+//        for (int i = 0; i < test_struct.num_ints; i++) {
+//          test_struct.ints.push_back(serialized::read<int>(data, size));
+//        }
+//      }
 
       return test_struct;
     }
