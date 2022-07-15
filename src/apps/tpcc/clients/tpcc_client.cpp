@@ -4,6 +4,7 @@
 #include "perf_client.h"
 #include "../tpcc_tables.h"
 #include "tpcc_client_read_writer.h"
+#include "tpcc_transactions_local.h"
 
 #include <chrono>
 
