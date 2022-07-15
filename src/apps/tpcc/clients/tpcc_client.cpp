@@ -188,7 +188,7 @@ private:
 
       if (x < 4) // Stock Level
       {
-        LOG_INFO_FMT("Stock Level");
+//        LOG_INFO_FMT("Stock Level");
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.stock_level(1, 1, 1000);
@@ -201,7 +201,7 @@ private:
       }
       else if (x < 8) // Delivery
       {
-        LOG_INFO_FMT("Delivery");
+//        LOG_INFO_FMT("Delivery");
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.delivery();
@@ -209,7 +209,7 @@ private:
       }
       else if (x < 12) // Order Status
       {
-        LOG_INFO_FMT("Order Status");
+//        LOG_INFO_FMT("Order Status");
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.order_status();
@@ -217,7 +217,7 @@ private:
       }
       else if (x < (12 + 43)) // Payment
       {
-        LOG_INFO_FMT("Payment");
+//        LOG_INFO_FMT("Payment");
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.payment();
@@ -225,7 +225,7 @@ private:
       }
       else // New Order
       {
-        LOG_INFO_FMT("New Order");
+//        LOG_INFO_FMT("New Order");
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.new_order();
