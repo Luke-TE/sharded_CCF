@@ -3,7 +3,6 @@
 #pragma once
 
 #include "ds/serialized.h"
-#include "ds/logging.h"
 #include <cstring>
 #include <stdint.h>
 #include <unordered_map>
@@ -158,8 +157,6 @@ namespace tpcc
       serialized::write(data, size, num_ints);
 
       for(auto it = std::begin(ints); it != std::end(ints); ++it) {
-        LOG_INFO_FMT("Hello");
-        LOG_INFO_FMT("Size: {0}", std::to_string(size));
         serialized::write(data, size, it);
       }
 
