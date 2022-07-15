@@ -110,9 +110,9 @@ private:
       LOG_INFO_FMT("No Value :(");
     }
 
-    tpcc::TestStruct test_struct;
-    test_struct.int_val = 999;
-    const auto body = test_struct.serialize();
+    tpcc::TestStruct test_vector_struct;
+    test_vector_struct.int_val = 999;
+    const auto body = test_vector_struct.serialize();
     const auto response =
       connection->call("do_test_vector", CBuffer{body.data(), body.size()});
 
