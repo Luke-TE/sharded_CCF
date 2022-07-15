@@ -80,6 +80,7 @@ private:
     order_lines[key] = order_line;
 
     int num_entries = order_lines.size();
+    LOG_INFO_FMT("Num Entries: {0}", std::to_string(new_num_entries));
     auto size = sizeof(int) + (tpcc::OrderLine::Key::get_size() + tpcc::OrderLine::get_size()) * num_entries;
     std::vector<uint8_t> v(size);
     auto data = v.data();
@@ -94,12 +95,12 @@ private:
     }
 
     size = sizeof(int) + (tpcc::OrderLine::Key::get_size() + tpcc::OrderLine::get_size()) * num_entries;
-    const uint8_t* new_data = data;
+    const uint8_t* new_data = v.data();
 
     tpcc::TestOrderLineMapStruct test_struct;
     LOG_INFO_FMT("Size: {0}", std::to_string(size));
     int new_num_entries = serialized::read<int>(new_data, size);
-    LOG_INFO_FMT("Num Entries: {0}", std::to_string(new_num_entries));
+    LOG_INFO_FMT("New Num Entries: {0}", std::to_string(new_num_entries));
     LOG_INFO_FMT("After Num Entries Size: {0}", std::to_string(size));
 
     if (new_num_entries > 0) {
