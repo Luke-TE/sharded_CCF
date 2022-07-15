@@ -87,21 +87,22 @@ private:
     }
 
     size = sizeof(int) + (tpcc::OrderLine::Key::get_size() + tpcc::OrderLine::get_size()) * num_entries;
+    const uint8_t* new_data = data;
 
     tpcc::TestOrderLineMapStruct test_struct;
     LOG_INFO_FMT("Size: {0}", std::to_string(size));
-    int new_num_entries = serialized::read<int>(data, size);
+    int new_num_entries = serialized::read<int>(new_data, size);
     LOG_INFO_FMT("After Num Entries Size: {0}", std::to_string(size));
 
     if (new_num_entries > 0) {
       for (int i = 0; i < new_num_entries; i++) {
 
         //          auto serialised_key = serialized::read<>(data, size);
-        auto key = tpcc::OrderLine::Key::deserialize(data, tpcc::OrderLine::Key::get_size());
+        auto key = tpcc::OrderLine::Key::deserialize(new_data, tpcc::OrderLine::Key::get_size());
         LOG_INFO_FMT("After Key Size: {0}", std::to_string(size));
 
         //          auto serialised_order_line = serialized::read<>(data, size);
-        auto order_line = tpcc::OrderLine::deserialize(data, tpcc::OrderLine::get_size());
+        auto order_line = tpcc::OrderLine::deserialize(new_data, tpcc::OrderLine::get_size());
         LOG_INFO_FMT("After Order Line Size: {0}", std::to_string(size));
 
         test_struct.order_lines[key] = order_line;
