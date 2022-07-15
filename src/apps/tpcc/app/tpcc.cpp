@@ -13,6 +13,7 @@
 #include <charconv>
 #include <string.h>
 #include <vector>
+#include <map>
 
 using namespace std;
 using namespace nlohmann;
@@ -24,6 +25,7 @@ namespace ccfapp
   {
   private:
     metrics::Tracker metrics_tracker;
+    std::map<int, tpcc::WriteSet2pc> write_set_map;
 
     void set_error_status(
       ccf::endpoints::EndpointContext& args, int status, std::string&& message)
@@ -382,18 +384,28 @@ namespace ccfapp
         args.rpc_ctx->set_response_body(test_vector_struct.serialize());
       };
 
+      auto prepare_2pc = [this](auto& args) {
+        const auto& body = args.rpc_ctx->get_request_body();
+        auto write_set_2pc = tpcc::WriteSet2pc::deserialize(body.data(), body.size());
+
+        write_set_map[write_set_2pc.tx_id] = write_set_2pc;
+
+        set_ok_status(args);
+      };
+
       auto commit_2pc = [this](auto& args) {
         const auto& body = args.rpc_ctx->get_request_body();
         auto request = tpcc::CommitRequest::deserialize(body.data(), body.size());
+        auto write_set_2pc = write_set_map[request.tx_id];
 
-        for (auto const& entry : request.write_set.orders)
+        for (auto const& entry : write_set_2pc.update_set.orders)
         {
           auto it = tpcc::TpccTables::orders.find(entry.first.table_key.k);
           auto orders_table = args.tx.rw(it->second);
           orders_table->put(entry.first.key, entry.second);
         }
 
-        for (auto const& entry : request.write_set.new_orders)
+        for (auto const& entry : write_set_2pc.update_set.new_orders)
         {
           auto it = tpcc::TpccTables::new_orders.find(entry.first.table_key.k);
           auto new_orders_table = args.tx.rw(it->second);
@@ -404,19 +416,19 @@ namespace ccfapp
           new_orders_table->put(key, entry.second);
         }
 
-        for (auto const& entry : request.write_set.order_lines)
+        for (auto const& entry : write_set_2pc.update_set.order_lines)
         {
           auto order_lines = args.tx.rw(tpcc::TpccTables::order_lines);
           order_lines->put(entry.first, entry.second);
         }
 
-        for (auto const& entry : request.write_set.histories)
+        for (auto const& entry : write_set_2pc.update_set.histories)
         {
           auto history_table = args.tx.rw(tpcc::TpccTables::histories);
           history_table->put(entry.first, entry.second);
         }
 
-        for(auto entry = std::begin(request.keys_deleted.new_order_keys); entry != std::end(request.keys_deleted.new_order_keys); ++entry) {
+        for(auto entry = std::begin(write_set_2pc.keys_deleted.new_order_keys); entry != std::end(write_set_2pc.keys_deleted.new_order_keys); ++entry) {
           tpcc::TpccTables::DistributeKey table_key;
           table_key.v.w_id = (*entry).w_id;
           table_key.v.d_id = (*entry).d_id;
@@ -468,6 +480,8 @@ namespace ccfapp
         make_endpoint("get_last_new_order", verb, get_last_new_order, user_sig_or_cert)
           .install();
         make_endpoint("do_test_vector", verb, do_test_vector, user_sig_or_cert)
+          .install();
+        make_endpoint("prepare_2pc", verb, prepare_2pc, user_sig_or_cert)
           .install();
         make_endpoint("commit_2pc", verb, commit_2pc, user_sig_or_cert)
           .install();

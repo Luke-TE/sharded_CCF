@@ -6,6 +6,7 @@
 #include "tpcc_client_read_writer.h"
 #include "tpcc_transactions_local.h"
 #include "../serialise_msgpack.h"
+#include "tpcc_coordinator.h"
 
 #include <chrono>
 
@@ -195,28 +196,6 @@ private:
     Base::verify_params(expected);
   }
 
-  double send_commit_request(std::shared_ptr<RpcTlsClient>& connection, tpcc::ClientReadWriter read_writer) {
-    using std::chrono::high_resolution_clock;
-    using std::chrono::duration_cast;
-    using std::chrono::duration;
-    using std::chrono::milliseconds;
-
-    tpcc::CommitRequest commitRequest;
-    commitRequest.write_set = read_writer.write_set;
-    commitRequest.keys_deleted = read_writer.keys_deleted;
-
-    const auto body = commitRequest.serialize();
-    auto tx_start_time = high_resolution_clock::now();
-    const auto response =
-      connection->call("commit_2pc", CBuffer{body.data(), body.size()});
-    auto tx_finish_time = high_resolution_clock::now();
-
-    check_response(response);
-
-    duration<double, std::milli> s_double = tx_finish_time - tx_start_time;
-    return s_double.count();
-  }
-
   void send_transactions(std::shared_ptr<RpcTlsClient>& connection, const PreparedTxs& txs) {
     last_write_time = std::chrono::high_resolution_clock::now();
 
@@ -251,7 +230,8 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.stock_level(1, 1, 1000);
-        auto response_time = send_commit_request(connection, client_read_writer);
+        tpcc::TpccCoordinator coordinator(connection, client_read_writer);
+        auto response_time = coordinator.two_phase_commit(i);
         total_response_time += response_time;
         total_stock_level_response_time += response_time;
         num_stock_level_txs++;
@@ -262,7 +242,8 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.delivery();
-        auto response_time = send_commit_request(connection, client_read_writer);
+        tpcc::TpccCoordinator coordinator(connection, client_read_writer);
+        auto response_time = coordinator.two_phase_commit(i);
         total_response_time += response_time;
         total_delivery_response_time += response_time;
         num_delivery_txs++;
@@ -273,7 +254,8 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.order_status();
-        auto response_time = send_commit_request(connection, client_read_writer);
+        tpcc::TpccCoordinator coordinator(connection, client_read_writer);
+        auto response_time = coordinator.two_phase_commit(i);
         total_response_time += response_time;
         total_order_status_response_time += response_time;
         num_order_status_txs++;
@@ -284,7 +266,8 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.payment();
-        auto response_time = send_commit_request(connection, client_read_writer);
+        tpcc::TpccCoordinator coordinator(connection, client_read_writer);
+        auto response_time = coordinator.two_phase_commit(i);
         total_response_time += response_time;
         total_payment_response_time += response_time;
         num_payment_txs++;
@@ -295,7 +278,8 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.new_order();
-        auto response_time = send_commit_request(connection, client_read_writer);
+        tpcc::TpccCoordinator coordinator(connection, client_read_writer);
+        auto response_time = coordinator.two_phase_commit(i);
         total_response_time += response_time;
         total_new_order_response_time += response_time;
         num_new_order_txs++;

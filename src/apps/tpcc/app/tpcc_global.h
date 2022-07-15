@@ -81,7 +81,7 @@ namespace tpcc
     std::set<tpcc::NewOrder::Key> new_order_keys;
   };
 
-  struct WriteSet {
+  struct UpdateSet {
     std::map<OrderFullKey, tpcc::Order> orders;
     std::map<OrderFullKey, tpcc::NewOrder> new_orders;
     std::map<tpcc::OrderLine::Key, tpcc::OrderLine> order_lines;

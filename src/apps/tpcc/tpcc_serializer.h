@@ -226,20 +226,21 @@ namespace tpcc
     }
   };
 
-  struct CommitRequest
+  struct WriteSet2pc
   {
-    tpcc::WriteSet write_set;
+    int tx_id;
+    tpcc::UpdateSet update_set;
     tpcc::KeysDeleted keys_deleted;
 
     std::vector<uint8_t> serialize() const
     {
-      int num_orders = write_set.orders.size();
-      int num_new_orders = write_set.new_orders.size();
-      int num_order_lines = write_set.order_lines.size();
-      int num_histories = write_set.histories.size();
+      int num_orders = update_set.orders.size();
+      int num_new_orders = update_set.new_orders.size();
+      int num_order_lines = update_set.order_lines.size();
+      int num_histories = update_set.histories.size();
       int num_new_orders_deleted = keys_deleted.new_order_keys.size();
 
-      auto size =
+      auto size = sizeof(int) +
         sizeof(int) + (tpcc::Order::get_size() + tpcc::OrderFullKey::get_size()) * num_orders
         + sizeof(int) + (tpcc::NewOrder::get_size() + tpcc::OrderFullKey::get_size()) * num_new_orders
         + sizeof(int) + (tpcc::OrderLine::get_size() + tpcc::OrderLine::Key::get_size()) * num_order_lines
@@ -249,29 +250,31 @@ namespace tpcc
       std::vector<uint8_t> v(size);
       auto data = v.data();
 
+      serialized::write(data, size, tx_id);
+
       serialized::write(data, size, num_orders);
-      for (auto const& entry : write_set.orders)
+      for (auto const& entry : update_set.orders)
       {
         entry.first.serialize_to_buffer(data, size);
         entry.second.serialize_to_buffer(data, size);
       }
 
       serialized::write(data, size, num_new_orders);
-      for (auto const& entry : write_set.new_orders)
+      for (auto const& entry : update_set.new_orders)
       {
         entry.first.serialize_to_buffer(data, size);
         entry.second.serialize_to_buffer(data, size);
       }
 
       serialized::write(data, size, num_order_lines);
-      for (auto const& entry : write_set.order_lines)
+      for (auto const& entry : update_set.order_lines)
       {
         entry.first.serialize_to_buffer(data, size);
         entry.second.serialize_to_buffer(data, size);
       }
 
       serialized::write(data, size, num_histories);
-      for (auto const& entry : write_set.histories)
+      for (auto const& entry : update_set.histories)
       {
         entry.first.serialize_to_buffer(data, size);
         entry.second.serialize_to_buffer(data, size);
@@ -285,7 +288,7 @@ namespace tpcc
       return v;
     }
 
-    static CommitRequest deserialize(const uint8_t* data, size_t size)
+    static WriteSet2pc deserialize(const uint8_t* data, size_t size)
     {
       auto order_full_key_size = tpcc::OrderFullKey::get_size();
       auto order_size = tpcc::Order::get_size();
@@ -297,7 +300,8 @@ namespace tpcc
       auto history_size = tpcc::History::get_size();
       auto new_order_key_size = tpcc::OrderLine::Key::get_size();
 
-      CommitRequest commit_request;
+      WriteSet2pc write_set_2pc;
+      write_set_2pc.tx_id = serialized::read<int>(data, size);
 
       int num_orders = serialized::read<int>(data, size);
       for (int i = 0; i < num_orders; i++) {
@@ -309,7 +313,7 @@ namespace tpcc
         data += order_size;
         size -= order_size;
 
-        commit_request.write_set.orders[key] = order;
+        write_set_2pc.update_set.orders[key] = order;
       }
 
       int num_new_orders = serialized::read<int>(data, size);
@@ -322,7 +326,7 @@ namespace tpcc
         data += new_order_size;
         size -= new_order_size;
 
-        commit_request.write_set.new_orders[key] = new_order;
+        write_set_2pc.update_set.new_orders[key] = new_order;
       }
 
       int num_order_lines = serialized::read<int>(data, size);
@@ -335,7 +339,7 @@ namespace tpcc
         data += order_line_size;
         size -= order_line_size;
 
-        commit_request.write_set.order_lines[key] = order_line;
+        write_set_2pc.update_set.order_lines[key] = order_line;
       }
 
       int num_histories = serialized::read<int>(data, size);
@@ -348,7 +352,7 @@ namespace tpcc
         data += history_size;
         size -= history_size;
 
-        commit_request.write_set.histories[key] = history;
+        write_set_2pc.update_set.histories[key] = history;
       }
 
       int num_new_orders_deleted = serialized::read<int>(data, size);
@@ -357,9 +361,30 @@ namespace tpcc
         data += new_order_key_size;
         size -= new_order_key_size;
 
-        commit_request.keys_deleted.new_order_keys.insert(key);
+        write_set_2pc.keys_deleted.new_order_keys.insert(key);
       }
 
+      return write_set_2pc;
+    }
+  };
+
+  struct CommitRequest
+  {
+    int32_t tx_id;
+
+    std::vector<uint8_t> serialize() const
+    {
+      auto size = sizeof(tx_id);
+      std::vector<uint8_t> v(size);
+      auto data = v.data();
+      serialized::write(data, size, tx_id);
+      return v;
+    }
+
+    static CommitRequest deserialize(const uint8_t* data, size_t size)
+    {
+      CommitRequest commit_request;
+      commit_request.tx_id = serialized::read<decltype(tx_id)>(data, size);
       return commit_request;
     }
   };

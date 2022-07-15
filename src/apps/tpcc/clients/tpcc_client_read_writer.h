@@ -16,7 +16,7 @@ namespace tpcc
     std::shared_ptr<RpcTlsClient> connection;
 
   public:
-    WriteSet write_set;
+    UpdateSet update_set;
     KeysDeleted keys_deleted;
 
     ClientReadWriter(std::shared_ptr<RpcTlsClient> conn) : connection(conn)
@@ -26,7 +26,7 @@ namespace tpcc
       std::map<tpcc::OrderLine::Key, tpcc::OrderLine> order_lines;
       std::map<tpcc::History::Key, tpcc::History> histories;
 
-      write_set = {
+      update_set = {
         orders,
         new_orders,
         order_lines,
@@ -222,19 +222,19 @@ namespace tpcc
       OrderFullKey order_full_key;
       order_full_key.table_key = table_key;
       order_full_key.key = key;
-      write_set.orders[order_full_key] = order;
+      update_set.orders[order_full_key] = order;
     };
     void put_new_order(TpccTables::DistributeKey table_key, NewOrder::Key key, NewOrder new_order) override {
       OrderFullKey new_order_full_key;
       new_order_full_key.table_key = table_key;
       new_order_full_key.key = {key.o_id};
-      write_set.new_orders[new_order_full_key] = new_order;
+      update_set.new_orders[new_order_full_key] = new_order;
     };
     void put_order_line(OrderLine::Key key, OrderLine order_line) override {
-      write_set.order_lines[key] = order_line;
+      update_set.order_lines[key] = order_line;
     };
     void put_history(History::Key key, History history) override {
-      write_set.histories[key] = history;
+      update_set.histories[key] = history;
     };
 
     void remove_new_order(NewOrder::Key key) override {
