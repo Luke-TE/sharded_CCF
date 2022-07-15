@@ -157,7 +157,7 @@ namespace tpcc
       serialized::write(data, size, num_ints);
 
       for(auto it = std::begin(ints); it != std::end(ints); ++it) {
-        serialized::write(data, size, it);
+        serialized::write(data, size, *it);
       }
 
       return v;
