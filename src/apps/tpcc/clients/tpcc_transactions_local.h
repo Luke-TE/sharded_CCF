@@ -105,7 +105,6 @@ namespace tpcc
       TpccTables::DistributeKey table_key;
       table_key.v.w_id = w_id;
       table_key.v.d_id = d_id;
-      auto it = tpcc::TpccTables::new_orders.find(table_key.k);
 
       client_read_writer.put_new_order(table_key, no.get_key(), no);
     }
