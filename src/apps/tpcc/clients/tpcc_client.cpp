@@ -52,57 +52,6 @@ private:
     return response;
   }
 
-  timing::Results call_raw_batch(std::shared_ptr<RpcTlsClient>& connection, const PreparedTxs& txs) override
-  {
-    size_t read;
-    size_t written;
-
-    last_write_time = std::chrono::high_resolution_clock::now();
-    kick_off_timing();
-
-    // Repeat for each session
-    for (size_t session = 1; session <= options.session_count; ++session)
-    {
-      read = 0;
-      written = 0;
-
-      // Write everything
-      while (written < txs.size()) {
-        LOG_INFO_FMT("written: {0}", std::to_string(written));
-        LOG_INFO_FMT("size: {0}", std::to_string(txs.size()));
-        // store txs elsewhere rather thanin preparedtxs
-        // for each tx
-          // execute it
-          // extract writeset
-          // create request
-          // send and wait for response
-
-        // clientreadwriter.
-//         write_set;
-//         keys_deleted;
-        // TODO execute transaction
-      }
-      write(txs[written], read, written, connection);
-      blocking_read(read, written, connection);
-
-      // Reconnect for each session (except the last)
-      if (session != options.session_count)
-      {
-        reconnect(connection);
-      }
-    }
-
-    if (!options.no_wait)
-    {
-      auto c = create_connection(true, false);
-      wait_for_global_commit(last_response_tx_id);
-    }
-    const auto last_commit = last_response_tx_id.seqno;
-    auto timing_results = end_timing(last_commit);
-    LOG_INFO_FMT("Timing ended");
-    return timing_results;
-  }
-
   void prepare_transactions() override
   {
     auto connection = create_connection(true, false);
@@ -143,30 +92,6 @@ private:
     else {
       LOG_INFO_FMT("bad response");
      }
-
-//     std::vector<int> ints;
-//     ints.push_back(123);
-//     ints.push_back(456);
-//
-//     tpcc::TestVectorStruct new_test;
-//     new_test.num_ints = 2;
-//     new_test.ints = ints;
-//     auto ser = new_test.serialize();
-//
-////     auto size = sizeof(new_test.num_ints) + new_test.ints.size() * sizeof(int);
-////     std::vector<uint8_t> v(size);
-////     auto data = v.data();
-////     LOG_INFO_FMT("Size: {0}", std::to_string(size));
-////     serialized::write(data, size, new_test.num_ints);
-////
-////     for(auto it = std::begin(new_test.ints); it != std::end(new_test.ints); ++it) {
-////       LOG_INFO_FMT("Hello");
-////       LOG_INFO_FMT("Size: {0}", std::to_string(size));
-////       serialized::write(data, size, *it);
-////     }
-//
-//     auto newer_test = tpcc::TestVectorStruct::deserialize(ser.data(), ser.size());
-
 
     // Reserve space for transfer transactions
     prepared_txs.resize(options.num_transactions);
@@ -217,11 +142,14 @@ private:
         serialized_body = info.serialize();
         operation = (uint8_t)TransactionTypes::new_order;
       }
-//      add_prepared_tx(
+      // TODO change this to add to a new data structure
+
+      //      add_prepared_tx(
 //        OPERATION_C_STR[operation],
 //        CBuffer{serialized_body.data(), serialized_body.size()},
 //        true, // expect commit
 //        i);
+
     }
   }
 
@@ -237,34 +165,84 @@ private:
     return true;
   }
 
-  void pre_creation_hook() override
-  {
-    // empty
-  }
-
-  void post_creation_hook() override
-  {
-    // empty
-  }
-
-  void post_timing_body_hook() override
-  {
-    // empty
-  }
-
   void verify_params(const nlohmann::json& expected) override
   {
     Base::verify_params(expected);
   }
 
-  void verify_initial_state(const nlohmann::json& expected) override
-  {
-    // empty
+  timing::Results send_transactions(std::shared_ptr<RpcTlsClient>& connection, const PreparedTxs& txs) {
+    last_write_time = std::chrono::high_resolution_clock::now();
+    kick_off_timing();
+
+    // Write everything
+    // store txs elsewhere rather thanin preparedtxs
+    // for each tx
+    // execute it
+    // extract writeset
+    // create request
+    // send and wait for response
+
+    // clientreadwriter.
+    //         write_set;
+    //         keys_deleted;
+    // TODO execute transaction
+
+
+
+    //// remove soon
+    read = 0;
+    written = 0;
+
+    while (written < txs.size())
+      write(txs[written], read, written, connection);
+
+    blocking_read(read, written, connection);
+    //// remove soon
+
+    if (!options.no_wait)
+    {
+      auto c = create_connection(true, false);
+      wait_for_global_commit(last_response_tx_id);
+    }
+    const auto last_commit = last_response_tx_id.seqno;
+    auto timing_results = end_timing(last_commit);
+    LOG_INFO_FMT("Timing ended");
+    return timing_results;
   }
 
-  void verify_final_state(const nlohmann::json& expected) override
+
+  void run() override
   {
-    // empty
+    files::dump(fmt::format("{}", ::getpid()), options.pid_file);
+
+    LOG_INFO_FMT(
+      "Random choices determined by seed: {}", options.generator_seed);
+    rand_generator.seed(options.generator_seed);
+
+    send_all_creation_transactions();
+    prepare_all_transactions(); // TODO change to store differently
+
+    LOG_TRACE_FMT(
+      "Sending {} transactions from {} clients {} times...",
+      options.num_transactions,
+      options.thread_count,
+      options.session_count);
+
+//     = send_all_prepared_transactions();
+    init_connection();
+    try
+    {
+      auto timing_results = send_transactions(rpc_connection, prepared_txs);
+    }
+    catch (std::exception& e)
+    {
+      LOG_FAIL_FMT("Transaction exception: {}", e.what());
+      throw e;
+    }
+
+    LOG_INFO_FMT("Done");
+
+    summarize_results(timing_results);
   }
 
 public:
