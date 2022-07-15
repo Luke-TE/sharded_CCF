@@ -275,7 +275,7 @@ namespace tpcc
     };
 
     void remove_new_order(NewOrder::Key key) override {
-      keys_deleted.insert(key);
+      keys_deleted.new_order_keys.insert(key);
     };
 
 //  private:
