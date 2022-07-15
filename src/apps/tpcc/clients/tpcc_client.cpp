@@ -211,7 +211,10 @@ private:
   }
 
 
-  public void run() override
+public:
+  TpccClient(const TpccClientOptions& o) : Base(o) {}
+
+  void run() override
   {
     files::dump(fmt::format("{}", ::getpid()), options.pid_file);
 
@@ -228,25 +231,21 @@ private:
       options.thread_count,
       options.session_count);
 
-//     = send_all_prepared_transactions();
+    //     = send_all_prepared_transactions();
     init_connection();
     try
     {
       auto timing_results = send_transactions(rpc_connection, prepared_txs);
+      LOG_INFO_FMT("Done");
+
+      summarize_results(timing_results);
     }
     catch (std::exception& e)
     {
       LOG_FAIL_FMT("Transaction exception: {}", e.what());
       throw e;
     }
-
-    LOG_INFO_FMT("Done");
-
-    summarize_results(timing_results);
   }
-
-public:
-  TpccClient(const TpccClientOptions& o) : Base(o) {}
 };
 
 int main(int argc, char** argv)
