@@ -67,7 +67,7 @@ private:
       written = 0;
 
       // Write everything
-      while (written < txs.size()) {
+//      while (written < txs.size()) {
         // store txs elsewhere rather thanin preparedtxs
         // for each tx
           // execute it
@@ -81,7 +81,7 @@ private:
 //        write(txs[written], read, written, connection);
 //        blocking_read(read, written, connection);
         // TODO execute transaction
-      }
+//      }
 
       // Reconnect for each session (except the last)
       if (session != options.session_count)
