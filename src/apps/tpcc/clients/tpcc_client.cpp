@@ -246,9 +246,10 @@ private:
     }
 
     auto finish_time = high_resolution_clock::now();
-    duration<double, std::milli> s_double = (finish_time - start_time) / 1000.0;
-    LOG_INFO_FMT("Total duration (seconds): {}", std::to_string(s_double.count()));
-    LOG_INFO_FMT("Txs per second: {}", std::to_string(options.num_transactions / s_double.count()));
+    duration<double, std::milli>  = finish_time - start_time;
+    auto dur = s_double.count() / 1000.0;
+    LOG_INFO_FMT("Total duration (seconds): {}", std::to_string(dur));
+    LOG_INFO_FMT("Txs per second: {}", std::to_string(options.num_transactions / dur));
   }
 
 public:
