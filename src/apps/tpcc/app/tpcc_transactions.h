@@ -27,7 +27,6 @@ namespace tpcc
 
     District find_district(int32_t w_id, int32_t d_id)
     {
-      LOG_INFO_FMT("District Key: {0} {1}", std::to_string(w_id), std::to_string(d_id));
       District::Key key = {w_id, d_id};
 
       auto districts_table = args.tx.ro(tpcc::TpccTables::districts);
