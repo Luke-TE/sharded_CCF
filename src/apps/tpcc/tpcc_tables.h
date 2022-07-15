@@ -652,9 +652,9 @@ namespace tpcc
 
     struct Key
     {
-      int32_t o_id;
-      int32_t d_id;
       int32_t w_id;
+      int32_t d_id;
+      int32_t o_id;
       int32_t number;
 
       bool operator==(const Key &o) const {
@@ -662,10 +662,10 @@ namespace tpcc
       }
 
       bool operator<(const Key &o) const {
-        return o_id < o.o_id
-          || (o_id == o.o_id && d_id < o.d_id)
-          || (o_id == o.o_id && d_id == o.d_id && w_id < o.w_id)
-          || (o_id == o.o_id && d_id == o.d_id && w_id == o.w_id && number < o.number);
+        return w_id < o.w_id
+          || (w_id == o.w_id && d_id < o.d_id)
+          || (w_id == o.w_id && d_id == o.d_id && o_id < o.o_id)
+          || (w_id == o.w_id && d_id == o.d_id && o_id == o.o_id && number < o.number);
       }
 
       std::vector<uint8_t> serialize() const
@@ -782,6 +782,16 @@ namespace tpcc
       int32_t w_id;
       int32_t d_id;
       int32_t o_id;
+
+      bool operator==(const Key &o) const {
+        return o_id == o.o_id && d_id == o.d_id && w_id == o.w_id;
+      }
+
+      bool operator<(const Key &o) const {
+        return w_id < o.w_id
+          || (w_id == o.w_id && d_id < o.d_id)
+          || (w_id == o.w_id && d_id == o.d_id && o_id < o.o_id);
+      }
 
       MSGPACK_DEFINE(w_id, d_id, o_id);
     };
