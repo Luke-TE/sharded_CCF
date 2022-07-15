@@ -151,7 +151,7 @@ private:
        serialized::write(data, size, it);
      }
 
-     auto newer_test = tpcc::TestVectorStruct::deserialize(ser.data(), ser.size());
+//     auto newer_test = tpcc::TestVectorStruct::deserialize(ser.data(), ser.size());
 
 
     // Reserve space for transfer transactions
