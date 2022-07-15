@@ -208,15 +208,20 @@ private:
     using std::chrono::milliseconds;
 
     auto total_response_time = 0.0;
+
     auto total_new_order_response_time = 0.0;
     auto total_payment_response_time = 0.0;
     auto total_delivery_response_time = 0.0;
-    auto start_time = high_resolution_clock::now();
+    auto total_stock_level_response_time = 0.0;
+    auto total_order_status_response_time = 0.0;
 
     auto num_new_order_txs = 0.0;
     auto num_payment_txs = 0.0;
     auto num_delivery_txs = 0.0;
+    auto num_stock_level_txs = 0.0;
+    auto num_order_status_txs = 0.0;
 
+    auto start_time = high_resolution_clock::now();
     for (decltype(options.num_transactions) i = 0; i < options.num_transactions;
          i++)
     {
@@ -230,6 +235,8 @@ private:
         tx_client.stock_level(1, 1, 1000);
         auto response_time = send_commit_request(connection, client_read_writer);
         total_response_time += response_time;
+        total_stock_level_response_time += response_time;
+        num_stock_level_txs++;
       }
       else if (x < 8) // Delivery
       {
@@ -250,6 +257,8 @@ private:
         tx_client.order_status();
         auto response_time = send_commit_request(connection, client_read_writer);
         total_response_time += response_time;
+        total_order_status_response_time += response_time;
+        num_order_status_txs++;
       }
       else if (x < (12 + 43)) // Payment
       {
@@ -284,7 +293,8 @@ private:
     LOG_INFO_FMT("Avg new order tx commit response time (ms): {}", std::to_string(total_new_order_response_time / num_new_order_txs));
     LOG_INFO_FMT("Avg payment tx commit response time (ms): {}", std::to_string(total_payment_response_time / num_payment_txs));
     LOG_INFO_FMT("Avg delivery tx commit response time (ms): {}", std::to_string(total_delivery_response_time / num_delivery_txs));
-
+    LOG_INFO_FMT("Avg stock level tx commit response time (ms): {}", std::to_string(total_stock_level_response_time / num_stock_level_txs));
+    LOG_INFO_FMT("Avg order status tx commit response time (ms): {}", std::to_string(total_order_status_response_time / num_order_status_txs));
   }
 
 public:
