@@ -138,7 +138,19 @@ private:
      tpcc::TestVectorStruct new_test;
      new_test.num_ints = 2;
      new_test.ints = ints;
-     auto ser = new_test.serialize();
+//     auto ser = new_test.serialize();
+
+     auto size = sizeof(new_test.num_ints) + new_test.ints.size() * sizeof(int);
+     std::vector<uint8_t> v(size);
+     auto data = v.data();
+     serialized::write(data, size, new_test.num_ints);
+
+     for(auto it = std::begin(new_test.ints); it != std::end(new_test.ints); ++it) {
+       LOG_INFO_FMT("Hello");
+       LOG_INFO_FMT("Size: {0}", std::to_string(size));
+       serialized::write(data, size, it);
+     }
+
      auto newer_test = tpcc::TestVectorStruct::deserialize(ser.data(), ser.size());
 
 
