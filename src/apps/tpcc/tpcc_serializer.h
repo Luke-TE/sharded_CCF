@@ -169,7 +169,7 @@ namespace tpcc
       test_struct.num_ints = serialized::read<decltype(num_ints)>(data, size);
       if (test_struct.num_ints > 0) {
         for (int i = 0; i < test_struct.num_ints; i++) {
-          test_struct.ints.push_back(serialized::read<int)>(data, size));
+          test_struct.ints.push_back(serialized::read<int>(data, size));
         }
       }
 
