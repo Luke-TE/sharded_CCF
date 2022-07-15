@@ -14,9 +14,18 @@ using namespace nlohmann;
 
 struct TpccClientOptions : public client::PerfOptions
 {
+  bool sharded = false;
+
   TpccClientOptions(CLI::App& app, const std::string& default_pid_file) :
     client::PerfOptions("Tpcc_ClientCpp", default_pid_file, app)
-  {}
+  {
+    app
+      .add_option(
+        "--sharded",
+        sharded,
+        "Use the sharded client")
+      ->capture_default_str();
+  }
 };
 
 using Base = client::PerfBase<TpccClientOptions>;
@@ -54,52 +63,6 @@ private:
 
   void prepare_transactions() override
   {
-    auto connection = create_connection(true, false);
-    tpcc::ClientReadWriter read_writer(connection);
-
-//    tpcc::District::Key key;
-//    key.id = 123;
-//    key.w_id = 456;
-//
-//    auto optional_district = read_writer.get_district(key);
-//    if (optional_district.has_value())
-//    {
-//      auto district = optional_district.value();
-//      LOG_INFO_FMT("New Value: {0}, {1}", std::to_string(district.id), std::to_string(district.w_id));
-//    }
-//    else {
-//      LOG_INFO_FMT("No Value :(");
-//    }
-
-
-
-    tpcc::TestStruct test_struct;
-    test_struct.int_val = 999;
-
-    const auto body = test_struct.serialize();
-    const auto response =
-      connection->call("do_test_vector", CBuffer{body.data(), body.size()});
-
-    if (http::status_success(response.status))
-    {
-      if (response.body.size() > 0) {
-        auto test_vector_struct = tpcc::TestOrderLineMapStruct::deserialize(response.body.data(), response.body.size());
-        LOG_INFO_FMT("Num of Entries: {0}", std::to_string(test_vector_struct.order_lines.size()));
-
-        for (auto const& entry : test_vector_struct.order_lines)
-        {
-          LOG_INFO_FMT("Orderline Key w_id: {0}, Orderline w_id {1}", std::to_string(entry.first.w_id), std::to_string(entry.second.w_id));
-          LOG_INFO_FMT("Orderline Key number: {0}, Orderline number {1}", std::to_string(entry.first.number), std::to_string(entry.second.number));
-        }
-      }
-      else {
-        LOG_INFO_FMT("No vals");
-      }
-    }
-    else {
-      LOG_INFO_FMT("bad response");
-     }
-
     // Reserve space for transfer transactions
     prepared_txs.resize(options.num_transactions);
 
@@ -149,7 +112,6 @@ private:
         serialized_body = info.serialize();
         operation = (uint8_t)TransactionTypes::new_order;
       }
-      // TODO change this to add to a new data structure
 
       add_prepared_tx(
         OPERATION_C_STR[operation],
@@ -300,6 +262,14 @@ private:
 public:
   TpccClient(const TpccClientOptions& o) : Base(o) {}
 
+  void run_() {
+    if (options.sharded) {
+      run_sharded()
+    } else {
+      run();
+    }
+  }
+
   void run_sharded()
   {
     files::dump(fmt::format("{}", ::getpid()), options.pid_file);
@@ -344,7 +314,7 @@ int main(int argc, char** argv)
   CLI11_PARSE(cli_app, argc, argv);
 
   TpccClient client(options);
-  client.run_sharded();
-
+//  client.run_sharded();
+  client.run_();
   return 0;
 }
