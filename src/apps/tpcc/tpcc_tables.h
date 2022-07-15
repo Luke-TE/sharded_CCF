@@ -702,16 +702,6 @@ namespace tpcc
         return key;
       }
 
-      static OrderLine::Key deserialize_to_buffer(uint8_t* data, size_t size)
-      {
-        OrderLine::Key key;
-        key.o_id = serialized::read<decltype(o_id)>(data, size);
-        key.d_id = serialized::read<decltype(d_id)>(data, size);
-        key.w_id = serialized::read<decltype(w_id)>(data, size);
-        key.number = serialized::read<decltype(number)>(data, size);
-        return key;
-      }
-
       MSGPACK_DEFINE(o_id, d_id, w_id, number);
     };
 
@@ -770,22 +760,6 @@ namespace tpcc
     }
 
     static OrderLine deserialize(const uint8_t* data, size_t size)
-    {
-      OrderLine order_line;
-      order_line.o_id = serialized::read<decltype(o_id)>(data, size);
-      order_line.d_id = serialized::read<decltype(d_id)>(data, size);
-      order_line.w_id = serialized::read<decltype(w_id)>(data, size);
-      order_line.number = serialized::read<decltype(number)>(data, size);
-      order_line.i_id = serialized::read<decltype(i_id)>(data, size);
-      order_line.supply_w_id = serialized::read<decltype(supply_w_id)>(data, size);
-      order_line.quantity = serialized::read<decltype(quantity)>(data, size);
-      order_line.delivery_d = serialized::read<decltype(delivery_d)>(data, size);
-      order_line.dist_info = serialized::read<decltype(dist_info)>(data, size);
-
-      return order_line;
-    }
-
-    static OrderLine deserialize_from_buffer(uint8_t* data, size_t size)
     {
       OrderLine order_line;
       order_line.o_id = serialized::read<decltype(o_id)>(data, size);
