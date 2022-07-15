@@ -68,8 +68,18 @@ private:
 
       // Write everything
       while (written < txs.size()) {
-        write(txs[written], read, written, connection);
-        blocking_read(read, written, connection);
+        // store txs elsewhere rather thanin preparedtxs
+        // for each tx
+          // execute it
+          // extract writeset
+          // create request
+          // send and wait for response
+
+        // clientreadwriter.
+//         write_set;
+//         keys_deleted;
+//        write(txs[written], read, written, connection);
+//        blocking_read(read, written, connection);
         // TODO execute transaction
       }
 
