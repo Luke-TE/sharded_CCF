@@ -820,6 +820,35 @@ namespace tpcc
           || (w_id == o.w_id && d_id == o.d_id && o_id < o.o_id);
       }
 
+      static size_t get_size() {
+        return sizeof(w_id) + sizeof(d_id) + sizeof(o_id);
+      }
+
+      std::vector<uint8_t> serialize() const
+      {
+        auto size = get_size();
+        std::vector<uint8_t> v(size);
+        auto data = v.data();
+        serialize_to_buffer(data, size);
+        return v;
+      }
+
+      void serialize_to_buffer(uint8_t*& data, size_t& size) const
+      {
+        serialized::write(data, size, w_id);
+        serialized::write(data, size, d_id);
+        serialized::write(data, size, o_id);
+      }
+
+      static NewOrder::Key deserialize(const uint8_t* data, size_t size)
+      {
+        NewOrder::Key key;
+        key.w_id = serialized::read<decltype(w_id)>(data, size);
+        key.d_id = serialized::read<decltype(d_id)>(data, size);
+        key.o_id = serialized::read<decltype(o_id)>(data, size);
+        return key;
+      }
+
       MSGPACK_DEFINE(w_id, d_id, o_id);
     };
 
