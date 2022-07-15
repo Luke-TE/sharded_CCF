@@ -355,9 +355,9 @@ namespace ccfapp
         tpcc::OrderLine order_line = {
           1,2,3,4,5,6,7,8.0
         };
-        
-        order_line.delivery_d = { 'a', 'a','a','a','a','a','a','a','a','a','a','a','a', '\0'};
-        order_line.dist_info = { 'a','a','a','a','a','a','a','a','a','a','a','a', 'a','a','a','a','a','a','a','a','a','a','a','\0'};
+
+        order_line.delivery_d = { 0 };
+        order_line.dist_info = { 0 };
 
         test_vector_struct.order_lines[key] = order_line;
 //        test_vector_struct.ints = ints;
