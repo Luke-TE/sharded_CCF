@@ -353,7 +353,11 @@ namespace tpcc
 
       int num_new_orders_deleted = serialized::read<int>(data, size);
       for (int i = 0; i < num_new_orders_deleted; i++) {
-        commit_request.keys_deleted.new_order_keys.insert(serialized::read<int>(data, size));
+        auto key = tpcc::NewOrder::Key::deserialize(data, size);
+        data += new_order_key_size;
+        size -= new_order_key_size;
+
+        commit_request.keys_deleted.new_order_keys.insert(key);
       }
 
       return commit_request;
