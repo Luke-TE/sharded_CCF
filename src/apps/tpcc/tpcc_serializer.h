@@ -154,7 +154,7 @@ namespace tpcc
       auto size = sizeof(num_ints) + ints.size() * sizeof(int);
       std::vector<uint8_t> v(size);
       auto data = v.data();
-      serialized::write(data, size, int_val);
+      serialized::write(data, size, num_ints);
 
       for(auto it = std::begin(ints); it != std::end(ints); ++it) {
         serialized::write(data, size, it);
