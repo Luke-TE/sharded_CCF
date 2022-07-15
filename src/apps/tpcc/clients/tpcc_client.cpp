@@ -61,6 +61,44 @@ private:
     return response;
   }
 
+  timing::Results call_raw_batch(
+  std::shared_ptr<RpcTlsClient>& connection, const PreparedTxs& txs) override
+{
+  size_t read;
+  size_t written;
+
+  if (options.transactions_per_s > 0)
+  {
+    write_delay_ns =
+      std::chrono::nanoseconds{1000000000 / options.transactions_per_s};
+    connection->set_tcp_nodelay(true);
+  }
+
+  last_write_time = std::chrono::high_resolution_clock::now();
+  kick_off_timing();
+
+  // Repeat for each session
+  for (size_t session = 1; session <= options.session_count; ++session)
+  {
+    read = 0;
+    written = 0;
+
+    // Write everything
+    while (written < txs.size())
+    {
+      write(txs[written], read, written, connection);
+      LOG_INFO_FMT("Write!");
+    }
+
+    blocking_read(read, written, connection);
+
+    // Reconnect for each session (except the last)
+    if (session != options.session_count)
+    {
+      reconnect(connection);
+    }
+  }
+
   void prepare_transactions() override
   {
     // Reserve space for transfer transactions
