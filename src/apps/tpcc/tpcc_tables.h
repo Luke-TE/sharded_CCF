@@ -657,6 +657,14 @@ namespace tpcc
       int32_t w_id;
       int32_t number;
 
+      bool operator==(const Key &o) const {
+        return o_id == o.o_id && d_id == o.d_id && w_id == o.w_id && number == o.number;
+      }
+
+//      bool operator<(const Key &o) const {
+//        return id < o.id;
+//      }
+
       std::vector<uint8_t> serialize() const
       {
         auto size = sizeof(o_id) + sizeof(d_id) + sizeof(w_id) + sizeof(number);
@@ -771,6 +779,7 @@ namespace tpcc
       int32_t w_id;
       int32_t d_id;
       int32_t o_id;
+
       MSGPACK_DEFINE(w_id, d_id, o_id);
     };
 
@@ -823,6 +832,15 @@ namespace tpcc
       int32_t c_w_id;
       int32_t d_id;
       int32_t w_id;
+
+      bool operator==(const Key &o) const {
+        return c_id == o.c_id && d_id == o.d_id && w_id == o.w_id && c_d_id == o.c_d_id && c_w_id == o.c_w_id;
+      }
+
+//      bool operator<(const Key &o) const {
+//        return id < o.id;
+//      }
+
       MSGPACK_DEFINE(c_id, c_d_id, c_w_id, d_id, w_id);
     };
 
