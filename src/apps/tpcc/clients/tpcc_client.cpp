@@ -108,34 +108,34 @@ private:
       }
       LOG_INFO_FMT("End Size: {0}", std::to_string(size));
     }
-
-    tpcc::TestStruct test_struct;
-    test_struct.int_val = 999;
-
-    const auto body = test_struct.serialize();
-    const auto response =
-      connection->call("do_test_vector", CBuffer{body.data(), body.size()});
-
-    if (http::status_success(response.status))
-    {
-      if (response.body.size() > 0) {
-        auto test_vector_struct = tpcc::TestOrderLineMapStruct::deserialize(response.body.data(), response.body.size());
-        LOG_INFO_FMT("Num of Entries: {0}", std::to_string(test_vector_struct.order_lines.size()));
-        tpcc::OrderLine::Key key = {12, 34, 56, 78};
-
-        for (auto const& entry : test_vector_struct.order_lines)
-        {
-          LOG_INFO_FMT("Orderline Key w_id: {0}, Orderline w_id {1}", std::to_string(entry.first.w_id), std::to_string(entry.second.w_id));
-          LOG_INFO_FMT("Orderline Key number: {0}, Orderline number {1}", std::to_string(entry.first.number), std::to_string(entry.second.number));
-        }
-      }
-      else {
-        LOG_INFO_FMT("No vals");
-      }
-    }
-    else {
-      LOG_INFO_FMT("bad response");
-     }
+//
+//    tpcc::TestStruct test_struct;
+//    test_struct.int_val = 999;
+//
+//    const auto body = test_struct.serialize();
+//    const auto response =
+//      connection->call("do_test_vector", CBuffer{body.data(), body.size()});
+//
+//    if (http::status_success(response.status))
+//    {
+//      if (response.body.size() > 0) {
+//        auto test_vector_struct = tpcc::TestOrderLineMapStruct::deserialize(response.body.data(), response.body.size());
+//        LOG_INFO_FMT("Num of Entries: {0}", std::to_string(test_vector_struct.order_lines.size()));
+//        tpcc::OrderLine::Key key = {12, 34, 56, 78};
+//
+//        for (auto const& entry : test_vector_struct.order_lines)
+//        {
+//          LOG_INFO_FMT("Orderline Key w_id: {0}, Orderline w_id {1}", std::to_string(entry.first.w_id), std::to_string(entry.second.w_id));
+//          LOG_INFO_FMT("Orderline Key number: {0}, Orderline number {1}", std::to_string(entry.first.number), std::to_string(entry.second.number));
+//        }
+//      }
+//      else {
+//        LOG_INFO_FMT("No vals");
+//      }
+//    }
+//    else {
+//      LOG_INFO_FMT("bad response");
+//     }
 
     // Reserve space for transfer transactions
     prepared_txs.resize(options.num_transactions);
