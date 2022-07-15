@@ -80,7 +80,7 @@ private:
     order_lines[key] = order_line;
 
     int num_entries = order_lines.size();
-    LOG_INFO_FMT("Num Entries: {0}", std::to_string(new_num_entries));
+    LOG_INFO_FMT("Num Entries: {0}", std::to_string(num_entries));
     auto size = sizeof(int) + (tpcc::OrderLine::Key::get_size() + tpcc::OrderLine::get_size()) * num_entries;
     std::vector<uint8_t> v(size);
     auto data = v.data();
