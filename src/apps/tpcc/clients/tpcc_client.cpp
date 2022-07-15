@@ -187,18 +187,6 @@ private:
     //         keys_deleted;
     // TODO execute transaction
 
-
-
-    //// remove soon
-    size_t read = 0;
-    size_t written = 0;
-
-    while (written < txs.size())
-      write(txs[written], read, written, connection);
-
-    blocking_read(read, written, connection);
-    //// remove soon
-
     if (!options.no_wait)
     {
       auto c = create_connection(true, false);
