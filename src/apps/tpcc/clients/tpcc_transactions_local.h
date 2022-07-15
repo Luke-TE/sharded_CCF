@@ -238,7 +238,7 @@ namespace tpcc
           continue;
         }
         int32_t o_id = new_order.o_id;
-        client_read_writer.remove_new_order();
+        client_read_writer.remove_new_order(new_order.get_key());
 
         DeliveryOrderInfo order;
         order.d_id = d_id;
