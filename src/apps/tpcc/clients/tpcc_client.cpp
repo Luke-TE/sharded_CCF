@@ -67,7 +67,7 @@ private:
       written = 0;
 
       // Write everything
-//      while (written < txs.size()) {
+      while (written < txs.size()) {
         // store txs elsewhere rather thanin preparedtxs
         // for each tx
           // execute it
@@ -78,10 +78,10 @@ private:
         // clientreadwriter.
 //         write_set;
 //         keys_deleted;
-//        write(txs[written], read, written, connection);
-//        blocking_read(read, written, connection);
         // TODO execute transaction
-//      }
+      }
+      write(txs[written], read, written, connection);
+      blocking_read(read, written, connection);
 
       // Reconnect for each session (except the last)
       if (session != options.session_count)
@@ -122,6 +122,7 @@ private:
 
     tpcc::TestStruct test_struct;
     test_struct.int_val = 999;
+
     const auto body = test_struct.serialize();
     const auto response =
       connection->call("do_test_vector", CBuffer{body.data(), body.size()});
@@ -214,11 +215,11 @@ private:
         serialized_body = info.serialize();
         operation = (uint8_t)TransactionTypes::new_order;
       }
-      add_prepared_tx(
-        OPERATION_C_STR[operation],
-        CBuffer{serialized_body.data(), serialized_body.size()},
-        true, // expect commit
-        i);
+//      add_prepared_tx(
+//        OPERATION_C_STR[operation],
+//        CBuffer{serialized_body.data(), serialized_body.size()},
+//        true, // expect commit
+//        i);
     }
   }
 
