@@ -177,15 +177,21 @@ private:
     Base::verify_params(expected);
   }
 
-  void send_commit_request(std::shared_ptr<RpcTlsClient>& connection, tpcc::ClientReadWriter read_writer) {
+  double send_commit_request(std::shared_ptr<RpcTlsClient>& connection, tpcc::ClientReadWriter read_writer) {
     tpcc::CommitRequest commitRequest;
     commitRequest.write_set = read_writer.write_set;
     commitRequest.keys_deleted = read_writer.keys_deleted;
 
     const auto body = commitRequest.serialize();
+    auto tx_start_time = high_resolution_clock::now();
     const auto response =
       connection->call("commit_2pc", CBuffer{body.data(), body.size()});
+    auto tx_finish_time = high_resolution_clock::now();
+
     check_response(response);
+
+    duration<double, std::milli> s_double = tx_finish_time - tx_start_time;
+    return s_double.count() / 1000.0;
   }
 
   void send_transactions(std::shared_ptr<RpcTlsClient>& connection, const PreparedTxs& txs) {
@@ -196,7 +202,15 @@ private:
     using std::chrono::duration;
     using std::chrono::milliseconds;
 
+    auto total_response_time = 0;
+    auto total_new_order_response_time = 0;
+    auto total_payment_response_time = 0;
+    auto total_delivery_response_time = 0;
     auto start_time = high_resolution_clock::now();
+
+    auto num_new_order_txs = 0;
+    auto num_payment_txs = 0;
+    auto num_delivery_txs = 0;
 
     for (decltype(options.num_transactions) i = 0; i < options.num_transactions;
          i++)
@@ -209,7 +223,8 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.stock_level(1, 1, 1000);
-        send_commit_request(connection, client_read_writer);
+        auto response_time = send_commit_request(connection, client_read_writer);
+        total_response_time += response_time;
       }
       else if (x < 8) // Delivery
       {
@@ -217,7 +232,10 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.delivery();
-        send_commit_request(connection, client_read_writer);
+        auto response_time = send_commit_request(connection, client_read_writer);
+        total_response_time += response_time;
+        total_delivery_response_time += response_time;
+        num_delivery_txs++;
       }
       else if (x < 12) // Order Status
       {
@@ -225,7 +243,8 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.order_status();
-        send_commit_request(connection, client_read_writer);
+        auto response_time = send_commit_request(connection, client_read_writer);
+        total_response_time += response_time;
       }
       else if (x < (12 + 43)) // Payment
       {
@@ -233,7 +252,10 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.payment();
-        send_commit_request(connection, client_read_writer);
+        auto response_time = send_commit_request(connection, client_read_writer);
+        total_response_time += response_time;
+        total_payment_response_time += response_time;
+        num_payment_txs++;
       }
       else // New Order
       {
@@ -241,7 +263,10 @@ private:
         tpcc::ClientReadWriter client_read_writer(connection);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.new_order();
-        send_commit_request(connection, client_read_writer);
+        auto response_time = send_commit_request(connection, client_read_writer);
+        total_response_time += response_time;
+        total_new_order_response_time += response_time;
+        num_new_order_txs++;
       }
     }
 
@@ -250,6 +275,11 @@ private:
     auto dur = s_double.count() / 1000.0;
     LOG_INFO_FMT("Total duration (seconds): {}", std::to_string(dur));
     LOG_INFO_FMT("Txs per second: {}", std::to_string(options.num_transactions / dur));
+    LOG_INFO_FMT("Avg commit response time: {}", std::to_string(total_response_time / options.num_transactions));
+    LOG_INFO_FMT("Avg new order tx commit response time: {}", std::to_string(total_new_order_response_time / num_new_order_txs));
+    LOG_INFO_FMT("Avg payment tx commit response time: {}", std::to_string(total_payment_response_time / num_payment_txs);
+    LOG_INFO_FMT("Avg delivery tx commit response time: {}", std::to_string(total_delivery_response_time / num_delivery_txs));
+
   }
 
 public:
