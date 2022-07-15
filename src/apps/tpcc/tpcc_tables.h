@@ -668,7 +668,7 @@ namespace tpcc
           || (w_id == o.w_id && d_id == o.d_id && o_id == o.o_id && number < o.number);
       }
 
-      static size_t get_size() const {
+      static size_t get_size() {
         return sizeof(o_id) + sizeof(d_id) + sizeof(w_id) + sizeof(number);
       }
 
@@ -702,7 +702,7 @@ namespace tpcc
       return {o_id, d_id, w_id, number};
     }
 
-    static size_t get_size() const {
+    static size_t get_size() {
       return sizeof(o_id) + sizeof(d_id) + sizeof(w_id) + sizeof(number) +
         sizeof(i_id) + sizeof(supply_w_id) + sizeof(quantity) + sizeof(amount) +
         sizeof(delivery_d) + sizeof(dist_info);
