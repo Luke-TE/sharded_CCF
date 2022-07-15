@@ -131,6 +131,16 @@ private:
       LOG_INFO_FMT("bad response");
      }
 
+     std::vector<int> ints;
+     ints.push_back(123);
+     ints.push_back(456);
+
+     tpcc::TestVectorStruct new_test;
+     new_test.num_ints = 2;
+     new_test.ints = ints;
+     auto ser = new_test.serialize();
+     auto newer_test = tpcc::TestVectorStruct::deserialize(ser.data(), ser.size());
+
 
     // Reserve space for transfer transactions
     prepared_txs.resize(options.num_transactions);
