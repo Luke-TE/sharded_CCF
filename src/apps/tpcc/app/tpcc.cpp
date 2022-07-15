@@ -8,6 +8,7 @@
 #include "tpcc_global.h"
 #include "tpcc_setup.h"
 #include "tpcc_transactions.h"
+#include "tpcc_common.h"
 
 #include <charconv>
 #include <string.h>
@@ -349,12 +350,18 @@ namespace ccfapp
         const auto& body = args.rpc_ctx->get_request_body();
         auto test_struct = tpcc::TestStruct::deserialize(body.data(), body.size());
 
-        std::vector<int> ints;
-        ints.push_back(123);
-        ints.push_back(456);
+        tpcc::TestOrderLineMapStruct test_vector_struct;
+        tpcc::OrderLine::Key key = {12, 34, 56, 78};
+        tpcc::OrderLine order_line = {
+          1,2,3,4,5,6,7,8.0
+        };
+        std::array<char, DATETIME_SIZE + 1> delivery_d = { 'a', 'a','a','a','a','a','a','a','a','a','a','a','a', '\0' };
+        std::array<char, tpcc::Stock::DIST + 1> dist_info = { 'a','a','a','a','a','a','a','a','a','a','a','a', 'a','a','a','a','a','a','a','a','a','a','a','\0' };
+        order_line.delivery_d = delivery_d;
+        order_line.dist_info = dist_info;
 
-        tpcc::TestVectorStruct test_vector_struct;
-        test_vector_struct.ints = ints;
+        test_vector_struct.order_lines[key] = order_line
+//        test_vector_struct.ints = ints;
 
         set_ok_status(args);
         args.rpc_ctx->set_response_body(test_vector_struct.serialize());

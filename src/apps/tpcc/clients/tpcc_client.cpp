@@ -81,9 +81,11 @@ private:
     if (http::status_success(response.status))
     {
       if (response.body.size() > 0) {
-        auto test_vector_struct = tpcc::TestVectorStruct::deserialize(response.body.data(), response.body.size());
-        LOG_INFO_FMT("Num of Ints: {0}", std::to_string(test_vector_struct.ints.size()));
-        LOG_INFO_FMT("Values: {0}, {1}", std::to_string(test_vector_struct.ints.at(0)), std::to_string(test_vector_struct.ints.at(1)));
+        auto test_vector_struct = tpcc::TestOrderLineMapStruct::deserialize(response.body.data(), response.body.size());
+//        LOG_INFO_FMT("Num of Ints: {0}", std::to_string(test_vector_struct.ints.size()));
+        tpcc::OrderLine::Key key = {12, 34, 56, 78};
+        auto order_line = test_vector_struct.order_lines[key];
+        LOG_INFO_FMT("Values: {0}, {1}", std::to_string(order_line.o_id), std::to_string(order_line.w_id));
       }
       else {
         LOG_INFO_FMT("No vals");
