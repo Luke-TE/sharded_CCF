@@ -121,9 +121,7 @@ private:
       if (response.body.size() > 0) {
         auto test_vector_struct = tpcc::TestVectorStruct::deserialize(response.body.data(), response.body.size());
         LOG_INFO_FMT("Num of Ints: {0}", std::to_string(test_vector_struct.num_ints));
-
-
-//        LOG_INFO_FMT("Values: {0}, {1}", std::to_string(test_vector_struct.ints.at(0)), std::to_string(test_vector_struct.ints.at(1)));
+        LOG_INFO_FMT("Values: {0}, {1}", std::to_string(test_vector_struct.ints.at(0)), std::to_string(test_vector_struct.ints.at(1)));
       }
       else {
         LOG_INFO_FMT("No vals");
