@@ -353,11 +353,11 @@ namespace ccfapp
         ints.push_back(123);
         ints.push_back(456);
 
-        tpcc::TestVectorStruct test_struct;
-        test_struct.ints = ints;
+        tpcc::TestVectorStruct test_vector_struct;
+        test_vector_struct.ints = ints;
 
         set_ok_status(args);
-        args.rpc_ctx->set_response_body(test_struct.serialize());
+        args.rpc_ctx->set_response_body(test_vector_struct.serialize());
       };
 
       const ccf::AuthnPolicies user_sig_or_cert = {user_signature_auth_policy,
