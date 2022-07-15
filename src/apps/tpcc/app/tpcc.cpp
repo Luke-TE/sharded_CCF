@@ -354,6 +354,7 @@ namespace ccfapp
         ints.push_back(456);
 
         tpcc::TestVectorStruct test_vector_struct;
+        test_vector_struct.num_ints = 0;
         test_vector_struct.ints = ints;
 
         set_ok_status(args);
