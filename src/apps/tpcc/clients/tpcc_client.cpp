@@ -144,11 +144,11 @@ private:
       }
       // TODO change this to add to a new data structure
 
-      //      add_prepared_tx(
-//        OPERATION_C_STR[operation],
-//        CBuffer{serialized_body.data(), serialized_body.size()},
-//        true, // expect commit
-//        i);
+      add_prepared_tx(
+        OPERATION_C_STR[operation],
+        CBuffer{serialized_body.data(), serialized_body.size()},
+        true, // expect commit
+        i);
 
     }
   }
