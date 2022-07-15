@@ -67,7 +67,6 @@ private:
 
       // Write everything
       while (written < txs.size()) {
-        LOG_INFO_FMT("Transaction here");
         write(txs[written], read, written, connection);
         blocking_read(read, written, connection);
         // TODO execute transaction
