@@ -237,11 +237,11 @@ private:
       if (x < 4) // Stock Level
       {
 //        LOG_INFO_FMT("Stock Level");
-        tpcc::ClientReadWriter client_read_writer(connection);
+        tpcc::ClientReadWriter client_read_writer(connection, options.prop_delay_ms);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.stock_level(1, 1, 1000);
         tpcc::TpccCoordinator coordinator(connection, client_read_writer, options.prop_delay_ms);
-        auto response_time = coordinator.two_phase_commit(i, options.prop_delay_ms);
+        auto response_time = coordinator.two_phase_commit(i);
         total_response_time += response_time;
         total_stock_level_response_time += response_time;
         num_stock_level_txs++;
@@ -249,11 +249,11 @@ private:
       else if (x < 8) // Delivery
       {
 //        LOG_INFO_FMT("Delivery");
-        tpcc::ClientReadWriter client_read_writer(connection);
+        tpcc::ClientReadWriter client_read_writer(connection, options.prop_delay_ms);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.delivery();
         tpcc::TpccCoordinator coordinator(connection, client_read_writer, options.prop_delay_ms);
-        auto response_time = coordinator.two_phase_commit(i, options.prop_delay_ms);
+        auto response_time = coordinator.two_phase_commit(i);
         total_response_time += response_time;
         total_delivery_response_time += response_time;
         num_delivery_txs++;
@@ -261,11 +261,11 @@ private:
       else if (x < 12) // Order Status
       {
 //        LOG_INFO_FMT("Order Status");
-        tpcc::ClientReadWriter client_read_writer(connection);
+        tpcc::ClientReadWriter client_read_writer(connection, options.prop_delay_ms);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.order_status();
         tpcc::TpccCoordinator coordinator(connection, client_read_writer, options.prop_delay_ms);
-        auto response_time = coordinator.two_phase_commit(i, options.prop_delay_ms);
+        auto response_time = coordinator.two_phase_commit(i);
         total_response_time += response_time;
         total_order_status_response_time += response_time;
         num_order_status_txs++;
@@ -273,11 +273,11 @@ private:
       else if (x < (12 + 43)) // Payment
       {
 //        LOG_INFO_FMT("Payment");
-        tpcc::ClientReadWriter client_read_writer(connection);
+        tpcc::ClientReadWriter client_read_writer(connection, options.prop_delay_ms);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.payment();
         tpcc::TpccCoordinator coordinator(connection, client_read_writer, options.prop_delay_ms);
-        auto response_time = coordinator.two_phase_commit(i, options.prop_delay_ms);
+        auto response_time = coordinator.two_phase_commit(i);
         total_response_time += response_time;
         total_payment_response_time += response_time;
         num_payment_txs++;
@@ -285,11 +285,11 @@ private:
       else // New Order
       {
 //        LOG_INFO_FMT("New Order");
-        tpcc::ClientReadWriter client_read_writer(connection);
+        tpcc::ClientReadWriter client_read_writer(connection, options.prop_delay_ms);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.new_order();
         tpcc::TpccCoordinator coordinator(connection, client_read_writer, options.prop_delay_ms);
-        auto response_time = coordinator.two_phase_commit(i, options.prop_delay_ms);
+        auto response_time = coordinator.two_phase_commit(i);
         total_response_time += response_time;
         total_new_order_response_time += response_time;
         num_new_order_txs++;
