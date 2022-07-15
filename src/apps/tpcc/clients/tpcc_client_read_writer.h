@@ -256,11 +256,15 @@ namespace tpcc
     };
 
     void put_order(TpccTables::DistributeKey table_key, Order::Key key, Order order) override {
-      auto order_full_key = { table_key, key };
+      OrderFullKey order_full_key;
+      order_full_key.table_key = table_key;
+      order_full_key.key = key;
       write_set.orders[order_full_key] = order;
     };
     void put_new_order(TpccTables::DistributeKey table_key, NewOrder::Key key, NewOrder new_order) override {
-      auto new_order_full_key = { table_key, key };
+      NewOrderFullKey new_order_full_key;
+      new_order_full_key.table_key = table_key;
+      new_order_full_key.key = key;
       write_set.new_orders[new_order_full_key] = new_order;
     };
     void put_order_line(OrderLine::Key key, OrderLine order_line) override {
