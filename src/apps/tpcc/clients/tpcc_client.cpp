@@ -110,18 +110,19 @@ private:
       LOG_INFO_FMT("No Value :(");
     }
 
-    tpcc::TestStruct test_vector_struct;
-    test_vector_struct.int_val = 999;
-    const auto body = test_vector_struct.serialize();
+    tpcc::TestStruct test_struct;
+    test_struct.int_val = 999;
+    const auto body = test_struct.serialize();
     const auto response =
       connection->call("do_test_vector", CBuffer{body.data(), body.size()});
 
     if (http::status_success(response.status))
     {
       if (response.body.size() > 0) {
+        auto test_vector_struct = tpcc::TestVectorStruct::deserialize(body.data(), body.size());
         LOG_INFO_FMT("Num of Ints: {0}", std::to_string(test_vector_struct.num_ints));
 
-//        auto test_vector_struct = tpcc::TestVectorStruct::deserialize(body.data(), body.size());
+
 //        LOG_INFO_FMT("Values: {0}, {1}", std::to_string(test_vector_struct.ints.at(0)), std::to_string(test_vector_struct.ints.at(1)));
       }
       else {
