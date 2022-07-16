@@ -214,6 +214,14 @@ private:
     using std::chrono::duration;
     using std::chrono::milliseconds;
 
+    auto total_commit_response_time = 0.0;
+
+    auto total_new_order_commit_response_time = 0.0;
+    auto total_payment_commit_response_time = 0.0;
+    auto total_delivery_commit_response_time = 0.0;
+    auto total_stock_level_commit_response_time = 0.0;
+    auto total_order_status_commit_response_time = 0.0;
+
     auto total_response_time = 0.0;
 
     auto total_new_order_response_time = 0.0;
@@ -236,62 +244,102 @@ private:
 
       if (x < 4) // Stock Level
       {
-//        LOG_INFO_FMT("Stock Level");
+        // LOG_INFO_FMT("Stock Level");
+        auto tx_start_time = high_resolution_clock::now();
         tpcc::ClientReadWriter client_read_writer(connection, options.prop_delay_ms);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.stock_level(1, 1, 1000);
         tpcc::TpccCoordinator coordinator(connection, client_read_writer, options.prop_delay_ms);
-        auto response_time = coordinator.two_phase_commit(i);
+
+        auto commit_response_time = coordinator.two_phase_commit(i);
+        auto tx_end_time = high_resolution_clock::now();
+        duration<double, std::milli> tx_s_double = tx_end_time - tx_start_time;
+        auto response_time = tx_s_double.count() / 1000.0;
+
         total_response_time += response_time;
         total_stock_level_response_time += response_time;
+        total_commit_response_time += commit_response_time;
+        total_stock_level_commit_response_time += commit_response_time;
         num_stock_level_txs++;
       }
       else if (x < 8) // Delivery
       {
-//        LOG_INFO_FMT("Delivery");
+        // LOG_INFO_FMT("Delivery");
+        auto tx_start_time = high_resolution_clock::now();
         tpcc::ClientReadWriter client_read_writer(connection, options.prop_delay_ms);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.delivery();
         tpcc::TpccCoordinator coordinator(connection, client_read_writer, options.prop_delay_ms);
-        auto response_time = coordinator.two_phase_commit(i);
+
+        auto commit_response_time = coordinator.two_phase_commit(i);
+        auto tx_end_time = high_resolution_clock::now();
+        duration<double, std::milli> tx_s_double = tx_end_time - tx_start_time;
+        auto response_time = tx_s_double.count() / 1000.0;
+
         total_response_time += response_time;
         total_delivery_response_time += response_time;
+        total_commit_response_time += commit_response_time;
+        total_delivery_commit_response_time += commit_response_time;
         num_delivery_txs++;
       }
       else if (x < 12) // Order Status
       {
-//        LOG_INFO_FMT("Order Status");
+        // LOG_INFO_FMT("Order Status");
+        auto tx_start_time = high_resolution_clock::now();
         tpcc::ClientReadWriter client_read_writer(connection, options.prop_delay_ms);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.order_status();
         tpcc::TpccCoordinator coordinator(connection, client_read_writer, options.prop_delay_ms);
-        auto response_time = coordinator.two_phase_commit(i);
+
+        auto commit_response_time = coordinator.two_phase_commit(i);
+        auto tx_end_time = high_resolution_clock::now();
+        duration<double, std::milli> tx_s_double = tx_end_time - tx_start_time;
+        auto response_time = tx_s_double.count() / 1000.0;
+
         total_response_time += response_time;
         total_order_status_response_time += response_time;
+        total_commit_response_time += commit_response_time;
+        total_order_status_commit_response_time += commit_response_time;
         num_order_status_txs++;
       }
       else if (x < (12 + 43)) // Payment
       {
-//        LOG_INFO_FMT("Payment");
+        // LOG_INFO_FMT("Payment");
+        auto tx_start_time = high_resolution_clock::now();
         tpcc::ClientReadWriter client_read_writer(connection, options.prop_delay_ms);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.payment();
         tpcc::TpccCoordinator coordinator(connection, client_read_writer, options.prop_delay_ms);
-        auto response_time = coordinator.two_phase_commit(i);
+
+        auto commit_response_time = coordinator.two_phase_commit(i);
+        auto tx_end_time = high_resolution_clock::now();
+        duration<double, std::milli> tx_s_double = tx_end_time - tx_start_time;
+        auto response_time = tx_s_double.count() / 1000.0;
+
         total_response_time += response_time;
         total_payment_response_time += response_time;
+        total_commit_response_time += commit_response_time;
+        total_payment_commit_response_time += commit_response_time;
         num_payment_txs++;
       }
       else // New Order
       {
-//        LOG_INFO_FMT("New Order");
+        // LOG_INFO_FMT("New Order");
+        auto tx_start_time = high_resolution_clock::now();
         tpcc::ClientReadWriter client_read_writer(connection, options.prop_delay_ms);
         tpcc::TpccTransactionsClient tx_client(client_read_writer, rand_range<int32_t>());
         tx_client.new_order();
         tpcc::TpccCoordinator coordinator(connection, client_read_writer, options.prop_delay_ms);
-        auto response_time = coordinator.two_phase_commit(i);
+
+        auto commit_response_time = coordinator.two_phase_commit(i);
+        auto tx_end_time = high_resolution_clock::now();
+        duration<double, std::milli> tx_s_double = tx_end_time - tx_start_time;
+        auto response_time = tx_s_double.count() / 1000.0;
+
         total_response_time += response_time;
         total_new_order_response_time += response_time;
+        total_commit_response_time += commit_response_time;
+        total_new_order_commit_response_time += commit_response_time;
         num_new_order_txs++;
       }
     }
@@ -301,12 +349,23 @@ private:
     auto dur = s_double.count() / 1000.0;
     LOG_INFO_FMT("Total duration (seconds): {}", std::to_string(dur));
     LOG_INFO_FMT("Txs per second: {}", std::to_string(options.num_transactions / dur));
-    LOG_INFO_FMT("Avg commit response time (ms): {}", std::to_string(total_response_time / options.num_transactions));
-    LOG_INFO_FMT("Avg new order tx commit response time (ms): {}", std::to_string(total_new_order_response_time / num_new_order_txs));
-    LOG_INFO_FMT("Avg payment tx commit response time (ms): {}", std::to_string(total_payment_response_time / num_payment_txs));
-    LOG_INFO_FMT("Avg delivery tx commit response time (ms): {}", std::to_string(total_delivery_response_time / num_delivery_txs));
-    LOG_INFO_FMT("Avg stock level tx commit response time (ms): {}", std::to_string(total_stock_level_response_time / num_stock_level_txs));
-    LOG_INFO_FMT("Avg order status tx commit response time (ms): {}", std::to_string(total_order_status_response_time / num_order_status_txs));
+
+    LOG_INFO_FMT("Avg response time (ms): {}", std::to_string(total_response_time / options.num_transactions));
+
+    LOG_INFO_FMT("Avg new order tx response time (ms): {}", std::to_string(total_new_order_response_time / num_new_order_txs));
+    LOG_INFO_FMT("Avg payment tx response time (ms): {}", std::to_string(total_payment_response_time / num_payment_txs));
+    LOG_INFO_FMT("Avg delivery tx response time (ms): {}", std::to_string(total_delivery_response_time / num_delivery_txs));
+    LOG_INFO_FMT("Avg stock level tx response time (ms): {}", std::to_string(total_stock_level_response_time / num_stock_level_txs));
+    LOG_INFO_FMT("Avg order status tx response time (ms): {}", std::to_string(total_order_status_response_time / num_order_status_txs));
+    
+
+    LOG_INFO_FMT("Avg commit response time (ms): {}", std::to_string(total_commit_response_time / options.num_transactions));
+
+    LOG_INFO_FMT("Avg new order tx commit response time (ms): {}", std::to_string(total_new_order_commit_response_time / num_new_order_txs));
+    LOG_INFO_FMT("Avg payment tx commit response time (ms): {}", std::to_string(total_payment_commit_response_time / num_payment_txs));
+    LOG_INFO_FMT("Avg delivery tx commit response time (ms): {}", std::to_string(total_delivery_commit_response_time / num_delivery_txs));
+    LOG_INFO_FMT("Avg stock level tx commit response time (ms): {}", std::to_string(total_stock_level_commit_response_time / num_stock_level_txs));
+    LOG_INFO_FMT("Avg order status tx commit response time (ms): {}", std::to_string(total_order_status_commit_response_time / num_order_status_txs));
   }
 
 public:
