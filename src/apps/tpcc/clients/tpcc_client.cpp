@@ -253,8 +253,8 @@ private:
 
         auto commit_response_time = coordinator.two_phase_commit(i);
         auto tx_end_time = high_resolution_clock::now();
-        duration<double, std::milli> tx_s_double = tx_end_time - tx_start_time;
-        auto response_time = tx_s_double.count() / 1000.0;
+        duration<double, std::milli> tx_ms_double = tx_end_time - tx_start_time;
+        auto response_time = tx_ms_double.count();
 
         total_response_time += response_time;
         total_stock_level_response_time += response_time;
@@ -273,8 +273,8 @@ private:
 
         auto commit_response_time = coordinator.two_phase_commit(i);
         auto tx_end_time = high_resolution_clock::now();
-        duration<double, std::milli> tx_s_double = tx_end_time - tx_start_time;
-        auto response_time = tx_s_double.count() / 1000.0;
+        duration<double, std::milli> tx_ms_double = tx_end_time - tx_start_time;
+        auto response_time = tx_ms_double.count();
 
         total_response_time += response_time;
         total_delivery_response_time += response_time;
@@ -293,8 +293,8 @@ private:
 
         auto commit_response_time = coordinator.two_phase_commit(i);
         auto tx_end_time = high_resolution_clock::now();
-        duration<double, std::milli> tx_s_double = tx_end_time - tx_start_time;
-        auto response_time = tx_s_double.count() / 1000.0;
+        duration<double, std::milli> tx_ms_double = tx_end_time - tx_start_time;
+        auto response_time = tx_ms_double.count();
 
         total_response_time += response_time;
         total_order_status_response_time += response_time;
@@ -313,8 +313,8 @@ private:
 
         auto commit_response_time = coordinator.two_phase_commit(i);
         auto tx_end_time = high_resolution_clock::now();
-        duration<double, std::milli> tx_s_double = tx_end_time - tx_start_time;
-        auto response_time = tx_s_double.count() / 1000.0;
+        duration<double, std::milli> tx_ms_double = tx_end_time - tx_start_time;
+        auto response_time = tx_ms_double.count();
 
         total_response_time += response_time;
         total_payment_response_time += response_time;
@@ -333,8 +333,8 @@ private:
 
         auto commit_response_time = coordinator.two_phase_commit(i);
         auto tx_end_time = high_resolution_clock::now();
-        duration<double, std::milli> tx_s_double = tx_end_time - tx_start_time;
-        auto response_time = tx_s_double.count() / 1000.0;
+        duration<double, std::milli> tx_ms_double = tx_end_time - tx_start_time;
+        auto response_time = tx_ms_double.count();
 
         total_response_time += response_time;
         total_new_order_response_time += response_time;
@@ -357,7 +357,7 @@ private:
     LOG_INFO_FMT("Avg delivery tx response time (ms): {}", std::to_string(total_delivery_response_time / num_delivery_txs));
     LOG_INFO_FMT("Avg stock level tx response time (ms): {}", std::to_string(total_stock_level_response_time / num_stock_level_txs));
     LOG_INFO_FMT("Avg order status tx response time (ms): {}", std::to_string(total_order_status_response_time / num_order_status_txs));
-    
+
 
     LOG_INFO_FMT("Avg commit response time (ms): {}", std::to_string(total_commit_response_time / options.num_transactions));
 
