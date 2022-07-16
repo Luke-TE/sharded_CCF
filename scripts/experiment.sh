@@ -1,4 +1,5 @@
 #!/bin/bash
+# DEPRECATED
 cd ../build
 mkdir results
 
