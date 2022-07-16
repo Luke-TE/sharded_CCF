@@ -1,0 +1,85 @@
+2022-07-16T17:51:22.164060Z        100 [info ] CF/src/perf_client/perf_client.h:868 | Random choices determined by seed: 1116372792
+2022-07-16T17:51:22.437305Z        100 [info ] ded_CCF/src/perf_client/timing.h:233 | Waiting for transaction ID 2.9535
+2022-07-16T17:51:23.203953Z        100 [info ] ded_CCF/src/perf_client/timing.h:272 | Found global commit 2.9535
+2022-07-16T17:51:23.205357Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:213 | Prep duration (ms): 1.389996
+2022-07-16T17:51:23.205364Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:214 | Txs prepped per second: 1438853.061448
+2022-07-16T17:51:23.205367Z        100 [info ] CF/src/perf_client/perf_client.h:481 | About to begin timing
+2022-07-16T17:51:23.205370Z        100 [info ] CF/src/perf_client/perf_client.h:483 | Began timing
+2022-07-16T17:54:03.875692Z        100 [info ] ded_CCF/src/perf_client/timing.h:233 | Waiting for transaction ID 2.11536
+2022-07-16T17:54:03.986205Z        100 [info ] ded_CCF/src/perf_client/timing.h:272 | Found global commit 2.11536
+2022-07-16T17:54:03.986259Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:134 | New Timings: Total duration (seconds): 160.780881
+2022-07-16T17:54:03.986265Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:135 | New Timings: Txs per second: 12.439290
+2022-07-16T17:54:03.986277Z        100 [info ] ded_CCF/src/perf_client/timing.h:342 | Global commit match 11536 for highest local commit 11536
+2022-07-16T17:54:03.986281Z        100 [info ] ded_CCF/src/perf_client/timing.h:348 | Duration changing from 160.78s to 160.78s
+2022-07-16T17:54:03.986340Z        100 [info ] CF/src/perf_client/perf_client.h:909 | Done
+2022-07-16T17:54:03.986345Z        100 [info ] CF/src/perf_client/perf_client.h:795 | 2691 transactions took 160780ms.
+=> 16.73715636273168tx/s
+
+2022-07-16T17:54:04.104164Z        100 [info ] CF/src/perf_client/perf_client.h:868 | Random choices determined by seed: 2848135847
+2022-07-16T17:54:04.371788Z        100 [info ] ded_CCF/src/perf_client/timing.h:233 | Waiting for transaction ID 2.11538
+2022-07-16T17:54:04.993963Z        100 [info ] ded_CCF/src/perf_client/timing.h:272 | Found global commit 2.11538
+2022-07-16T17:54:04.995383Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:213 | Prep duration (ms): 1.405700
+2022-07-16T17:54:04.995390Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:214 | Txs prepped per second: 1422778.686775
+2022-07-16T17:54:04.995393Z        100 [info ] CF/src/perf_client/perf_client.h:481 | About to begin timing
+2022-07-16T17:54:04.995396Z        100 [info ] CF/src/perf_client/perf_client.h:483 | Began timing
+2022-07-16T17:56:45.667656Z        100 [info ] ded_CCF/src/perf_client/timing.h:233 | Waiting for transaction ID 2.13512
+2022-07-16T17:56:46.375980Z        100 [info ] ded_CCF/src/perf_client/timing.h:272 | Found global commit 2.13512
+2022-07-16T17:56:46.376059Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:134 | New Timings: Total duration (seconds): 161.380655
+2022-07-16T17:56:46.376066Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:135 | New Timings: Txs per second: 12.393059
+2022-07-16T17:56:46.376090Z        100 [info ] ded_CCF/src/perf_client/timing.h:342 | Global commit match 13512 for highest local commit 13512
+2022-07-16T17:56:46.376094Z        100 [info ] ded_CCF/src/perf_client/timing.h:348 | Duration changing from 161.38s to 161.38s
+2022-07-16T17:56:46.376156Z        100 [info ] CF/src/perf_client/perf_client.h:909 | Done
+2022-07-16T17:56:46.376161Z        100 [info ] CF/src/perf_client/perf_client.h:795 | 3059 transactions took 161380ms.
+=> 18.955260874953527tx/s
+
+2022-07-16T17:56:46.491805Z        100 [info ] CF/src/perf_client/perf_client.h:868 | Random choices determined by seed: 263380742
+2022-07-16T17:56:46.762264Z        100 [info ] ded_CCF/src/perf_client/timing.h:233 | Waiting for transaction ID 2.13514
+2022-07-16T17:56:47.381523Z        100 [info ] ded_CCF/src/perf_client/timing.h:272 | Found global commit 2.13514
+2022-07-16T17:56:47.382949Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:213 | Prep duration (ms): 1.406485
+2022-07-16T17:56:47.382960Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:214 | Txs prepped per second: 1421984.592797
+2022-07-16T17:56:47.382963Z        100 [info ] CF/src/perf_client/perf_client.h:481 | About to begin timing
+2022-07-16T17:56:47.382966Z        100 [info ] CF/src/perf_client/perf_client.h:483 | Began timing
+2022-07-16T17:59:28.047677Z        100 [info ] ded_CCF/src/perf_client/timing.h:233 | Waiting for transaction ID 2.15481
+2022-07-16T17:59:28.066619Z        100 [info ] ded_CCF/src/perf_client/timing.h:272 | Found global commit 2.15481
+2022-07-16T17:59:28.066805Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:134 | New Timings: Total duration (seconds): 160.683820
+2022-07-16T17:59:28.066834Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:135 | New Timings: Txs per second: 12.446804
+2022-07-16T17:59:28.066866Z        100 [info ] ded_CCF/src/perf_client/timing.h:342 | Global commit match 15481 for highest local commit 15481
+2022-07-16T17:59:28.066883Z        100 [info ] ded_CCF/src/perf_client/timing.h:348 | Duration changing from 160.683s to 160.683s
+2022-07-16T17:59:28.067107Z        100 [info ] CF/src/perf_client/perf_client.h:909 | Done
+2022-07-16T17:59:28.067126Z        100 [info ] CF/src/perf_client/perf_client.h:795 | 2499 transactions took 160683ms.
+=> 15.552360859580666tx/s
+
+2022-07-16T17:59:28.192016Z        100 [info ] CF/src/perf_client/perf_client.h:868 | Random choices determined by seed: 1239889758
+2022-07-16T17:59:28.462758Z        100 [info ] ded_CCF/src/perf_client/timing.h:233 | Waiting for transaction ID 2.15483
+2022-07-16T17:59:30.007794Z        100 [info ] ded_CCF/src/perf_client/timing.h:272 | Found global commit 2.15483
+2022-07-16T17:59:30.009206Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:213 | Prep duration (ms): 1.393567
+2022-07-16T17:59:30.009212Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:214 | Txs prepped per second: 1435166.016417
+2022-07-16T17:59:30.009216Z        100 [info ] CF/src/perf_client/perf_client.h:481 | About to begin timing
+2022-07-16T17:59:30.009219Z        100 [info ] CF/src/perf_client/perf_client.h:483 | Began timing
+2022-07-16T18:02:10.707702Z        100 [info ] ded_CCF/src/perf_client/timing.h:233 | Waiting for transaction ID 2.17484
+2022-07-16T18:02:11.457761Z        100 [info ] ded_CCF/src/perf_client/timing.h:272 | Found global commit 2.17484
+2022-07-16T18:02:11.457813Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:134 | New Timings: Total duration (seconds): 161.448586
+2022-07-16T18:02:11.457819Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:135 | New Timings: Txs per second: 12.387845
+2022-07-16T18:02:11.457833Z        100 [info ] ded_CCF/src/perf_client/timing.h:342 | Global commit match 17484 for highest local commit 17484
+2022-07-16T18:02:11.457837Z        100 [info ] ded_CCF/src/perf_client/timing.h:348 | Duration changing from 161.448s to 161.448s
+2022-07-16T18:02:11.457909Z        100 [info ] CF/src/perf_client/perf_client.h:909 | Done
+2022-07-16T18:02:11.457914Z        100 [info ] CF/src/perf_client/perf_client.h:795 | 3837 transactions took 161448ms.
+=> 23.76616619592686tx/s
+
+2022-07-16T18:02:11.576121Z        100 [info ] CF/src/perf_client/perf_client.h:868 | Random choices determined by seed: 3097050875
+2022-07-16T18:02:11.837613Z        100 [info ] ded_CCF/src/perf_client/timing.h:233 | Waiting for transaction ID 2.17486
+2022-07-16T18:02:12.463950Z        100 [info ] ded_CCF/src/perf_client/timing.h:272 | Found global commit 2.17486
+2022-07-16T18:02:12.465364Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:213 | Prep duration (ms): 1.399118
+2022-07-16T18:02:12.465371Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:214 | Txs prepped per second: 1429471.995929
+2022-07-16T18:02:12.465375Z        100 [info ] CF/src/perf_client/perf_client.h:481 | About to begin timing
+2022-07-16T18:02:12.465378Z        100 [info ] CF/src/perf_client/perf_client.h:483 | Began timing
+2022-07-16T18:04:53.131787Z        100 [info ] ded_CCF/src/perf_client/timing.h:233 | Waiting for transaction ID 2.19457
+2022-07-16T18:04:53.410651Z        100 [info ] ded_CCF/src/perf_client/timing.h:272 | Found global commit 2.19457
+2022-07-16T18:04:53.410707Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:134 | New Timings: Total duration (seconds): 160.945321
+2022-07-16T18:04:53.410713Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:135 | New Timings: Txs per second: 12.426581
+2022-07-16T18:04:53.410724Z        100 [info ] ded_CCF/src/perf_client/timing.h:342 | Global commit match 19457 for highest local commit 19457
+2022-07-16T18:04:53.410728Z        100 [info ] ded_CCF/src/perf_client/timing.h:348 | Duration changing from 160.945s to 160.945s
+2022-07-16T18:04:53.410788Z        100 [info ] CF/src/perf_client/perf_client.h:909 | Done
+2022-07-16T18:04:53.410792Z        100 [info ] CF/src/perf_client/perf_client.h:795 | 2710 transactions took 160945ms.
+=> 16.83805026561869tx/s
+
