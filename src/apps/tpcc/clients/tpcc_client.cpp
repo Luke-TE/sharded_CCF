@@ -85,7 +85,7 @@ private:
     }
 
     last_write_time = std::chrono::high_resolution_clock::now();
-    kick_off_timing();
+//    kick_off_timing();
 
     // Repeat for each session
     for (size_t session = 1; session <= options.session_count; ++session)
@@ -119,7 +119,7 @@ private:
     }
     const auto last_commit = last_response_tx_id.seqno;
     auto timing_results = end_timing(last_commit);
-    LOG_INFO_FMT("Timing ended");
+//    LOG_INFO_FMT("Timing ended");
     return timing_results;
   }
 
