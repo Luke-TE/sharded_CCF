@@ -23,6 +23,7 @@ struct TpccClientOptions : public client::PerfOptions
 {
   bool sharded = false;
   int prop_delay_ms = 0;
+  int iterations = 1;
 
   TpccClientOptions(CLI::App& app, const std::string& default_pid_file) :
     client::PerfOptions("Tpcc_ClientCpp", default_pid_file, app)
@@ -39,6 +40,13 @@ struct TpccClientOptions : public client::PerfOptions
         "--delay",
         prop_delay_ms,
         "Propagation delay in ms")
+      ->capture_default_str();
+
+    app
+      .add_option(
+        "--iterations",
+        iterations,
+        "Number of iterations")
       ->capture_default_str();
   }
 };
@@ -405,25 +413,27 @@ public:
     rand_generator.seed(options.generator_seed);
 
     send_all_creation_transactions();
-//    prepare_all_transactions();
 
-    LOG_TRACE_FMT(
-      "Sending {} transactions from {} clients {} times...",
-      options.num_transactions,
-      options.thread_count,
-      options.session_count);
+    for (int i = 0; i < options.iterations; i++) {
+      LOG_INFO_FMT("Iteration {}", std::to_string(i + 1));
 
-    //     = send_all_prepared_transactions();
-    init_connection();
-    try
-    {
-      send_transactions(rpc_connection, prepared_txs);
-      LOG_INFO_FMT("Done");
-    }
-    catch (std::exception& e)
-    {
-      LOG_FAIL_FMT("Transaction exception: {}", e.what());
-      throw e;
+      LOG_TRACE_FMT(
+        "Sending {} transactions from {} clients {} times...",
+        options.num_transactions,
+        options.thread_count,
+        options.session_count);
+
+      init_connection();
+      try
+      {
+        send_transactions(rpc_connection, prepared_txs);
+        LOG_INFO_FMT("Done");
+      }
+      catch (std::exception& e)
+      {
+        LOG_FAIL_FMT("Transaction exception: {}", e.what());
+        throw e;
+      }
     }
   }
 };
