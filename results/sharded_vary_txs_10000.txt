@@ -1,0 +1,83 @@
+2022-07-16T15:39:43.116111Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:412 | Random choices determined by seed: 3066229118
+2022-07-16T15:39:43.386521Z        100 [info ] ded_CCF/src/perf_client/timing.h:233 | Waiting for transaction ID 2.11
+2022-07-16T15:39:43.519779Z        100 [info ] ded_CCF/src/perf_client/timing.h:272 | Found global commit 2.11
+2022-07-16T15:39:43.519791Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:418 | Iteration 1
+2022-07-16T15:46:09.656788Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:370 | Total duration (seconds): 386.136985
+2022-07-16T15:46:09.656802Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:371 | Txs per second: 25.897545
+2022-07-16T15:46:09.656820Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:373 | Avg response time (ms): 38.613037
+2022-07-16T15:46:09.656824Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:375 | Avg new order tx response time (ms): 39.210627
+2022-07-16T15:46:09.656828Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:376 | Avg payment tx response time (ms): 5.879672
+2022-07-16T15:46:09.656831Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:377 | Avg delivery tx response time (ms): 145.678984
+2022-07-16T15:46:09.656835Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:378 | Avg stock level tx response time (ms): 299.828489
+2022-07-16T15:46:09.656839Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:379 | Avg order status tx response time (ms): 15.601302
+2022-07-16T15:46:09.656842Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:382 | Avg commit response time (ms): 1.173603
+2022-07-16T15:46:09.656846Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:384 | Avg new order tx commit response time (ms): 1.173423
+2022-07-16T15:46:09.656849Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:385 | Avg payment tx commit response time (ms): 1.173701
+2022-07-16T15:46:09.656852Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:386 | Avg delivery tx commit response time (ms): 1.173742
+2022-07-16T15:46:09.656855Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:387 | Avg stock level tx commit response time (ms): 1.172952
+2022-07-16T15:46:09.656858Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:388 | Avg order status tx commit response time (ms): 1.175075
+2022-07-16T15:46:09.656862Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:430 | Done
+2022-07-16T15:46:09.656866Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:418 | Iteration 2
+2022-07-16T15:52:34.756125Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:370 | Total duration (seconds): 385.099249
+2022-07-16T15:52:34.756141Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:371 | Txs per second: 25.967332
+2022-07-16T15:52:34.756145Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:373 | Avg response time (ms): 38.509264
+2022-07-16T15:52:34.756148Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:375 | Avg new order tx response time (ms): 39.282868
+2022-07-16T15:52:34.756151Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:376 | Avg payment tx response time (ms): 5.881070
+2022-07-16T15:52:34.756154Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:377 | Avg delivery tx response time (ms): 145.625777
+2022-07-16T15:52:34.756157Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:378 | Avg stock level tx response time (ms): 299.778904
+2022-07-16T15:52:34.756160Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:379 | Avg order status tx response time (ms): 15.567383
+2022-07-16T15:52:34.756163Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:382 | Avg commit response time (ms): 1.174057
+2022-07-16T15:52:34.756166Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:384 | Avg new order tx commit response time (ms): 1.174473
+2022-07-16T15:52:34.756169Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:385 | Avg payment tx commit response time (ms): 1.173642
+2022-07-16T15:52:34.756191Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:386 | Avg delivery tx commit response time (ms): 1.173110
+2022-07-16T15:52:34.756194Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:387 | Avg stock level tx commit response time (ms): 1.172961
+2022-07-16T15:52:34.756197Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:388 | Avg order status tx commit response time (ms): 1.175952
+2022-07-16T15:52:34.756201Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:430 | Done
+2022-07-16T15:52:34.756204Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:418 | Iteration 3
+2022-07-16T15:58:48.744793Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:370 | Total duration (seconds): 373.988578
+2022-07-16T15:58:48.744807Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:371 | Txs per second: 26.738784
+2022-07-16T15:58:48.744811Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:373 | Avg response time (ms): 37.398185
+2022-07-16T15:58:48.744814Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:375 | Avg new order tx response time (ms): 39.159675
+2022-07-16T15:58:48.744817Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:376 | Avg payment tx response time (ms): 5.881641
+2022-07-16T15:58:48.744820Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:377 | Avg delivery tx response time (ms): 145.813395
+2022-07-16T15:58:48.744824Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:378 | Avg stock level tx response time (ms): 299.819995
+2022-07-16T15:58:48.744827Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:379 | Avg order status tx response time (ms): 15.714158
+2022-07-16T15:58:48.744829Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:382 | Avg commit response time (ms): 1.173562
+2022-07-16T15:58:48.744832Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:384 | Avg new order tx commit response time (ms): 1.173247
+2022-07-16T15:58:48.744836Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:385 | Avg payment tx commit response time (ms): 1.173686
+2022-07-16T15:58:48.744859Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:386 | Avg delivery tx commit response time (ms): 1.174256
+2022-07-16T15:58:48.744862Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:387 | Avg stock level tx commit response time (ms): 1.174904
+2022-07-16T15:58:48.744866Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:388 | Avg order status tx commit response time (ms): 1.173741
+2022-07-16T15:58:48.744869Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:430 | Done
+2022-07-16T15:58:48.744873Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:418 | Iteration 4
+2022-07-16T16:05:07.138069Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:370 | Total duration (seconds): 378.393186
+2022-07-16T16:05:07.138083Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:371 | Txs per second: 26.427537
+2022-07-16T16:05:07.138087Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:373 | Avg response time (ms): 37.838657
+2022-07-16T16:05:07.138090Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:375 | Avg new order tx response time (ms): 38.914482
+2022-07-16T16:05:07.138093Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:376 | Avg payment tx response time (ms): 5.880879
+2022-07-16T16:05:07.138096Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:377 | Avg delivery tx response time (ms): 145.505411
+2022-07-16T16:05:07.138100Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:378 | Avg stock level tx response time (ms): 299.871871
+2022-07-16T16:05:07.138103Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:379 | Avg order status tx response time (ms): 15.552917
+2022-07-16T16:05:07.138105Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:382 | Avg commit response time (ms): 1.173955
+2022-07-16T16:05:07.138108Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:384 | Avg new order tx commit response time (ms): 1.173496
+2022-07-16T16:05:07.138112Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:385 | Avg payment tx commit response time (ms): 1.174370
+2022-07-16T16:05:07.138133Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:386 | Avg delivery tx commit response time (ms): 1.174102
+2022-07-16T16:05:07.138137Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:387 | Avg stock level tx commit response time (ms): 1.174409
+2022-07-16T16:05:07.138140Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:388 | Avg order status tx commit response time (ms): 1.174026
+2022-07-16T16:05:07.138143Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:430 | Done
+2022-07-16T16:05:07.138147Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:418 | Iteration 5
+2022-07-16T16:11:35.408982Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:370 | Total duration (seconds): 388.270825
+2022-07-16T16:11:35.408997Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:371 | Txs per second: 25.755219
+2022-07-16T16:11:35.409001Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:373 | Avg response time (ms): 38.826416
+2022-07-16T16:11:35.409004Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:375 | Avg new order tx response time (ms): 39.243780
+2022-07-16T16:11:35.409007Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:376 | Avg payment tx response time (ms): 5.880461
+2022-07-16T16:11:35.409010Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:377 | Avg delivery tx response time (ms): 145.624092
+2022-07-16T16:11:35.409014Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:378 | Avg stock level tx response time (ms): 299.746496
+2022-07-16T16:11:35.409017Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:379 | Avg order status tx response time (ms): 15.726124
+2022-07-16T16:11:35.409019Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:382 | Avg commit response time (ms): 1.173560
+2022-07-16T16:11:35.409023Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:384 | Avg new order tx commit response time (ms): 1.173168
+2022-07-16T16:11:35.409040Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:385 | Avg payment tx commit response time (ms): 1.174269
+2022-07-16T16:11:35.409044Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:386 | Avg delivery tx commit response time (ms): 1.172798
+2022-07-16T16:11:35.409048Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:387 | Avg stock level tx commit response time (ms): 1.172315
+2022-07-16T16:11:35.409052Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:388 | Avg order status tx commit response time (ms): 1.172445
+2022-07-16T16:11:35.409056Z        100 [info ] pps/tpcc/clients/tpcc_client.cpp:430 | Done
