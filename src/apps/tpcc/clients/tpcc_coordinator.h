@@ -68,6 +68,12 @@ namespace tpcc
       std::this_thread::sleep_for(std::chrono::milliseconds(prop_delay_ms));
       const auto response =
         connection->call("commit_2pc", CBuffer{body.data(), body.size()});
+
+      if (!http::status_success(response.status))
+      {
+        const std::string error_msg(r.body.begin(), r.body.end());
+        throw logic_error(error_msg);
+      }
     }
 
     void abort(int tx_id) {
