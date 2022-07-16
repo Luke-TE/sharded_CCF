@@ -19,7 +19,8 @@ namespace tpcc
 
       if (can_commit)
       {
-        return commit(tx_id);
+//        return commit(tx_id);
+        return timed_commit(tx_id);
       }
       else
       {
@@ -46,24 +47,27 @@ namespace tpcc
       return http::status_success(response.status);
     }
 
-    double commit(int tx_id) {
+    double timed_commit(int tx_id) {
+      // put timing code in function just in case it isn't a blocking call
       using std::chrono::high_resolution_clock;
       using std::chrono::duration_cast;
       using std::chrono::duration;
       using std::chrono::milliseconds;
+      auto tx_start_time = high_resolution_clock::now();
+      commit(tx_id);
+      auto tx_finish_time = high_resolution_clock::now();
+      duration<double, std::milli> ms_double = tx_finish_time - tx_start_time;
+      return ms_double.count();
+    }
 
+    void commit(int tx_id) {
       tpcc::CommitRequest commit_request;
       commit_request.tx_id = tx_id;
 
       const auto body = commit_request.serialize();
-      auto tx_start_time = high_resolution_clock::now();
       std::this_thread::sleep_for(std::chrono::milliseconds(prop_delay_ms));
       const auto response =
         connection->call("commit_2pc", CBuffer{body.data(), body.size()});
-      auto tx_finish_time = high_resolution_clock::now();
-
-      duration<double, std::milli> s_double = tx_finish_time - tx_start_time;
-      return s_double.count();
     }
 
     void abort(int tx_id) {

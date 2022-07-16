@@ -130,6 +130,13 @@ private:
 
   void prepare_transactions() override
   {
+    using std::chrono::high_resolution_clock;
+    using std::chrono::duration_cast;
+    using std::chrono::duration;
+    using std::chrono::milliseconds;
+
+    auto prep_start_time = high_resolution_clock::now();
+
     // Reserve space for transfer transactions
     prepared_txs.resize(options.num_transactions);
 
@@ -187,6 +194,13 @@ private:
         i);
 
     }
+    auto prep_end_time = high_resolution_clock::now();
+    auto finish_time = high_resolution_clock::now();
+
+    duration<double, std::milli> s_double = finish_time - start_time;
+    auto dur = s_double.count() / 1000.0;
+    LOG_INFO_FMT("Total duration (seconds): {}", std::to_string(dur));
+    LOG_INFO_FMT("Txs per second: {}", std::to_string(options.num_transactions / dur));
   }
 
   bool check_response(const RpcTlsClient::Response& r) override
