@@ -11,6 +11,11 @@
 #include <chrono>
 #include <thread>
 
+using std::chrono::high_resolution_clock;
+using std::chrono::duration_cast;
+using std::chrono::duration;
+using std::chrono::milliseconds;
+
 using namespace std;
 using namespace nlohmann;
 
@@ -77,15 +82,11 @@ private:
     size_t read;
     size_t written;
 
-    if (options.transactions_per_s > 0)
-    {
-      write_delay_ns =
-        std::chrono::nanoseconds{1000000000 / options.transactions_per_s};
-      connection->set_tcp_nodelay(true);
-    }
-
+    // old timing code
     last_write_time = std::chrono::high_resolution_clock::now();
-//    kick_off_timing();
+    kick_off_timing();
+
+    auto start_time = high_resolution_clock::now();
 
     // Repeat for each session
     for (size_t session = 1; session <= options.session_count; ++session)
@@ -117,6 +118,14 @@ private:
       auto c = create_connection(true, false);
       wait_for_global_commit(last_response_tx_id);
     }
+
+    auto finish_time = high_resolution_clock::now();
+
+    duration<double, std::milli> ms_double = finish_time - start_time;
+    auto dur_s = ms_double.count() / 1000.0;
+    LOG_INFO_FMT("New Timings: Total duration (seconds): {}", std::to_string(dur_s));
+    LOG_INFO_FMT("New Timings: Txs per second: {}", std::to_string(options.num_transactions / dur_s));
+
     const auto last_commit = last_response_tx_id.seqno;
     auto timing_results = end_timing(last_commit);
 //    LOG_INFO_FMT("Timing ended");
@@ -130,11 +139,6 @@ private:
 
   void prepare_transactions() override
   {
-    using std::chrono::high_resolution_clock;
-    using std::chrono::duration_cast;
-    using std::chrono::duration;
-    using std::chrono::milliseconds;
-
     auto prep_start_time = high_resolution_clock::now();
 
     // Reserve space for transfer transactions
@@ -221,11 +225,6 @@ private:
 
   void send_transactions(std::shared_ptr<RpcTlsClient>& connection, const PreparedTxs& txs) {
     last_write_time = std::chrono::high_resolution_clock::now();
-
-    using std::chrono::high_resolution_clock;
-    using std::chrono::duration_cast;
-    using std::chrono::duration;
-    using std::chrono::milliseconds;
 
     auto total_commit_response_time = 0.0;
 
