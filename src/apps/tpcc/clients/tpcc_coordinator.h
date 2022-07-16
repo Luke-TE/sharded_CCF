@@ -72,7 +72,7 @@ namespace tpcc
       if (!http::status_success(response.status))
       {
         const std::string error_msg(r.body.begin(), r.body.end());
-        throw logic_error(error_msg);
+        throw std::logic_error(error_msg);
       }
     }
 
