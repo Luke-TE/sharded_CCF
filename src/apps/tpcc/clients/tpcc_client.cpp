@@ -194,13 +194,12 @@ private:
         i);
 
     }
-    auto prep_end_time = high_resolution_clock::now();
-    auto finish_time = high_resolution_clock::now();
+    auto prep_finish_time = high_resolution_clock::now();
 
-    duration<double, std::milli> s_double = finish_time - start_time;
-    auto dur = s_double.count() / 1000.0;
-    LOG_INFO_FMT("Total duration (seconds): {}", std::to_string(dur));
-    LOG_INFO_FMT("Txs per second: {}", std::to_string(options.num_transactions / dur));
+    duration<double, std::milli> ms_double = prep_finish_time - prep_start_time;
+    auto dur_ms = ms_double.count();
+    LOG_INFO_FMT("Prep duration (ms): {}", std::to_string(dur_ms));
+    LOG_INFO_FMT("Txs prepped per second: {}", std::to_string(options.num_transactions / (dur_ms / 1000.0)));
   }
 
   bool check_response(const RpcTlsClient::Response& r) override
