@@ -1,4 +1,6 @@
 #!/bin/bash
+cd ../build
+mkdir results
 output=$1
 shift
 echo "Output file: $output"
